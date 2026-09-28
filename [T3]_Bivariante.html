@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../estilo.css">
+    <title>Tema 3: Correlación y Contingencia &mdash; Ejemplo aplicado a Psicología</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  .lead-note{ color: var(--uca-gray); font-style: italic; margin-top: 1rem; }
+  .small-note{ font-size: 1.05rem; color: var(--uca-gray); margin-top: 1rem; }
+  .formula-box{ background: var(--light-gray); border-left: 4px solid var(--uca-blue);
+    padding: 0.8rem 1.4rem; margin: 1rem 0; font-size: 1.35rem; overflow-x: auto; }
+  .formula-box.small{ font-size: 1.05rem; }
+  .formula-box.large{ font-size: 1.65rem; }
+  .two-col{ display:flex; gap: 2rem; width:100%; flex-wrap: wrap; align-items:center; }
+  .two-col > *{ flex: 1 1 40%; }
+  .three-col{ display:flex; gap: 1.2rem; width:100%; }
+  .three-col > *{ flex: 1 1 0; }
+  .mini-card{ background: var(--light-gray); border-radius: 8px; padding: 1rem 1.2rem; }
+  .mini-card.center{ text-align:center; }
+  .mini-card h3{ margin-top:0; }
+  .fig-svg{ width:100%; height:auto; display:block; margin: 0.6rem 0; }
+  .data-table{ border-collapse: collapse; width:100%; font-size: 1rem; margin-top: 0.8rem; }
+  .data-table.small{ font-size: 0.85rem; }
+  .data-table th, .data-table td{ border: 1px solid #ddd; padding: 0.25rem 0.5rem; text-align:center; }
+  .data-table thead{ background: var(--uca-blue); color:white; }
+  .data-table tbody tr:nth-child(even){ background: var(--light-gray); }
+  code{ background: var(--light-gray); padding: 0.1em 0.4em; border-radius:4px; }
+  .slide h1{ font-size: clamp(2.2rem, 3.2vw, 3.4rem); }
+  .slide p, .slide li{ font-size: clamp(1.0rem, 1.25vw, 1.35rem); }
+  .qtag{ color: var(--uca-gray); font-size: 0.95rem; margin-top: 0.3rem; }
+  .cont-table{ border-collapse: collapse; margin: 0.8rem auto; font-size: 1.05rem; }
+  .cont-table th, .cont-table td{ border: 1px solid #ccc; padding: 0.4rem 1rem; text-align:center; }
+  .cont-table thead tr:first-child th{ background: var(--uca-orange); color:white; }
+  .cont-table thead tr:nth-child(2) th{ background: var(--uca-blue); color:white; }
+  .cont-table td.tot, .cont-table .tot-row th, .cont-table .tot-row td{ background: var(--light-gray); font-weight:bold; }
+</style>
+
+</head>
+<body>
+
+<div class="slide">
+  <h1>Tema 3: Correlación y Contingencia</h1>
+  <div class="col">
+    <h2>Análisis de la relación entre dos variables</h2>
+    <h3><ul>
+      <li>Promedios bidimensionales</li>
+      <li>Coeficiente de correlación de Pearson</li>
+    </ul></h3>
+  </div>
+  <div class="col">
+    <h2>Análisis de la relación entre dos factores</h2>
+    <h3><ul>
+      <li>Distribuciones condicionadas</li>
+      <li>Medida Chi-cuadrado</li>
+    </ul></h3>
+    <p class="lead-note">Seguimos con nuestros estudiantes de Psicología, ahora con dos columnas nuevas.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Una segunda variable: (X, Y)</h1>
+  <p>Hasta ahora describíamos <strong>una</strong> variable a la vez. Si medimos una segunda variable
+  \(Y\) sobre los mismos individuos, cada estudiante aporta una <strong>pareja</strong> \((x_i,y_i)\).
+  Añadimos su <strong>nota final de examen</strong> y la <strong>técnica de preparación</strong> que usaron:</p>
+  
+<table class="data-table small">
+<thead><tr><th>ID</th><th>Sexo</th><th>Ansiedad</th><th>Sueño (h)</th><th>Nota examen</th><th>Técnica de preparación</th></tr></thead>
+<tbody><tr><td>1</td><td>M</td><td>12</td><td>7.5</td><td>7.8</td><td>Repaso activo</td></tr><tr><td>2</td><td>F</td><td>22</td><td>5</td><td>5.5</td><td>Relectura</td></tr><tr><td>3</td><td>F</td><td>18</td><td>6</td><td>7.9</td><td>Repaso activo</td></tr><tr><td>4</td><td>M</td><td>10</td><td>8</td><td>8.2</td><td>Repaso activo</td></tr><tr><td>5</td><td>F</td><td>25</td><td>4.5</td><td>4.5</td><td>Ninguna</td></tr><tr><td>6</td><td>M</td><td>15</td><td>6.5</td><td>8.6</td><td>Repaso activo</td></tr><tr><td>7</td><td>F</td><td>9</td><td>7</td><td>8.8</td><td>Repaso activo</td></tr><tr><td>8</td><td>M</td><td>19</td><td>5.5</td><td>5.4</td><td>Relectura</td></tr><tr><td>9</td><td>F</td><td>14</td><td>6.5</td><td>8.9</td><td>Repaso activo</td></tr><tr><td>10</td><td>M</td><td>11</td><td>8.5</td><td>7.0</td><td>Relectura</td></tr><tr><td>11</td><td>M</td><td>20</td><td>5</td><td>6.0</td><td>Ninguna</td></tr><tr><td>12</td><td>F</td><td>17</td><td>6</td><td>8.4</td><td>Repaso activo</td></tr><tr><td>13</td><td>F</td><td>10</td><td>7</td><td>9.2</td><td>Repaso activo</td></tr><tr><td>14</td><td>M</td><td>16</td><td>6.5</td><td>6.8</td><td>Relectura</td></tr><tr><td>15</td><td>F</td><td>38</td><td>4</td><td>4.8</td><td>Ninguna</td></tr><tr><td>16</td><td>M</td><td>7</td><td>8</td><td>9.5</td><td>Repaso activo</td></tr></tbody>
+</table>
+  <p class="small-note">Esta tabla de 16 es una muestra; para las tablas de contingencia usaremos el curso
+  completo (n=150). Para correlación trabajaremos con <strong>Ansiedad</strong> y <strong>Nota</strong>.</p>
+</div>
+
+<div class="slide">
+  <h1>Promedios bidimensionales</h1>
+  <p>Generalizamos los promedios del Tema 2 a dos variables a la vez:</p>
+  <div class="two-col">
+    <div class="mini-card">
+      <h3>Básico de orden (k,h)</h3>
+      <div class="formula-box large">\[ a_{k,h} = \frac{\sum x_i^k y_i^h}{n} \]</div>
+    </div>
+    <div class="mini-card">
+      <h3>Centrado de orden (k,h)</h3>
+      <div class="formula-box large">\[ m_{k,h} = \frac{\sum (x_i-\bar{x})^k(y_i-\bar{y})^h}{n} \]</div>
+    </div>
+  </div>
+  <p class="small-note">De aquí se deduce que \(a_{1,0}=\bar{x}\), \(a_{0,1}=\bar{y}\),
+  \(m_{1,0}=m_{0,1}=0\), \(m_{2,0}=S_X^2\) y \(m_{0,2}=S_Y^2\) &mdash;los promedios de una sola
+  variable son casos particulares.</p>
+</div>
+
+<div class="slide">
+  <h1>La covarianza</h1>
+  <div class="formula-box large">\[ S_{XY} = m_{1,1} = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{n} \]</div>
+  <p>Para Ansiedad (\(\bar{x}=16.44\)) y Nota (\(\bar{y}=7.33\)):</p>
+  <div class="formula-box large">\[ S_{XY} = \frac{\sum(x_i-16.44)(y_i-7.33)}{16} = -9.49 \]</div>
+  <p><mark>\(S_{XY}<0\)</mark>: cuando la Ansiedad sube, la Nota tiende a bajar &mdash;una relación lineal
+  <strong>inversa</strong>. \(S_{XY}\) conserva las unidades de ambas variables, lo que dificulta su
+  interpretación directa: por eso necesitamos normalizarla.</p>
+</div>
+
+<div class="slide">
+  <h1>Diagrama de dispersión: Ansiedad vs. Nota</h1>
+  <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd"/><line x1="236.4" y1="25" x2="236.4" y2="335" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3"/><line x1="55" y1="156.0" x2="610" y2="156.0" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3"/><circle cx="236.4" cy="156.0" r="4" fill="#E87B00"/><text x="236.4" y="17" font-size="12" text-anchor="middle" fill="#E87B00" font-weight="bold">x&#772;=16.44</text><text x="47" y="160.0" font-size="12" text-anchor="end" fill="#E87B00" font-weight="bold">y&#772;=7.33</text><circle cx="166.0" cy="136.6" r="5" fill="#005877" opacity="0.8"/><circle cx="324.6" cy="231.7" r="5" fill="#005877" opacity="0.8"/><circle cx="261.1" cy="132.5" r="5" fill="#005877" opacity="0.8"/><circle cx="134.3" cy="120.1" r="5" fill="#005877" opacity="0.8"/><circle cx="372.1" cy="273.0" r="5" fill="#005877" opacity="0.8"/><circle cx="213.6" cy="103.5" r="5" fill="#005877" opacity="0.8"/><circle cx="118.4" cy="95.3" r="5" fill="#005877" opacity="0.8"/><circle cx="277.0" cy="235.8" r="5" fill="#005877" opacity="0.8"/><circle cx="197.7" cy="91.1" r="5" fill="#005877" opacity="0.8"/><circle cx="150.1" cy="169.7" r="5" fill="#005877" opacity="0.8"/><circle cx="292.9" cy="211.0" r="5" fill="#005877" opacity="0.8"/><circle cx="245.3" cy="111.8" r="5" fill="#005877" opacity="0.8"/><circle cx="134.3" cy="78.7" r="5" fill="#005877" opacity="0.8"/><circle cx="229.4" cy="177.9" r="5" fill="#005877" opacity="0.8"/><circle cx="578.3" cy="260.6" r="5" fill="#005877" opacity="0.8"/><circle cx="86.7" cy="66.3" r="5" fill="#005877" opacity="0.8"/><text x="55.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">5</text><text x="134.3" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text x="213.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="292.9" y="353" font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="372.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">25</text><text x="451.4" y="353" font-size="10.5" text-anchor="middle" fill="#777">30</text><text x="530.7" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0" font-size="10.5" text-anchor="end" fill="#777">3.0</text><text x="47" y="276.0" font-size="10.5" text-anchor="end" fill="#777">4.5</text><text x="47" y="214.0" font-size="10.5" text-anchor="end" fill="#777">6.0</text><text x="47" y="152.0" font-size="10.5" text-anchor="end" fill="#777">7.5</text><text x="47" y="90.0" font-size="10.5" text-anchor="end" fill="#777">9.0</text><text x="47" y="28.0" font-size="10.5" text-anchor="end" fill="#777">10.5</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14" y="160.0" font-size="12.5" text-anchor="middle" fill="#333" transform="rotate(-90 14 180.0)">Nota examen</text></svg>
+  <p class="small-note">El punto \((\bar{x},\bar{y})\) es el <strong>centro de gravedad</strong> de
+  la nube. La tendencia descendente es visible: a mayor ansiedad, notas más bajas &mdash;coherente con el
+  estudiante #15, nuestro atípico del Tema 2 (Ansiedad=38), que también tiene una de las notas más bajas.</p>
+</div>
+
+<div class="slide">
+  <h1>Interpretación de la covarianza</h1>
+  <p>El signo de cada término \((x_i-\bar{x})(y_i-\bar{y})\) depende del cuadrante: si la mayoría de
+  puntos cae en cuadrantes "+", \(S_{XY}>0\); si caen en "-", \(S_{XY}<0\); si se compensan, \(S_{XY}\approx0\).</p>
+  <div class="three-col">
+    <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="22" y="22" width="216" height="104" fill="none" stroke="#ddd"/><line x1="130.0" y1="22" x2="130.0" y2="126" stroke="#bbb" stroke-width="1"/><line x1="22" y1="74.0" x2="238" y2="74.0" stroke="#bbb" stroke-width="1"/><line x1="32.8" y1="115.6" x2="227.2" y2="32.4" stroke="#bbb" stroke-width="1.5"/><line x1="32.8" y1="32.4" x2="227.2" y2="115.6" stroke="#bbb" stroke-width="1.5"/><circle cx="43.6" cy="110.4" r="4" fill="#005877"/><circle cx="76.0" cy="84.4" r="4" fill="#005877"/><circle cx="108.4" cy="63.6" r="4" fill="#005877"/><circle cx="130.0" cy="74.0" r="4" fill="#005877"/><circle cx="151.6" cy="84.4" r="4" fill="#005877"/><circle cx="184.0" cy="63.6" r="4" fill="#005877"/><circle cx="216.4" cy="37.6" r="4" fill="#005877"/><circle cx="54.4" cy="42.8" r="4" fill="#005877"/><circle cx="205.6" cy="110.4" r="4" fill="#005877"/><text x="54.4" y="44.9" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">+</text><text x="205.6" y="44.9" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">-</text><text x="54.4" y="110.4" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">-</text><text x="205.6" y="110.4" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">+</text></svg><p class="qtag">Sin relación &middot; S<sub>XY</sub>&asymp;0</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="22" y="22" width="216" height="104" fill="none" stroke="#ddd"/><line x1="130.0" y1="22" x2="130.0" y2="126" stroke="#bbb" stroke-width="1"/><line x1="22" y1="74.0" x2="238" y2="74.0" stroke="#bbb" stroke-width="1"/><line x1="32.8" y1="115.6" x2="227.2" y2="32.4" stroke="#6B6E6D" stroke-width="2"/><circle cx="39.3" cy="110.4" r="4" fill="#005877"/><circle cx="69.5" cy="94.8" r="4" fill="#005877"/><circle cx="86.8" cy="84.4" r="4" fill="#005877"/><circle cx="112.7" cy="79.2" r="4" fill="#005877"/><circle cx="130.0" cy="74.0" r="4" fill="#005877"/><circle cx="151.6" cy="65.7" r="4" fill="#005877"/><circle cx="177.5" cy="55.3" r="4" fill="#005877"/><circle cx="205.6" cy="42.8" r="4" fill="#005877"/><circle cx="222.9" cy="32.4" r="4" fill="#005877"/><text x="54.4" y="44.9" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">-</text><text x="205.6" y="44.9" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">+</text><text x="54.4" y="110.4" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">+</text><text x="205.6" y="110.4" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">-</text></svg><p class="qtag">Relación directa &middot; S<sub>XY</sub>&gt;0</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="22" y="22" width="216" height="104" fill="none" stroke="#ddd"/><line x1="130.0" y1="22" x2="130.0" y2="126" stroke="#bbb" stroke-width="1"/><line x1="22" y1="74.0" x2="238" y2="74.0" stroke="#bbb" stroke-width="1"/><line x1="32.8" y1="32.4" x2="227.2" y2="115.6" stroke="#6B6E6D" stroke-width="2"/><circle cx="39.3" cy="37.6" r="4" fill="#005877"/><circle cx="69.5" cy="51.1" r="4" fill="#005877"/><circle cx="86.8" cy="61.5" r="4" fill="#005877"/><circle cx="112.7" cy="68.8" r="4" fill="#005877"/><circle cx="130.0" cy="74.0" r="4" fill="#005877"/><circle cx="151.6" cy="82.3" r="4" fill="#005877"/><circle cx="177.5" cy="92.7" r="4" fill="#005877"/><circle cx="205.6" cy="103.1" r="4" fill="#005877"/><circle cx="222.9" cy="113.5" r="4" fill="#005877"/><text x="54.4" y="44.9" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">+</text><text x="205.6" y="44.9" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">-</text><text x="54.4" y="110.4" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">-</text><text x="205.6" y="110.4" font-size="15" fill="#E87B00" font-weight="bold" text-anchor="middle">+</text></svg><p class="qtag">Relación inversa &middot; S<sub>XY</sub>&lt;0</p></div>
+  </div>
+  <p class="small-note">Nuestro ejemplo (Ansiedad-Nota) se parece al esquema C: nube descendente,
+  mayoría de puntos en cuadrantes "-".</p>
+</div>
+
+<div class="slide">
+  <h1>Coeficiente de correlación de Pearson</h1>
+  <div class="formula-box large">\[ r = \frac{S_{XY}}{S_X S_Y} \]</div>
+  <p>Es una <strong>normalización</strong> de la covarianza: el numerador contiene toda la información
+  de la relación lineal; el denominador elimina las unidades de \(X\) e \(Y\), haciendo el resultado
+  <mark>interpretable y comparable</mark> entre cualquier par de variables.</p>
+</div>
+
+<div class="slide">
+  <h1>Propiedades de r</h1>
+  <ul>
+    <li>Es una medida <strong>adimensional</strong> (sin unidades) y toma el signo de \(S_{XY}\).</li>
+    <li>Siempre \(r\in[-1,1]\).</li>
+    <li>\(r=0\): las variables están <strong>incorreladas</strong> (sin relación lineal).</li>
+  </ul>
+  <div class="two-col">
+    <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="24" y="24" width="212" height="122" fill="none" stroke="#ddd"/><line x1="24.0" y1="146.0" x2="236.0" y2="24.0" stroke="#E87B00" stroke-width="2.5"/><circle cx="24.0" cy="146.0" r="4.5" fill="#005877"/><circle cx="66.4" cy="121.6" r="4.5" fill="#005877"/><circle cx="108.8" cy="97.2" r="4.5" fill="#005877"/><circle cx="151.2" cy="72.8" r="4.5" fill="#005877"/><circle cx="193.6" cy="48.4" r="4.5" fill="#005877"/><circle cx="236.0" cy="24.0" r="4.5" fill="#005877"/><text x="130.0" y="38" font-size="14" text-anchor="middle" fill="#E87B00" font-weight="bold">r = 1</text></svg><p class="qtag">Relación exacta y directa</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="24" y="24" width="212" height="122" fill="none" stroke="#ddd"/><line x1="24.0" y1="24.0" x2="236.0" y2="146.0" stroke="#E87B00" stroke-width="2.5"/><circle cx="24.0" cy="24.0" r="4.5" fill="#005877"/><circle cx="66.4" cy="48.4" r="4.5" fill="#005877"/><circle cx="108.8" cy="72.8" r="4.5" fill="#005877"/><circle cx="151.2" cy="97.2" r="4.5" fill="#005877"/><circle cx="193.6" cy="121.6" r="4.5" fill="#005877"/><circle cx="236.0" cy="146.0" r="4.5" fill="#005877"/><text x="130.0" y="38" font-size="14" text-anchor="middle" fill="#E87B00" font-weight="bold">r = -1</text></svg><p class="qtag">Relación exacta e inversa</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Calculando r: Ansiedad y Nota</h1>
+  <p>Con \(S_{XY}=-9.49\), \(S_X=7.40\) y \(S_Y=1.59\):</p>
+  <div class="formula-box large">\[ r = \frac{-9.49}{7.40\times1.59} = -0.81 \]</div>
+  <p><mark>r=-0.81</mark>: una correlación negativa e intensa entre Ansiedad y rendimiento &mdash;lejos del
+  &minus;1 (relación exacta), pero claramente por debajo de 0. En Psicología, correlaciones de esta magnitud
+  entre ansiedad y desempeño académico son habituales en la literatura.</p>
+  <p class="small-note">Recuerda: \(r\) mide relación <em>lineal</em>. Dos variables pueden estar
+  fuertemente relacionadas de forma no lineal y aun así dar \(r\) próximo a 0, como veremos ahora.</p>
+</div>
+
+<div class="slide">
+  <h1>Incorrelación no implica independencia</h1>
+  <p>Distribución \(\{(-2,5),(-1,2),(0,1),(1,2),(2,5)\}\), con \(\bar{x}=0\),
+  \(\bar{y}=3\):</p>
+  <div class="two-col">
+    <div>
+      <div class="formula-box">\[ S_{XY} = \frac{(-2)(2)+(-1)(-1)+0(-2)+1(-1)+2(2)}{5} = 0 \Rightarrow r = 0 \]</div>
+      <p class="small-note"><mark>X e Y están incorreladas</mark> &mdash;pero no son independientes: todos
+      los puntos siguen exactamente \(y=x^2+1\).</p>
+    </div>
+    <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="45" y="20" width="350" height="205" fill="none" stroke="#ddd"/><polyline points="91.7,25.5 97.5,40.2 103.3,54.2 109.2,67.5 115.0,80.1 120.8,92.1 126.7,103.4 132.5,114.0 138.3,123.9 144.2,133.1 150.0,141.6 155.8,149.5 161.7,156.7 167.5,163.2 173.3,169.0 179.2,174.1 185.0,178.5 190.8,182.3 196.7,185.4 202.5,187.8 208.3,189.5 214.2,190.5 220.0,190.8 225.8,190.5 231.7,189.5 237.5,187.8 243.3,185.4 249.2,182.3 255.0,178.5 260.8,174.1 266.7,169.0 272.5,163.2 278.3,156.7 284.2,149.5 290.0,141.6 295.8,133.1 301.7,123.9 307.5,114.0 313.3,103.4 319.2,92.1 325.0,80.1 330.8,67.5 336.7,54.2 342.5,40.2 348.3,25.5" fill="none" stroke="#6B6E6D" stroke-width="2"/><circle cx="103.3" cy="54.2" r="5" fill="#005877"/><circle cx="161.7" cy="156.7" r="5" fill="#005877"/><circle cx="220.0" cy="190.8" r="5" fill="#005877"/><circle cx="278.3" cy="156.7" r="5" fill="#005877"/><circle cx="336.7" cy="54.2" r="5" fill="#005877"/><line x1="220.0" y1="20" x2="220.0" y2="225" stroke="#E87B00" stroke-width="1.2" stroke-dasharray="4,3"/><line x1="45" y1="122.5" x2="395" y2="122.5" stroke="#E87B00" stroke-width="1.2" stroke-dasharray="4,3"/></svg>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Análisis de la relación entre dos factores</h1>
+  <p>Ahora ambas variables son <strong>categóricas</strong>: el Sexo y la Técnica de preparación (Repaso
+  activo / Relectura / Ninguna). Cada individuo aporta un par de niveles, p. ej. (M, Repaso activo).</p>
+  <p class="lead-note">Para construir las tablas usaremos <strong>todo el curso</strong> (n=150), del que
+  nuestros 16 estudiantes son solo una muestra ilustrativa.</p>
+</div>
+
+<div class="slide">
+  <h1>Tabla de contingencia: valores absolutos</h1>
+  
+<table class="cont-table">
+<thead>
+<tr><th></th><th colspan="3">Técnica de preparación</th><th></th></tr>
+<tr><th>Sexo</th><th>Repaso activo</th><th>Relectura</th><th>Ninguna</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><th>M</th><td>40</td><td>20</td><td>15</td><td class='tot'>75</td></tr><tr><th>H</th><td>25</td><td>30</td><td>20</td><td class='tot'>75</td></tr>
+<tr class="tot-row"><th>Total</th><td class='tot'>65</td><td class='tot'>50</td><td class='tot'>35</td><td class="tot">150</td></tr>
+</tbody>
+</table>
+  <p class="small-note">\(n_{ij}\) es la frecuencia conjunta; \(n_{i.}\) y \(n_{.j}\) son las
+  <strong>frecuencias marginales</strong> de Sexo y Técnica respectivamente. Ambos sexos suman 75 (n=150 en total).</p>
+</div>
+
+<div class="slide">
+  <h1>Tabla de contingencia: frecuencias relativas</h1>
+  <div class="formula-box small">\[ f_{ij} = f(A_i,B_j) = \frac{n_{ij}}{n} \]</div>
+  
+<table class="cont-table">
+<thead>
+<tr><th></th><th colspan="3">Técnica de preparación</th><th></th></tr>
+<tr><th>Sexo</th><th>Repaso activo</th><th>Relectura</th><th>Ninguna</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><th>M</th><td>0.267</td><td>0.133</td><td>0.1</td><td class='tot'>0.5</td></tr><tr><th>H</th><td>0.167</td><td>0.2</td><td>0.133</td><td class='tot'>0.5</td></tr>
+<tr class="tot-row"><th>Total</th><td class='tot'>0.433</td><td class='tot'>0.333</td><td class='tot'>0.233</td><td class="tot">1.0</td></tr>
+</tbody>
+</table>
+  <p class="small-note">Todas las frecuencias &mdash;conjuntas y marginales&mdash; suman 1: el 1 "es el todo"
+  repartido entre los pares de niveles.</p>
+</div>
+
+<div class="slide">
+  <h1>Distribución condicionada</h1>
+  <p>¿Aporta información un factor sobre el otro? Si sí, son <strong>dependientes</strong>; si no, son
+  <strong>independientes</strong>. La frecuencia condicionada de \(A_i\) sabiendo que \(B=B_j\):</p>
+  <div class="formula-box">\[ f(A_i/B_j) = \frac{n(A_i,B_j)}{n(B_j)} = \frac{n_{ij}}{n_{.j}} \]</div>
+  <p class="small-note">La barra "/" se lee "condicionada a" o "sabiendo que". Al condicionar, el tamaño de
+  la distribución se reduce al de ese subgrupo, y hay que recalcular las frecuencias sobre ese nuevo total.</p>
+</div>
+
+<div class="slide">
+  <h1>Ejemplo: distribuciones condicionadas</h1>
+  <p>¿Qué proporción de quienes <strong>no prepararon nada</strong> el examen son hombres?</p>
+  <div class="formula-box small">\[ f(H/\text{Ninguna}) = \frac{n(H,\text{Ninguna})}{n(\text{Ninguna})} = \frac{20}{35} = 0.571 \]</div>
+  <p>¿Y qué proporción de quienes <strong>sí usaron alguna técnica</strong> (Repaso activo o Relectura, es
+  decir no Ninguna) son mujeres?</p>
+  <div class="formula-box small">\[ f(M/\overline{\text{Ninguna}}) = \frac{40+20}{65+50} = 0.52 \]</div>
+</div>
+
+<div class="slide">
+  <h1>Independencia de factores</h1>
+  <div class="formula-box">\[ f(A_i/B_j) = f(A_i) = f_{i.}\ \ \forall i,j \]</div>
+  <p>Es decir: la información sobre \(B\) no cambia las frecuencias de \(A\). Equivalentemente,
+  \(A\) es independiente de \(B\) si:</p>
+  <div class="formula-box small">\[ f_{ij} = f(A_i)f(B_j) = f_{i.}f_{.j}\ \ \forall i,j \]</div>
+  <p class="small-note">Esta condición es simétrica: A es independiente de B si y solo si B es independiente de A.</p>
+</div>
+
+<div class="slide">
+  <h1>Dependencia funcional</h1>
+  <p>El extremo opuesto a la independencia. Ejemplo <strong>ilustrativo</strong> (ajeno a nuestro dataset),
+  sobre cómo se organizan unas prácticas de laboratorio:</p>
+  
+<table class="cont-table">
+<thead>
+<tr><th></th><th colspan="3">Turno</th><th></th></tr>
+<tr><th>Modalidad</th><th>Mañana</th><th>Tarde</th><th>Fin de semana</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><th>Presencial</th><td>13</td><td>7</td><td>0</td><td class='tot'>20</td></tr><tr><th>Online</th><td>0</td><td>0</td><td>18</td><td class='tot'>18</td></tr>
+<tr class="tot-row"><th>Total</th><td class='tot'>13</td><td class='tot'>7</td><td class='tot'>18</td><td class="tot">38</td></tr>
+</tbody>
+</table>
+  <p class="small-note">La Modalidad depende funcionalmente del Turno: sabiendo el turno, la modalidad queda
+  determinada sin ambigüedad. Pero el Turno <em>no</em> depende funcionalmente de la Modalidad (Presencial
+  admite Mañana o Tarde).</p>
+</div>
+
+<div class="slide">
+  <h1>La medida Chi-cuadrado</h1>
+  <p>Bajo independencia, las frecuencias observadas \(O_{ij}=f(A_i,B_j)\) deberían coincidir con las
+  <strong>esperadas</strong> \(E_{ij}=f(A_i)f(B_j)\). El estadístico \(\chi^2\) normaliza esa diferencia:</p>
+  <div class="formula-box">\[ \chi^2 = n\sum_{ij}\frac{(O_{ij}-E_{ij})^2}{E_{ij}} \]</div>
+  <p class="small-note">Si \(O_{ij}=E_{ij}\ \forall i,j \Rightarrow \chi^2=0\) (independencia exacta).
+  Cuanto mayor sea \(\chi^2\), más se alejan los factores de la independencia.</p>
+</div>
+
+<div class="slide">
+  <h1>Frecuencias esperadas y cálculo de &chi;&sup2;</h1>
+  <p>Multiplicando cada pareja de marginales (\(E_{ij}=f_{i.}\cdot f_{.j}\)):</p>
+
+
+
+<div class="two-col"><table class="cont-table">
+<thead>
+<tr><th>\(O_{ij}\)</th><th colspan="3">Técnica de preparación</th><th></th></tr>
+<tr><th>Sexo</th><th>Repaso activo</th><th>Relectura</th><th>Ninguna</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><th>M</th><td>0.267</td><td>0.133</td><td>0.1</td><td class='tot'>0.5</td></tr><tr><th>H</th><td>0.167</td><td>0.2</td><td>0.133</td><td class='tot'>0.5</td></tr>
+<tr class="tot-row"><th>Total</th><td class='tot'>0.433</td><td class='tot'>0.333</td><td class='tot'>0.233</td><td class="tot">1.0</td></tr>
+</tbody>
+</table>
+<table class="cont-table">
+<thead>
+<tr><th>\(E_{ij}\)</th><th colspan="3">Técnica de preparación</th><th></th></tr>
+<tr><th>Sexo</th><th>Repaso activo</th><th>Relectura</th><th>Ninguna</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><th>M</th><td>0.2167</td><td>0.1667</td><td>0.1167</td><td class='tot'>0.5</td></tr><tr><th>H</th><td>0.2167</td><td>0.1667</td><td>0.1167</td><td class='tot'>0.5</td></tr>
+<tr class="tot-row"><th>Total</th><td class='tot'>0.433</td><td class='tot'>0.333</td><td class='tot'>0.233</td><td class="tot">1.0</td></tr>
+</tbody>
+</table>
+</div>
+
+  <div class="formula-box small">\[ \chi^2 = 150\left(\frac{(0.267-0.217)^2}{0.217} + \frac{(0.133-0.167)^2}{0.167} + \frac{(0.100-0.117)^2}{0.117} + \frac{(0.167-0.217)^2}{0.217} + \frac{(0.200-0.167)^2}{0.167} + \frac{(0.133-0.117)^2}{0.117}\right) = 6.18 \]</div>
+  <p class="small-note">Como \(\chi^2=6.18\neq 0\), Sexo y Técnica de preparación <strong>no son
+  independientes</strong> &mdash;aunque de momento no sabemos si la relación es fuerte o débil.</p>
+</div>
+
+<div class="slide">
+  <h1>Coeficiente de contingencia</h1>
+  <p>\(\chi^2\) depende de \(n\) y del número de niveles, así que no es directamente interpretable.
+  Lo normalizamos eliminando el efecto de \(n\):</p>
+  <div class="formula-box">\[ C = \sqrt{\frac{\chi^2}{\chi^2+n}} = \sqrt{\frac{6.18}{6.18+150}} = 0.199 \]</div>
+  <p>Con \(h=2\) filas y \(k=3\) columnas, \(m=\min(h,k)=2\), por lo que \(C\) está acotado por:</p>
+  <div class="formula-box small">\[ C_{max} = \sqrt{\frac{m-1}{m}} = \sqrt{\frac{1}{2}} = 0.707 \]</div>
+</div>
+
+<div class="slide">
+  <h1>Coeficiente de Pawlick y cierre</h1>
+  <div class="formula-box">\[ C_P = \frac{C}{C_{max}} = \frac{0.199}{0.707} = 0.281 \]</div>
+  <p>Con \(0\le C_P\le 1\): <mark>28.1&nbsp;% de relación</mark> entre Sexo y Técnica de
+  preparación &mdash;un nivel intermedio, ni independencia ni dependencia funcional, "como casi siempre en
+  el mundo real".</p>
+  <p class="small-note">En próximos temas veremos cómo decidir, desde una óptica inferencial, si un
+  \(\chi^2\) como este es lo bastante grande para considerarlo estadísticamente significativo.</p>
+</div>
+    <img id="logo" src="../LogoUca.png">
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false}
+          ],
+          throwOnError: false
+        });
+      });
+    </script>
+</body>
+</html>

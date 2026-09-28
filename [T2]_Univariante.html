@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../estilo.css">
+    <title>Tema 2: Análisis Univariante &mdash; Ejemplo aplicado a Psicología</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  .lead-note{ color: var(--uca-gray); font-style: italic; margin-top: 1rem; }
+  .small-note{ font-size: 1.05rem; color: var(--uca-gray); margin-top: 1rem; }
+  .formula-box{ background: var(--light-gray); border-left: 4px solid var(--uca-blue);
+    padding: 0.8rem 1.4rem; margin: 1rem 0; font-size: 1.35rem; overflow-x: auto; }
+  .formula-box.small{ font-size: 1.05rem; }
+  .formula-box.large{ font-size: 1.65rem; }
+  .two-col{ display:flex; gap: 2rem; width:100%; flex-wrap: wrap; }
+  .two-col > *{ flex: 1 1 40%; }
+  .three-col{ display:flex; gap: 1.2rem; width:100%; }
+  .three-col > *{ flex: 1 1 0; }
+  .mini-card{ background: var(--light-gray); border-radius: 8px; padding: 1rem 1.2rem; }
+  .mini-card.center{ text-align:center; }
+  .mini-card h3{ margin-top:0; }
+  .fig-svg{ width:100%; height:auto; display:block; margin: 0.6rem 0; }
+  .data-table{ border-collapse: collapse; width:100%; font-size: 1rem; margin-top: 0.8rem; }
+  .data-table th, .data-table td{ border: 1px solid #ddd; padding: 0.3rem 0.6rem; text-align:center; }
+  .data-table thead{ background: var(--uca-blue); color:white; }
+  .data-table tbody tr:nth-child(even){ background: var(--light-gray); }
+  .ordered-data{ font-family: monospace; font-size: 1.15rem; background: var(--light-gray);
+    padding: 0.6rem 1rem; border-radius: 6px; letter-spacing: 0.5px;}
+  .quantile-grid{ display:flex; gap: 1rem; justify-content: space-between; margin-top: 1.2rem; }
+  .quantile-grid > div{ background: var(--light-gray); border-radius: 8px; padding: 0.8rem;
+    text-align:center; flex: 1; display:flex; flex-direction:column; gap:0.3rem; }
+  .qlabel{ color: var(--uca-orange); font-weight:bold; font-size:1.1rem; }
+  .qval{ font-size:1.6rem; color: var(--uca-blue); font-weight:bold; }
+  .qtag{ color: var(--uca-gray); font-size: 0.95rem; }
+  code{ background: var(--light-gray); padding: 0.1em 0.4em; border-radius:4px; }
+  .slide h1{ font-size: clamp(2.2rem, 3.2vw, 3.4rem); }
+  .slide p, .slide li{ font-size: clamp(1.05rem, 1.3vw, 1.4rem); }
+</style>
+
+</head>
+<body>
+
+<div class="slide">
+  <h1>Tema 2: Análisis Univariante</h1>
+  <div class="col">
+    <h2>Medidas y gráficos descriptivos</h2>
+    <h3><ul>
+      <li>Promedios</li>
+      <li>Varianza y desviación típica</li>
+      <li>Medidas de posición</li>
+      <li>Medidas de forma</li>
+      <li>Diagrama de caja y bigotes</li>
+    </ul></h3>
+  </div>
+  <div class="col">
+    <h2>Descripción de un conjunto de datos</h2>
+    <h3><ul>
+      <li>Análisis global</li>
+      <li>Análisis en función de un factor</li>
+    </ul></h3>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Nuestro conjunto de datos</h1>
+  <p>16 estudiantes de primer semestre de Psicología, evaluados antes de un examen:
+  su <strong>ansiedad</strong> (Inventario de Ansiedad de Beck, 0&ndash;63), sus <strong>horas de sueño</strong>
+  la noche anterior y su <strong>tiempo de reacción</strong> en una tarea de atención (ms).
+  
+<table class="data-table">
+<thead><tr><th>ID</th><th>Sexo</th><th>Ansiedad (BAI, 0&ndash;63)</th><th>Horas de sueño</th><th>T. reacción (ms)</th></tr></thead>
+<tbody><tr><td>1</td><td>M</td><td>12</td><td>7.5</td><td>420</td></tr><tr><td>2</td><td>F</td><td>22</td><td>5</td><td>510</td></tr><tr><td>3</td><td>F</td><td>18</td><td>6</td><td>470</td></tr><tr><td>4</td><td>M</td><td>10</td><td>8</td><td>400</td></tr><tr><td>5</td><td>F</td><td>25</td><td>4.5</td><td>560</td></tr><tr><td>6</td><td>M</td><td>15</td><td>6.5</td><td>450</td></tr><tr><td>7</td><td>F</td><td>9</td><td>7</td><td>410</td></tr><tr><td>8</td><td>M</td><td>19</td><td>5.5</td><td>500</td></tr><tr><td>9</td><td>F</td><td>14</td><td>6.5</td><td>440</td></tr><tr><td>10</td><td>M</td><td>11</td><td>8.5</td><td>395</td></tr><tr><td>11</td><td>M</td><td>20</td><td>5</td><td>520</td></tr><tr><td>12</td><td>F</td><td>17</td><td>6</td><td>460</td></tr><tr><td>13</td><td>F</td><td>10</td><td>7</td><td>430</td></tr><tr><td>14</td><td>M</td><td>16</td><td>6.5</td><td>455</td></tr><tr><td>15</td><td>F</td><td>38</td><td>4</td><td>590</td></tr><tr><td>16</td><td>M</td><td>7</td><td>8</td><td>390</td></tr></tbody>
+</table>
+  <p class="small-note">Usaremos principalmente la variable <strong>Ansiedad</strong> como hilo conductor del tema.</p>
+</div>
+
+<div class="slide">
+  <h1>Media aritmética</h1>
+  <div class="formula-box large">
+    \[ \bar{x} = \frac{\sum_{i=1}^{n} x_i}{n} \]
+  </div>
+  <p>Para los <code>n = 16</code> valores de <strong>Ansiedad </strong> de nuestros estudiantes:</p>
+  <div class="formula-box">
+    \[ \bar{x} = \frac{12+22+18+10+25+15+9+19+14+11+20+17+10+16+38+7}{16} = \frac{263}{16} = 16.44 \]
+  </div>
+  <p>La ansiedad media del grupo es <mark>16.44 puntos</mark> en la escala BAI &mdash; un valor comprendido
+  entre el mínimo (7) y el máximo (38) observados.</p>
+</div>
+
+<div class="slide">
+  <h1>Promedios de orden superior</h1>
+  <p>El promedio básico admite una generalización a cualquier orden <code>k</code>:</p>
+  <div class="formula-box large">\[ a_k = \frac{\sum x_i^k}{n} \]</div>
+  <p>Para <code>k=1</code> recuperamos la media (\(a_1=\bar{x}=16.44\)). El promedio de <strong>segundo orden</strong>
+  de la Ansiedad sería:</p>
+  <div class="formula-box">\[ a_2 = \frac{\sum x_i^2}{n} = \frac{5199}{16} = 324.94\ \text{puntos}^2 \]</div>
+  <p class="small-note">Solo algunos de estos promedios (los <em>centrados</em>) nos interesarán realmente.</p>
+</div>
+
+<div class="slide">
+  <h1>Promedios centrados en el origen</h1>
+  <div class="formula-box large">\[m_k = \dfrac{\sum (x_i - \bar{x})^k}{n}\]</div>
+  <p>El promedio centrado de <strong>primer orden</strong> (\(m_1\)) vale siempre 0, para cualquier variable.
+  Comprobémoslo con la Ansiedad (\(\bar{x}=16.44\)):</p>
+  <svg viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+    <line x1="40" y1="145" x2="840" y2="145" stroke="#999" stroke-width="1.5"/>
+    <line x1="40.0" y1="141" x2="40.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="40.0" y="165" font-size="11" text-anchor="middle" fill="#777">0</text>
+    <line x1="140.0" y1="141" x2="140.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="140.0" y="165" font-size="11" text-anchor="middle" fill="#777">5</text>
+    <line x1="240.0" y1="141" x2="240.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="240.0" y="165" font-size="11" text-anchor="middle" fill="#777">10</text>
+    <line x1="340.0" y1="141" x2="340.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="340.0" y="165" font-size="11" text-anchor="middle" fill="#777">15</text>
+    <line x1="440.0" y1="141" x2="440.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="440.0" y="165" font-size="11" text-anchor="middle" fill="#777">20</text>
+    <line x1="540.0" y1="141" x2="540.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="540.0" y="165" font-size="11" text-anchor="middle" fill="#777">25</text>
+    <line x1="640.0" y1="141" x2="640.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="640.0" y="165" font-size="11" text-anchor="middle" fill="#777">30</text>
+    <line x1="740.0" y1="141" x2="740.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="740.0" y="165" font-size="11" text-anchor="middle" fill="#777">35</text>
+    <line x1="840.0" y1="141" x2="840.0" y2="149" stroke="#999" stroke-width="1"/>
+    <text x="840.0" y="165" font-size="11" text-anchor="middle" fill="#777">40</text>
+    <line x1="368.8" y1="75" x2="368.8" y2="173" stroke="#E87B00" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="368.8" y="69" font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">x&#772; = 16.44</text>
+    <circle cx="280.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="480.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="400.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="240.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="540.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="340.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="220.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="420.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="320.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="260.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="440.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="380.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="240.0" cy="118.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="360.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <circle cx="800.0" cy="131.0" r="5" fill="#E87B00" opacity="0.85"/>
+    <circle cx="180.0" cy="131.0" r="5" fill="#005877" opacity="0.85"/>
+    <text x="204.4" y="187" font-size="12" text-anchor="middle" fill="#005877">&#931; diferencias negativas</text>
+    <text x="604.4" y="187" font-size="12" text-anchor="middle" fill="#E87B00">&#931; diferencias positivas</text>
+  </svg>
+  <p class="small-note">La suma de las diferencias positivas (derecha de la media) es igual, en valor absoluto,
+  a la suma de las diferencias negativas (izquierda). Por eso \(m_1 = 0.00\): la media es el
+  <em>centro geométrico</em> de los datos.</p>
+
+</div>
+
+<div class="slide">
+  <h1>Promedios notables</h1>
+  <p>De entre los promedios centrados, tres merecen especial atención:</p>
+  <div class="three-col">
+    <div class="mini-card">
+      <h3>2º orden</h3>
+      <div class="formula-box ">\[ m_2 = S^2 = \frac{\sum (x_i - \bar{x})^2}{n} \text{unid}^2 \]</div>
+      <p>Es la <strong>varianza</strong>: mide la dispersión de los datos.</p>
+    </div>
+    <div class="mini-card">
+      <h3>3º orden</h3>
+      <div class="formula-box ">\[ m_3 = \frac{\sum (x_i - \bar{x})^3}{n} \text{unid}^3 \]</div>
+      <p>Nos dará información sobre la <strong>simetría</strong> de los datos.</p>
+    </div>
+    <div class="mini-card">
+      <h3>4º orden</h3>
+      <div class="formula-box ">\[ m_4 = \frac{\sum (x_i - \bar{x})^4}{n} \text{unid}^4 \]</div>
+      <p>Nos dará información sobre el <strong>aplastamiento</strong> (curtosis) de los datos.</p>
+    </div>
+  </div>
+  <p>Para la <strong>Ansiedad</strong>, los valores son: \[S^2=54.75,\qquad m_3=552.50,\qquad m_4=14902.65\]</p>
+
+  <p class="small-note">A nosotros nos interesa sobretodo la <mark><strong>varianza (\(S^2\))</strong></mark>, \(m_3\) y \(m_4\) tendrán valor más adelante.</p>
+</div>
+
+<div class="slide">
+  <h1>La desviación típica</h1>
+  <div class="formula-box large">\[ S = +\sqrt{S^2} \]</div>
+  <p>Para la Ansiedad, \(S^2 = 54.75\ \text{puntos}^2\), por lo que:</p>
+  <div class="formula-box large">\[ S = +\sqrt{54.75} = 7.40\ \text{puntos} \]</div>
+  <p>A diferencia de la varianza, <mark>S conserva la unidad de la variable</mark> (puntos de la escala BAI),
+  lo que la hace más interpretable: los estudiantes se apartan, en promedio, unos 7.40 puntos de la
+  ansiedad media (16.44).</p>
+</div>
+
+<div class="slide">
+  <h1>¿Cuándo es representativa la media?</h1>
+  <p>Comparemos dos grupos hipotéticos con la <strong>misma media</strong> pero distinta dispersión:</p>
+  <svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="150" y1="55" x2="670" y2="55" stroke="#ddd" stroke-width="1"/><text x="8" y="59" font-size="12.5" fill="#333" font-weight="bold">Grupo A</text><line x1="410.0" y1="31" x2="410.0" y2="63" stroke="#005877" stroke-width="2" stroke-dasharray="4,2"/><circle cx="358.0" cy="49.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="384.0" cy="49.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="384.0" cy="38.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="410.0" cy="49.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="410.0" cy="38.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="410.0" cy="27.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="436.0" cy="49.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="436.0" cy="38.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="462.0" cy="49.0" r="4.5" fill="#E87B00" opacity="0.9"/><text x="682" y="59" font-size="13" fill="#005877" font-weight="bold">CV=0.07</text><line x1="150" y1="140" x2="670" y2="140" stroke="#ddd" stroke-width="1"/><text x="8" y="144" font-size="12.5" fill="#333" font-weight="bold">Grupo B</text><line x1="410.0" y1="116" x2="410.0" y2="148" stroke="#005877" stroke-width="2" stroke-dasharray="4,2"/><circle cx="202.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="254.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="306.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="410.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="410.0" cy="123.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="410.0" cy="112.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="514.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="566.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><circle cx="618.0" cy="134.0" r="4.5" fill="#E87B00" opacity="0.9"/><text x="682" y="144" font-size="13" fill="#005877" font-weight="bold">CV=0.32</text><text x="150.0" y="195" font-size="10.5" text-anchor="middle" fill="#777">6</text><text x="254.0" y="195" font-size="10.5" text-anchor="middle" fill="#777">10</text><text x="358.0" y="195" font-size="10.5" text-anchor="middle" fill="#777">14</text><text x="462.0" y="195" font-size="10.5" text-anchor="middle" fill="#777">18</text><text x="566.0" y="195" font-size="10.5" text-anchor="middle" fill="#777">22</text><text x="670.0" y="195" font-size="10.5" text-anchor="middle" fill="#777">26</text></svg>
+
+  <div class="two-col">
+    <div class="mini-card">
+    <h3>Grupo A</h3>
+        <ul>
+        <li>\(S^2=1.3225\text{ unid}^2\)</li>
+        <li>\(S=+\sqrt{1.3225}=1.15\text{ unid}\)</li>
+        </ul>
+        <!-- <p class="small-note">Datos concentrados, con media es representativa.</p> -->
+    </div>
+    <div class="mini-card">
+    <h3>Grupo B</h3>
+        <ul>
+        <li>\(S^2=25.8064\text{ unid}^2\)</li>
+        <li>\(S=+\sqrt{25.8064}=5.08\text{ unid}\)</li>
+        </ul>
+        <!-- <p class="small-note">Datos dispersos, con media poco representativa.</p> -->
+    </div>
+  </div>
+  <p>En el <strong>Grupo A</strong>, \(S=1.15\): los datos están concentrados y la media representa
+  bien al grupo. En el <strong>Grupo B</strong>, \(S=5.08\): los datos están dispersos y la media
+  es poco representativa. El <strong>Coeficiente de Variación (CV)</strong> cuantifica esa homogeneidad <strong>sin depender de la escala</strong>.</p>
+</div>
+
+<div class="slide">
+  <h1>Coeficiente de variación: interés práctico</h1>
+  <div class="formula-box large">\[ CV = \frac{S}{|\bar{x}|} \]</div>
+  <ul>
+    <li>No tiene unidad: es un número puro, <mark>ideal para comparar variables distintas</mark>.</li>
+    <li>Grupo A: \(CV_A=0.07\) &nbsp;&nbsp; Grupo B: \(CV_B=0.32\) &rarr; el Grupo A es
+    claramente más homogéneo.</li>
+  </ul>
+
+  <p><strong>Ejemplo.</strong> Entre la Ansiedad y las horas de sueño de los estudiantes, ¿Qué variable es más homogénea?</p>
+  <div class="two-col">
+    <div class="mini-card">
+      <p>Ansiedad (\(\bar{x}=16.44\), \(S=7.40\)):</p>
+      <div class="formula-box">\[ CV_{Ansiedad} = \dfrac{7.40}{16.44} = 0.45 \]</div>
+    </div>
+    <div class="mini-card">
+      <p>Horas de sueño (\(\bar{y}=6.34\), \(S=1.27\)):</p>
+      <div class="formula-box">\[ CV_{Sueño} = \dfrac{1.27}{6.34} \approx 0.20 \]</div>
+    </div>
+  </div>
+  <!-- <p class="small-note">El CV interesa sobre todo para comparar la homogeneidad de <strong>dos variables</strong> (p. ej. Ansiedad vs. Horas de sueño), más que para juzgar aisladamente si una media es representativa. En este caso como \(CV_{Sueño}\approx 0.20 < CV_{Ansiedad}=0.45\) decimos que las horas de sueño del grupo son más homogéneas que los niveles de ansiedad.</p> -->
+
+  <!-- <p><strong>Ejemplo.</strong> Supongamos que en <strong>otro grupo</strong> de estudiantes se ha medido la misma Ansiedad, con \(\bar y=13.23\) y \(S_y=8.54\). ¿En qué grupo la Ansiedad es más homogénea?</p>
+
+    <div class="two-col">
+        <div class="formula-box">
+            \[CV_{nuestro}=\frac{7.40}{16.44}=0.45\]
+        </div>
+        <div class="formula-box">
+            \[CV_{otro}=\frac{8.54}{13.23}=0.65\]
+        </div>
+    </div>
+  <p>Con \(CV_{nuestro}=0.45 < CV_{otro}=0.65\), nuestro grupo es más homogéneo en Ansiedad.</p>
+  <p class="small-note">El CV interesa sobre todo para comparar la homogeneidad de <strong>dos variables</strong>
+  (p. ej. Ansiedad vs. Horas de sueño), más que para juzgar aisladamente si una media es representativa.</p> -->
+</div>
+
+<div class="slide">
+  <h1>Tipificación de una variable</h1>
+  <div class="formula-box large">\[ Z = \frac{X - \bar{x}}{S_X} \]</div>
+  <p>El numerador contiene la <em>información bruta</em> (cuánto se aleja un dato de la media); el
+  denominador <em>normaliza</em> esa distancia y elimina la unidad, <strong>permitiendo comparar variables distintas</strong>.</p>
+
+  <p><strong>Ejemplo.</strong> El estudiante #6 de nuestro grupo reporta un nivel de Ansiedad=15; un estudiante del otro grupo reporta un nivel de Ansiedad=11. En el otro grupo se reporta una media \(\bar y=13.23\) puntos y una desviación típica de \(S_y=8.54\) puntos. Como las escalas (\(S\)) difieren, para comparar su <strong>posición relativa</strong> necesitamos tipificar:</p>
+
+  <div class="two-col">
+    <div class="mini-card">
+        <p>Estudiante #6 (nuestro grupo): \[z_1=\dfrac{15-16.44}{7.40}=-0.19\]</p>
+    </div>
+    <div class="mini-card">
+        <p>Estudiante del otro grupo:\[z_2=\dfrac{11-13.23}{8.54}=-0.26\]</p>
+    </div>
+  </div>
+
+  <!-- <p class="small-note">Ambas tipificaciones son <strong>negativas</strong>: los dos estudiantes están, relativamente, menos ansiosos que la media de su grupo (lo <em>deseable</em> tratándose de Ansiedad). Pero \(z_2=0.26\) es más negativo que \(z_1=-0.19\), así que el estudiante del otro grupo ocupa una <strong>mejor posición relativa</strong>, es decir, se aleja más, en sentido favorable, de su propia media.</p> -->
+
+  <!-- <p><strong>Ejemplo.</strong> El estudiante #2 tiene una Ansiedad de 22 puntos; el estudiante
+  #11 duerme solo 5 horas. ¿Cuál se aparta más &mdash;relativamente&mdash; de su grupo?</p>
+  <div class="two-col">
+    <div class="mini-card">
+      <p>Ansiedad (\(\bar{x}=16.44\), \(S=7.40\)):</p>
+      <div class="formula-box small">\[ z_{Ansiedad} = \dfrac{22 - 16.44}{7.40} = 0.75 \]</div>
+    </div>
+    <div class="mini-card">
+      <p>Horas de sueño (\(\bar{y}=6.34\), \(S=1.27\)):</p>
+      <div class="formula-box small">\[ z_{Sueño} = \dfrac{5 - 6.34}{1.27} = -1.06 \]</div>
+    </div>
+  </div>
+  <p class="small-note">Ambos valores se apartan de su media en la dirección "desfavorable", pero
+  \(|z_{Sueño}|=1.06 > |z_{Ansiedad}|=0.75\): en términos relativos, el déficit de sueño
+  del estudiante #11 es más atípico dentro de su grupo que el exceso de ansiedad del estudiante #2.</p> -->
+</div>
+
+<div class="slide">
+  <h1>Medidas de posición: los cuantiles</h1>
+  <p>Ordenando los datos de menor a mayor, \(x_{(1)} \le x_{(2)} \le \dots \le x_{(n)}\), un
+  <strong>cuantil</strong> \(P_\lambda\) (\(0\le\lambda\le1\)) es un valor que deja por debajo el
+  \(\lambda\cdot100\%\) de los datos, y por encima el \((1-\lambda)\cdot100\%\) restante.</p>
+  <div class="two-col">
+        <div class="formula-box large">
+            \[P_{k}=x_{(\lfloor L \rfloor)} + (L-\lfloor L \rfloor) \left[x_{(\lfloor L \rfloor + 1)}-x_{(\lfloor L \rfloor)}\right]\]
+            \[L=\dfrac{k(n-1)}{100}+1\]
+            <p class="small-note">Esta fórmula es válida para datos <strong>no-agrupados</strong> en intervalos.</p>
+        </div>
+    <ul>
+        <li>\(k\) es el <em>percentil</em> que queremos estudiar.</li>
+        <li>\(n\) el número total de datos.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Medidas de posición: los cuantiles (cont.)</h1>
+  <p class="lead-note"><strong>Ejemplo</strong>: Considerando los tiempos de reacción:</p>
+
+  <svg viewBox="-10 0 820 90" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+    <line x1="0" y1="55" x2="800" y2="55" stroke="#ddd" stroke-width="1"/>
+    <!-- Subdivisiones -->
+     <line   x1="0" y1="50" x2="0"   y2="60" stroke="#ddd" stroke-width="1"/> <!-- 390 -->
+     <line  x1="40" y1="50" x2="40"  y2="60" stroke="#ddd" stroke-width="1"/> <!-- 400 -->
+     <line  x1="80" y1="50" x2="80"  y2="60" stroke="#ddd" stroke-width="1"/> <!-- 410 -->
+     <line x1="120" y1="50" x2="120" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 420 -->
+     <line x1="160" y1="50" x2="160" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 430 -->
+     <line x1="200" y1="50" x2="200" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 440 -->
+     <line x1="240" y1="50" x2="240" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 450 -->
+     <line x1="280" y1="50" x2="280" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 460 -->
+     <line x1="320" y1="50" x2="320" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 470 -->
+     <line x1="360" y1="50" x2="360" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 480 -->
+     <line x1="400" y1="50" x2="400" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 490 -->
+     <line x1="440" y1="50" x2="440" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 500 -->
+     <line x1="480" y1="50" x2="480" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 510 -->
+     <line x1="520" y1="50" x2="520" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 520 -->
+     <line x1="560" y1="50" x2="560" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 530 -->
+     <line x1="600" y1="50" x2="600" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 540 -->
+     <line x1="640" y1="50" x2="640" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 550 -->
+     <line x1="680" y1="50" x2="680" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 560 -->
+     <line x1="720" y1="50" x2="720" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 570 -->
+     <line x1="760" y1="50" x2="760" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 580 -->
+     <line x1="799" y1="50" x2="799" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 590 -->
+
+    <!-- Circulos -->
+     <circle cx="0.0" cy="55" r="5"   fill="#E87B00" opacity="0.85"/> <!-- 390 -->
+     <circle cx="20.0" cy="55" r="5"  fill="#E87B00" opacity="0.85"/> <!-- 395 -->
+     <circle cx="40.0" cy="55" r="5"  fill="#E87B00" opacity="0.85"/> <!-- 400 -->
+     <circle cx="80.0" cy="55" r="5"  fill="#E87B00" opacity="0.85"/> <!-- 410 -->
+     <circle cx="120.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 420 -->
+     <circle cx="160.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 430 -->
+     <circle cx="200.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 440 -->
+     <circle cx="240.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 450 -->
+     <circle cx="260.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 455 -->
+     <circle cx="280.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 460 -->
+     <circle cx="320.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 470 -->
+     <circle cx="440.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 500 -->
+     <circle cx="480.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 510 -->
+     <circle cx="520.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 520 -->
+     <circle cx="680.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 560 -->
+     <circle cx="799.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 590 -->
+
+     <!-- Algunos valores -->
+      <text    x="0" y="80" font-size="11" text-anchor="middle" fill="#777">390</text>
+      <text    x="20" y="40" font-size="11" text-anchor="middle" fill="#777">395</text>
+      <text    x="40" y="80" font-size="11" text-anchor="middle" fill="#777">400</text>
+      <text    x="80" y="80" font-size="11" text-anchor="middle" fill="#777">410</text>
+      <text    x="120" y="80" font-size="11" text-anchor="middle" fill="#777">420</text>
+      <text    x="160" y="80" font-size="11" text-anchor="middle" fill="#777">430</text>
+      <text    x="200" y="80" font-size="11" text-anchor="middle" fill="#777">440</text>
+      <text    x="240" y="80" font-size="11" text-anchor="middle" fill="#777">450</text>
+      <text    x="260" y="40" font-size="11" text-anchor="middle" fill="#777">455</text>
+      <text    x="280" y="80" font-size="11" text-anchor="middle" fill="#777">460</text>
+      <text    x="320" y="80" font-size="11" text-anchor="middle" fill="#777">470</text>
+      <text    x="440" y="80" font-size="11" text-anchor="middle" fill="#777">500</text>
+      <text    x="480" y="80" font-size="11" text-anchor="middle" fill="#777">510</text>
+      <text    x="520" y="80" font-size="11" text-anchor="middle" fill="#777">520</text>
+      <text    x="680" y="80" font-size="11" text-anchor="middle" fill="#777">560</text>
+      <text    x="799" y="80" font-size="11" text-anchor="middle" fill="#777">590</text>
+  </svg>
+  
+  <p class="lead-note">
+    <ul>
+    <li>¿Cuál sería el peor tiempo de reacción para ser considerado entre el 30% más rápido?
+    \[L_{.30}=\frac{30*15}{100}+1=5.5 \rightarrow P_{.30}=x_{5} + (5.5-5) \left[x_{6}-x_{5}\right]\rightarrow P_{.30}=420 + 0.5 \left[430-420\right] = 425\,ms\]
+    </li>
+    <li>¿Cuanto debería demorar en reaccionar para estar en el 70% de personas más lentas?</li>
+    </ul>
+
+    <svg viewBox="-10 20 820 80" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+    <line x1="0" y1="55" x2="800" y2="55" stroke="#ddd" stroke-width="1"/>
+    <!-- Subdivisiones -->
+     <line   x1="0" y1="50" x2="0"   y2="60" stroke="#ddd" stroke-width="1"/> <!-- 390 -->
+     <line  x1="40" y1="50" x2="40"  y2="60" stroke="#ddd" stroke-width="1"/> <!-- 400 -->
+     <line  x1="80" y1="50" x2="80"  y2="60" stroke="#ddd" stroke-width="1"/> <!-- 410 -->
+     <line x1="120" y1="50" x2="120" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 420 -->
+     <line x1="160" y1="50" x2="160" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 430 -->
+     <line x1="200" y1="50" x2="200" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 440 -->
+     <line x1="240" y1="50" x2="240" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 450 -->
+     <line x1="280" y1="50" x2="280" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 460 -->
+     <line x1="320" y1="50" x2="320" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 470 -->
+     <line x1="360" y1="50" x2="360" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 480 -->
+     <line x1="400" y1="50" x2="400" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 490 -->
+     <line x1="440" y1="50" x2="440" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 500 -->
+     <line x1="480" y1="50" x2="480" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 510 -->
+     <line x1="520" y1="50" x2="520" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 520 -->
+     <line x1="560" y1="50" x2="560" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 530 -->
+     <line x1="600" y1="50" x2="600" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 540 -->
+     <line x1="640" y1="50" x2="640" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 550 -->
+     <line x1="680" y1="50" x2="680" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 560 -->
+     <line x1="720" y1="50" x2="720" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 570 -->
+     <line x1="760" y1="50" x2="760" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 580 -->
+     <line x1="799" y1="50" x2="799" y2="60" stroke="#ddd" stroke-width="1"/> <!-- 590 -->
+
+    <!-- Circulos -->
+     <circle cx="0.0" cy="55" r="5"   fill="#005877" opacity="0.45"/> <!-- 390 -->
+     <circle cx="20.0" cy="55" r="5"  fill="#005877" opacity="0.45"/> <!-- 395 -->
+     <circle cx="40.0" cy="55" r="5"  fill="#005877" opacity="0.45"/> <!-- 400 -->
+     <circle cx="80.0" cy="55" r="5"  fill="#005877" opacity="0.45"/> <!-- 410 -->
+     <circle cx="120.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 420 -->
+     <circle cx="160.0" cy="55" r="5" fill="#E87B00" opacity="0.85"/> <!-- 430 -->
+     <circle cx="200.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 440 -->
+     <circle cx="240.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 450 -->
+     <circle cx="260.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 455 -->
+     <circle cx="280.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 460 -->
+     <circle cx="320.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 470 -->
+     <circle cx="440.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 500 -->
+     <circle cx="480.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 510 -->
+     <circle cx="520.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 520 -->
+     <circle cx="680.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 560 -->
+     <circle cx="799.0" cy="55" r="5" fill="#005877" opacity="0.45"/> <!-- 590 -->
+
+     <!-- Valor de 30 -->
+      <text    x="160" y="80" font-size="11" text-anchor="middle" fill="#777">430</text>
+      <text    x="120" y="80" font-size="11" text-anchor="middle" fill="#777">420</text>
+      <line x1="140" y1="35" x2="140" y2="80" stroke="red  " stroke-width="2"/>
+      <text    x="140" y="30" font-size="11" text-anchor="middle" fill="red">425</text>
+
+      <!-- Lineas de indicando más lentos y más rápidos -->
+       <rect   x="-5" y="40" width="144" height="30" fill="#005877" opacity="0.5" rx="2"/>
+       <rect   x="141" y="40" width="670" height="30" fill="#E87B00" opacity="0.5" rx="2"/>
+
+       <text x="0" y="95" font-size="15" text-anchor="left" fill="#777">30% más rápidos</text>
+       <text x="400" y="35" font-size="15" text-anchor="left" fill="#777">70% más lentos</text>
+
+  </svg>
+
+
+  </p>
+</div>
+
+<div class="slide">
+  <h1>Cuantiles de la Ansiedad</h1>
+  <p>Datos ordenados (n=16, par &rarr; la mediana es la media de los dos valores centrales):</p>
+  <p class="ordered-data">7, 9, 10, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 22, 25, 38</p>
+  <div class="quantile-grid">
+    <div><span class="qlabel">P<sub>0</sub></span><span class="qval">7</span><span class="qtag">= Mínimo</span></div>
+    <div><span class="qlabel">P<sub>25</sub></span><span class="qval">10.75</span><span class="qtag">Q&#8321;</span></div>
+    <div><span class="qlabel">P<sub>50</sub></span><span class="qval">15.50</span><span class="qtag">= Mediana</span></div>
+    <div><span class="qlabel">P<sub>75</sub></span><span class="qval">19.25</span><span class="qtag">Q&#8323;</span></div>
+    <div><span class="qlabel">P<sub>100</sub></span><span class="qval">38</span><span class="qtag">= Máximo</span></div>
+  </div>
+  <p class="small-note">Como la mediana (15.50) cae entre las posiciones 8.ª y 9.ª (dos valores centrales
+  15 y 16), \(Me=\frac{15+16}{2}=15.50\).</p>
+
+  <ul>
+    <li><strong>Cuartiles</strong> (\(Q_1,Q_2,Q_3\)): dividen la distribución en 4 partes iguales &rarr;
+    <mark>3 cuartiles</mark>. \(Q_2 = Me\).</li>
+    <li><strong>Deciles</strong> (\(D_{.1},\dots,D_{.9}\)): dividen en 10 partes iguales &rarr;
+    <mark>9 deciles</mark>.</li>
+    <li><strong>Percentiles</strong> (\(P_{.01},\dots,P_{.99}\)): dividen en 100 partes iguales &rarr;
+    <mark>99 percentiles</mark>.</li>
+  </ul>
+  <p class="small-note">En los tres casos, \(P_0\) no cuenta como cuantil: es simplemente el mínimo.</p>
+</div>
+
+<div class="slide">
+  <h1>Medidas de dispersión: recorrido y RI</h1>
+  <p>¿Por qué las calculamos? Para cuantificar, con un único número, cuánto se <em>"estiran"</em> los datos.</p>
+  <div class="formula-box">Para la Ansiedad:\[ Re = x_{(n)} - x_{(1)} = 38 - 7 = 31\ \text{puntos} \]</div>
+  <p><strong>Rango</strong>: \(Ra=[7,\,38]\) &mdash; el intervalo que contiene todos los datos.</p>
+  <p>El Recorrido es muy sensible a valores extremos. El <strong>Recorrido intercuartílico</strong> corrige
+  esto, midiendo la dispersión del 50&nbsp;% central:</p>
+  <div class="formula-box">Nuevamente, utilizamos la Ansiedad:\[ RI = Q_3 - Q_1 = 19.25 - 10.75 = 8.50\ \text{puntos} \]</div>
+</div>
+
+<div class="slide">
+  <h1>Medidas de forma: el histograma</h1>
+  <p>La forma que observamos depende de cómo construyamos los intervalos. Misma variable (Ansiedad),
+  tres particiones distintas:</p>
+  <div class="three-col">
+    <div class="mini-card center"><h3>3 columnas</h3><svg viewBox="0 0 250 190" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="50" y1="150" x2="230" y2="150" stroke="#999" stroke-width="1"/><rect x="52.0" y="30.0" width="56.0" height="120.0" fill="#005877" opacity="0.85" rx="2"/><text x="80.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">10</text><rect x="112.0" y="90.0" width="56.0" height="60.0" fill="#005877" opacity="0.85" rx="2"/><text x="140.0" y="84.0" font-size="13" text-anchor="middle" fill="#333">5</text><rect x="172.0" y="138.0" width="56.0" height="12.0" fill="#005877" opacity="0.85" rx="2"/><text x="200.0" y="132.0" font-size="13" text-anchor="middle" fill="#333">1</text><text x="50.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">7.0</text><text x="110.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">17.3</text><text x="170.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">27.7</text><text x="230.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">38.0</text></svg></div>
+    <div class="mini-card center"><h3>4 columnas</h3><svg viewBox="0 0 250 190" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="50" y1="150" x2="230" y2="150" stroke="#999" stroke-width="1"/><rect x="52.0" y="30.0" width="41.0" height="120.0" fill="#005877" opacity="0.85" rx="2"/><text x="72.5" y="24.0" font-size="13" text-anchor="middle" fill="#333">7</text><rect x="97.0" y="30.0" width="41.0" height="120.0" fill="#005877" opacity="0.85" rx="2"/><text x="117.5" y="24.0" font-size="13" text-anchor="middle" fill="#333">7</text><rect x="142.0" y="132.9" width="41.0" height="17.1" fill="#005877" opacity="0.85" rx="2"/><text x="162.5" y="126.9" font-size="13" text-anchor="middle" fill="#333">1</text><rect x="187.0" y="132.9" width="41.0" height="17.1" fill="#005877" opacity="0.85" rx="2"/><text x="207.5" y="126.9" font-size="13" text-anchor="middle" fill="#333">1</text><text x="50.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">7.0</text><text x="95.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">14.8</text><text x="140.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">22.5</text><text x="185.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">30.2</text><text x="230.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">38.0</text></svg></div>
+    <div class="mini-card center"><h3>5 columnas</h3><svg viewBox="0 0 250 190" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="50" y1="150" x2="230" y2="150" stroke="#999" stroke-width="1"/><rect x="52.0" y="30.0" width="32.0" height="120.0" fill="#005877" opacity="0.85" rx="2"/><text x="68.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">6</text><rect x="88.0" y="30.0" width="32.0" height="120.0" fill="#005877" opacity="0.85" rx="2"/><text x="104.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">6</text><rect x="124.0" y="90.0" width="32.0" height="60.0" fill="#005877" opacity="0.85" rx="2"/><text x="140.0" y="84.0" font-size="13" text-anchor="middle" fill="#333">3</text><rect x="160.0" y="150.0" width="32.0" height="0.0" fill="#005877" opacity="0.85" rx="2"/><text x="176.0" y="144.0" font-size="13" text-anchor="middle" fill="#333">0</text><rect x="196.0" y="130.0" width="32.0" height="20.0" fill="#005877" opacity="0.85" rx="2"/><text x="212.0" y="124.0" font-size="13" text-anchor="middle" fill="#333">1</text><text x="50.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">7.0</text><text x="86.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">13.2</text><text x="122.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">19.4</text><text x="158.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">25.6</text><text x="194.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">31.8</text><text x="230.0" y="166.0" font-size="10.5" text-anchor="middle" fill="#555">38.0</text></svg></div>
+  </div>
+  <p class="small-note">La forma "aparente" cambia, pero los datos son los mismos: por eso necesitamos
+  medidas objetivas de forma (simetría y curtosis) que no dependan de los intervalos elegidos.</p>
+</div>
+
+<div class="slide">
+  <h1>Coeficiente de simetría</h1>
+  <div class="formula-box">\[ g_1 = \frac{m_3}{S^3} \]</div>
+  <p>Para la Ansiedad: \(g_1 = \dfrac{552.50}{7.40^3} = 1.36\) &rarr; asimétrica, con cola pesada
+  a la derecha (coherente con el estudiante atípico de 38 puntos).</p>
+  <div class="three-col">
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="108.9" width="48.0" height="41.1" fill="#6B6E6D" opacity="0.85"/><rect x="74.0" y="81.6" width="48.0" height="68.4" fill="#6B6E6D" opacity="0.85"/><rect x="126.0" y="54.2" width="48.0" height="95.8" fill="#6B6E6D" opacity="0.85"/><rect x="178.0" y="20.0" width="48.0" height="130.0" fill="#6B6E6D" opacity="0.85"/><rect x="230.0" y="67.9" width="48.0" height="82.1" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">g<sub>1</sub>&lt;0 &middot; cola a la izq.</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="98.0" width="48.0" height="52.0" fill="#6B6E6D" opacity="0.85"/><rect x="74.0" y="59.0" width="48.0" height="91.0" fill="#6B6E6D" opacity="0.85"/><rect x="126.0" y="20.0" width="48.0" height="130.0" fill="#6B6E6D" opacity="0.85"/><rect x="178.0" y="59.0" width="48.0" height="91.0" fill="#6B6E6D" opacity="0.85"/><rect x="230.0" y="98.0" width="48.0" height="52.0" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">g<sub>1</sub>=0 &middot; Simétrica</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="67.9" width="48.0" height="82.1" fill="#6B6E6D" opacity="0.85"/><rect x="74.0" y="20.0" width="48.0" height="130.0" fill="#6B6E6D" opacity="0.85"/><rect x="126.0" y="54.2" width="48.0" height="95.8" fill="#6B6E6D" opacity="0.85"/><rect x="178.0" y="81.6" width="48.0" height="68.4" fill="#6B6E6D" opacity="0.85"/><rect x="230.0" y="108.9" width="48.0" height="41.1" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">g<sub>1</sub>&gt;0 &middot; cola a la der.</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Coeficiente de curtosis</h1>
+  <div class="formula-box">\[ g_2 = \frac{m_4}{S^4} - 3 \]</div>
+  <p>El "&minus;3" centra el coeficiente en cero, porque en la normal tipificada (nuestro modelo de
+  referencia) \(\frac{m_4}{S^4}=3\). Para la Ansiedad: \(g_2=1.97\).</p>
+  <div class="three-col">
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="60.6" width="48.0" height="89.4" fill="#6B6E6D" opacity="0.85"/><rect x="74.0" y="36.2" width="48.0" height="113.8" fill="#6B6E6D" opacity="0.85"/><rect x="126.0" y="20.0" width="48.0" height="130.0" fill="#6B6E6D" opacity="0.85"/><rect x="178.0" y="36.2" width="48.0" height="113.8" fill="#6B6E6D" opacity="0.85"/><rect x="230.0" y="60.6" width="48.0" height="89.4" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">Platicúrtica (g<sub>2</sub>&lt;0)</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="104.5" width="48.0" height="45.5" fill="#6B6E6D" opacity="0.85"/><rect x="74.0" y="52.5" width="48.0" height="97.5" fill="#6B6E6D" opacity="0.85"/><rect x="126.0" y="20.0" width="48.0" height="130.0" fill="#6B6E6D" opacity="0.85"/><rect x="178.0" y="72.0" width="48.0" height="78.0" fill="#6B6E6D" opacity="0.85"/><rect x="230.0" y="124.0" width="48.0" height="26.0" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">Mesocúrtica (g<sub>2</sub>=0)</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="131.4" width="48.0" height="18.6" fill="#6B6E6D" opacity="0.85"/><rect x="74.0" y="119.0" width="48.0" height="31.0" fill="#6B6E6D" opacity="0.85"/><rect x="126.0" y="20.0" width="48.0" height="130.0" fill="#6B6E6D" opacity="0.85"/><rect x="178.0" y="119.0" width="48.0" height="31.0" fill="#6B6E6D" opacity="0.85"/><rect x="230.0" y="131.4" width="48.0" height="18.6" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">Leptocúrtica (g<sub>2</sub>&gt;0)</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Las modas</h1>
+  <p>Una <strong>moda</strong> es un máximo de frecuencia en el histograma. Las distribuciones pueden ser
+  unimodales o multimodales; la multimodalidad suele delatar un <strong>factor</strong> oculto en los datos.</p>
+  <div class="three-col">
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="108.9" width="39.3" height="41.1" fill="#6B6E6D" opacity="0.85"/><rect x="65.3" y="74.7" width="39.3" height="75.3" fill="#6B6E6D" opacity="0.85"/><rect x="108.7" y="20.0" width="39.3" height="130.0" fill="#E87B00" opacity="0.85"/><rect x="152.0" y="67.9" width="39.3" height="82.1" fill="#6B6E6D" opacity="0.85"/><rect x="195.3" y="102.1" width="39.3" height="47.9" fill="#6B6E6D" opacity="0.85"/><rect x="238.7" y="122.6" width="39.3" height="27.4" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">Unimodal</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="101.2" width="39.3" height="48.8" fill="#6B6E6D" opacity="0.85"/><rect x="65.3" y="20.0" width="39.3" height="130.0" fill="#E87B00" opacity="0.85"/><rect x="108.7" y="85.0" width="39.3" height="65.0" fill="#6B6E6D" opacity="0.85"/><rect x="152.0" y="93.1" width="39.3" height="56.9" fill="#6B6E6D" opacity="0.85"/><rect x="195.3" y="28.1" width="39.3" height="121.9" fill="#E87B00" opacity="0.85"/><rect x="238.7" y="85.0" width="39.3" height="65.0" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">Bimodal</p></div>
+    <div class="mini-card center"><svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="150" x2="280" y2="150" stroke="#999" stroke-width="1"/><rect x="22.0" y="94.3" width="28.5" height="55.7" fill="#6B6E6D" opacity="0.85"/><rect x="54.5" y="20.0" width="28.5" height="130.0" fill="#E87B00" opacity="0.85"/><rect x="87.0" y="85.0" width="28.5" height="65.0" fill="#6B6E6D" opacity="0.85"/><rect x="119.5" y="98.0" width="28.5" height="52.0" fill="#6B6E6D" opacity="0.85"/><rect x="152.0" y="29.3" width="28.5" height="120.7" fill="#E87B00" opacity="0.85"/><rect x="184.5" y="85.0" width="28.5" height="65.0" fill="#6B6E6D" opacity="0.85"/><rect x="217.0" y="47.9" width="28.5" height="102.1" fill="#E87B00" opacity="0.85"/><rect x="249.5" y="94.3" width="28.5" height="55.7" fill="#6B6E6D" opacity="0.85"/></svg><p class="qtag">Trimodal</p></div>
+  </div>
+  <p class="small-note">En Psicología, una distribución bimodal de Ansiedad podría reflejar dos subgrupos
+  &mdash;por ejemplo, con y sin experiencia previa con exámenes tipo test&mdash; que conviene analizar por
+  separado en lugar de describir con una sola media.</p>
+</div>
+
+<div class="slide">
+  <h1>Diagrama de caja y bigotes</h1>
+  <p>Representa \(Min, Q_1, Me, Q_3, Max\) e identifica los valores muy alejados del núcleo central
+  \((Q_1,Q_3)\), que contiene el 50&nbsp;% de los datos y mejor representa a la variable.</p>
+  <p>Un dato se considera <strong>atípico</strong> si está a más de \(1.5\times RI\) de la caja, para la Ansiedad tenemos:</p>
+  <div class="formula-box large">\[ \text{límites} = \left[\,Q_1 - 1.5\cdot RI,\;\; Q_3 + 1.5\cdot RI\,\right] = [-2.00,\ 32.00] \]</div>
+</div>
+
+<div class="slide">
+  <h1>El diagrama de caja de la Ansiedad</h1>
+  <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+    <line x1="55" y1="100" x2="640" y2="100" stroke="#ddd" stroke-width="1"/>
+    <line x1="87.5" y1="74.0" x2="148.4" y2="74.0" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="286.6" y1="74.0" x2="380.0" y2="74.0" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="87.5" y1="65.0" x2="87.5" y2="83.0" stroke="#555" stroke-width="1.5"/><line x1="380.0" y1="65.0" x2="380.0" y2="83.0" stroke="#555" stroke-width="1.5"/><rect x="148.4" y="55" width="138.1" height="38" fill="#E87B00" opacity="0.3" stroke="#E87B00" stroke-width="2"/><line x1="225.6" y1="55" x2="225.6" y2="93" stroke="#E87B00" stroke-width="3"/><circle cx="591.2" cy="74.0" r="5" fill="none" stroke="#c0392b" stroke-width="2"/><text x="591.2" y="47" font-size="11" text-anchor="middle" fill="#c0392b">atípico: 38</text><text x="87.5" y="113" font-size="12" text-anchor="middle" fill="#333">mín*</text><text x="87.5" y="128" font-size="10.5" text-anchor="middle" fill="#777">7</text><text x="148.4" y="113" font-size="12" text-anchor="middle" fill="#333">Q1</text><text x="148.4" y="128" font-size="10.5" text-anchor="middle" fill="#777">10.75</text><text x="225.6" y="113" font-size="12" text-anchor="middle" fill="#333">Me</text><text x="225.6" y="128" font-size="10.5" text-anchor="middle" fill="#777">15.5</text><text x="286.6" y="113" font-size="12" text-anchor="middle" fill="#333">Q3</text><text x="286.6" y="128" font-size="10.5" text-anchor="middle" fill="#777">19.25</text><text x="380.0" y="113" font-size="12" text-anchor="middle" fill="#333">máx*</text><text x="380.0" y="128" font-size="10.5" text-anchor="middle" fill="#777">25</text></svg>
+  <p>El estudiante con <mark>Ansiedad = 38</mark> queda fuera de \([-2.00,\ 32.00]\): es
+  un <strong>candidato a atípico</strong>. El bigote superior se detiene en el mayor valor "normal"
+  (25), no en el máximo real.</p>
+</div>
+
+<div class="slide">
+  <h1>Análisis exploratorio global</h1>
+  <p>Histograma y diagrama de caja comparten <strong>el mismo eje x</strong>: cada estadístico de la caja
+  se proyecta verticalmente sobre su posición exacta en el histograma.</p>
+  <svg viewBox="0 0 700 323" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+    <rect x="90.1" y="35.0" width="61.5" height="165.0" fill="#005877" opacity="0.85" rx="2"/>
+    <rect x="151.6" y="35.0" width="39.7" height="165.0" fill="#E87B00" opacity="0.30" rx="2"/>
+    <text x="140.7" y="29.0" font-size="12.5" text-anchor="middle" fill="#333">6</text>
+    <rect x="194.3" y="35.0" width="101.2" height="165.0" fill="#E87B00" opacity="0.30" rx="2"/>
+    <text x="244.9" y="29.0" font-size="12.5" text-anchor="middle" fill="#333">6</text>
+    <rect x="298.5" y="117.5" width="101.2" height="82.5" fill="#005877" opacity="0.85" rx="2"/>
+    <text x="349.1" y="111.5" font-size="12.5" text-anchor="middle" fill="#333">3</text>
+    <rect x="402.7" y="200.0" width="101.2" height="0.0" fill="#005877" opacity="0.85" rx="2"/>
+    <text x="453.3" y="194.0" font-size="12.5" text-anchor="middle" fill="#333">0</text>
+    <rect x="506.9" y="172.5" width="101.2" height="27.5" fill="#005877" opacity="0.85" rx="2"/>
+    <text x="557.5" y="166.5" font-size="12.5" text-anchor="middle" fill="#333">1</text>
+    <line x1="55" y1="200" x2="660" y2="200" stroke="#999" stroke-width="1"/>
+    <line x1="88.6" y1="10" x2="88.6" y2="260" stroke="black" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"/>
+    <line x1="151.6" y1="10" x2="151.6" y2="260" stroke="black" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"/>
+    <line x1="231.5" y1="10" x2="231.5" y2="260" stroke="black" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"/>
+    <line x1="294.5" y1="10" x2="294.5" y2="260" stroke="black" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"/>
+    <line x1="391.1" y1="10" x2="391.1" y2="260" stroke="black" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"/>
+    <line x1="609.6" y1="10" x2="609.6" y2="260" stroke="#c0392b" stroke-width="2" stroke-dasharray="3,3" opacity="0.7"/>
+    <line x1="88.6" y1="264.0" x2="151.6" y2="264.0" stroke="#555" stroke-width="1.5"/>
+    <line x1="294.5" y1="264.0" x2="391.1" y2="264.0" stroke="#555" stroke-width="1.5"/>
+    <line x1="88.6" y1="255.0" x2="88.6" y2="273.0" stroke="#555" stroke-width="1.5"/>
+    <line x1="391.1" y1="255.0" x2="391.1" y2="273.0" stroke="#555" stroke-width="1.5"/>
+    <rect x="151.6" y="245" width="142.8" height="38" fill="#E87B00" opacity="0.3" stroke="#E87B00" stroke-width="2"/>
+    <line x1="231.5" y1="245" x2="231.5" y2="283" stroke="#E87B00" stroke-width="3"/>
+    <circle cx="609.6" cy="264.0" r="5.5" fill="white" stroke="#c0392b" stroke-width="2.2"/>
+    <text x="88.6" y="297" font-size="11.5" text-anchor="middle" fill="#333">mín*</text>
+    <text x="88.6" y="311" font-size="10.5" text-anchor="middle" fill="#333">7</text>
+    <text x="151.6" y="297" font-size="11.5" text-anchor="middle" fill="#333">Q1</text>
+    <text x="151.6" y="311" font-size="10.5" text-anchor="middle" fill="#333">10.75</text>
+    <text x="231.5" y="297" font-size="11.5" text-anchor="middle" fill="#333">Me</text>
+    <text x="231.5" y="311" font-size="10.5" text-anchor="middle" fill="#333">15.5</text>
+    <text x="294.5" y="297" font-size="11.5" text-anchor="middle" fill="#333">Q3</text>
+    <text x="294.5" y="311" font-size="10.5" text-anchor="middle" fill="#333">19.25</text>
+    <text x="391.1" y="297" font-size="11.5" text-anchor="middle" fill="#333">máx*</text>
+    <text x="391.1" y="311" font-size="10.5" text-anchor="middle" fill="#333">25</text>
+    <text x="610" y="297" font-size="11.5" text-anchor="middle" fill="#c0392b">atípico</text>
+    <text x="610" y="311" font-size="10.5" text-anchor="middle" fill="#c0392b">38</text>
+</svg>
+</div>
+
+<div class="slide">
+  <h1>Análisis en función de un factor: Sexo</h1>
+  <p>Dividimos la Ansiedad según el factor <strong>Sexo</strong> y comparamos histogramas y cajas de cada
+  nivel: \(\bar{x}_M=13.75\) vs. \(\bar{x}_F=19.12\).</p>
+  <div class="two-col">
+    <div class="mini-card center">
+      <h3>&#9794; Hombres (n=8)</h3>
+      <svg viewBox="0 0 310 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="50" y1="110" x2="290" y2="110" stroke="#999" stroke-width="1"/><rect x="52.0" y="30.0" width="56.0" height="80.0" fill="#005877" opacity="0.85" rx="2"/><text x="80.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">2</text><rect x="112.0" y="30.0" width="56.0" height="80.0" fill="#005877" opacity="0.85" rx="2"/><text x="140.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">2</text><rect x="172.0" y="30.0" width="56.0" height="80.0" fill="#005877" opacity="0.85" rx="2"/><text x="200.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">2</text><rect x="232.0" y="30.0" width="56.0" height="80.0" fill="#005877" opacity="0.85" rx="2"/><text x="260.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">2</text><text x="50.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">7.0</text><text x="110.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">10.2</text><text x="170.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">13.5</text><text x="230.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">16.8</text><text x="290.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">20.0</text></svg>
+      <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="55" y1="108" x2="280" y2="108" stroke="#ddd" stroke-width="1"/><line x1="67.5" y1="74.0" x2="90.9" y2="74.0" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="128.4" y1="74.0" x2="148.8" y2="74.0" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="67.5" y1="65.0" x2="67.5" y2="83.0" stroke="#555" stroke-width="1.5"/><line x1="148.8" y1="65.0" x2="148.8" y2="83.0" stroke="#555" stroke-width="1.5"/><rect x="90.9" y="55" width="37.5" height="38" fill="#E87B00" opacity="0.3" stroke="#E87B00" stroke-width="2"/><line x1="108.1" y1="55" x2="108.1" y2="93" stroke="#E87B00" stroke-width="3"/><text x="67.5" y="113" font-size="12" text-anchor="middle" fill="#333">mín*</text><text x="67.5" y="128" font-size="10.5" text-anchor="middle" fill="#777">7</text><text x="90.9" y="113" font-size="12" text-anchor="middle" fill="#333">Q1</text><text x="90.9" y="128" font-size="10.5" text-anchor="middle" fill="#777">10.75</text><text x="108.1" y="113" font-size="12" text-anchor="middle" fill="#333">Me</text><text x="108.1" y="128" font-size="10.5" text-anchor="middle" fill="#777">13.5</text><text x="128.4" y="113" font-size="12" text-anchor="middle" fill="#333">Q3</text><text x="128.4" y="128" font-size="10.5" text-anchor="middle" fill="#777">16.75</text><text x="148.8" y="113" font-size="12" text-anchor="middle" fill="#333">máx*</text><text x="148.8" y="128" font-size="10.5" text-anchor="middle" fill="#777">20</text></svg>
+    </div>
+    <div class="mini-card center">
+      <h3>&#9792; Mujeres (n=8)</h3>
+      <svg viewBox="0 0 310 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="50" y1="110" x2="290" y2="110" stroke="#999" stroke-width="1"/><rect x="52.0" y="30.0" width="56.0" height="80.0" fill="#005877" opacity="0.85" rx="2"/><text x="80.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">3</text><rect x="112.0" y="30.0" width="56.0" height="80.0" fill="#005877" opacity="0.85" rx="2"/><text x="140.0" y="24.0" font-size="13" text-anchor="middle" fill="#333">3</text><rect x="172.0" y="83.3" width="56.0" height="26.7" fill="#005877" opacity="0.85" rx="2"/><text x="200.0" y="77.3" font-size="13" text-anchor="middle" fill="#333">1</text><rect x="232.0" y="83.3" width="56.0" height="26.7" fill="#005877" opacity="0.85" rx="2"/><text x="260.0" y="77.3" font-size="13" text-anchor="middle" fill="#333">1</text><text x="50.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">9.0</text><text x="110.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">16.2</text><text x="170.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">23.5</text><text x="230.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">30.8</text><text x="290.0" y="126.0" font-size="10.5" text-anchor="middle" fill="#555">38.0</text></svg>
+      <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="55" y1="108" x2="280" y2="108" stroke="#ddd" stroke-width="1"/><line x1="80.0" y1="74.0" x2="105.0" y2="74.0" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="165.9" y1="74.0" x2="180.0" y2="74.0" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="80.0" y1="65.0" x2="80.0" y2="83.0" stroke="#555" stroke-width="1.5"/><line x1="180.0" y1="65.0" x2="180.0" y2="83.0" stroke="#555" stroke-width="1.5"/><rect x="105.0" y="55" width="60.9" height="38" fill="#E87B00" opacity="0.3" stroke="#E87B00" stroke-width="2"/><line x1="133.1" y1="55" x2="133.1" y2="93" stroke="#E87B00" stroke-width="3"/><circle cx="261.2" cy="74.0" r="5" fill="none" stroke="#c0392b" stroke-width="2"/><text x="261.2" y="47" font-size="11" text-anchor="middle" fill="#c0392b">atípico: 38</text><text x="80.0" y="113" font-size="12" text-anchor="middle" fill="#333">mín*</text><text x="80.0" y="128" font-size="10.5" text-anchor="middle" fill="#777">9</text><text x="105.0" y="113" font-size="12" text-anchor="middle" fill="#333">Q1</text><text x="105.0" y="128" font-size="10.5" text-anchor="middle" fill="#777">13</text><text x="133.1" y="113" font-size="12" text-anchor="middle" fill="#333">Me</text><text x="133.1" y="128" font-size="10.5" text-anchor="middle" fill="#777">17.5</text><text x="165.9" y="113" font-size="12" text-anchor="middle" fill="#333">Q3</text><text x="165.9" y="128" font-size="10.5" text-anchor="middle" fill="#777">22.75</text><text x="180.0" y="113" font-size="12" text-anchor="middle" fill="#333">máx*</text><text x="180.0" y="128" font-size="10.5" text-anchor="middle" fill="#777">25</text></svg>
+    </div>
+  </div>
+  <p class="small-note">El grupo de mujeres presenta mayor dispersión y el único valor atípico (38); el de
+  hombres es más compacto y sin atípicos, aunque su mediana es algo inferior.</p>
+</div>
+    <img id="logo" src="../LogoUca.png">
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false}
+          ],
+          throwOnError: false
+        });
+      });
+    </script>
+</body>
+</html>
