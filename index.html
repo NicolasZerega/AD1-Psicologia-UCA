@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis de Datos en Psicología I</title>
+<style>
+    /* Mismos colores que estilo.css */
+    :root {
+        --uca-blue: #005877;
+        --uca-orange: #E87B00;
+        --uca-gray: #6B6E6D;
+        --light-gray: #f5f7f8;
+        --ink: #222;
+        --line: #dfe4e6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: var(--ink);
+        background: white;
+        line-height: 1.6;
+    }
+
+    .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 6vw;
+    }
+
+    /* ---------- Cabecera ---------- */
+
+    header .wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    #logo {
+        width: 150px;
+        height: auto;
+    }
+
+    .curso {
+        color: var(--uca-gray);
+        font-size: 0.95rem;
+    }
+
+    /* ---------- Portada ---------- */
+
+    .hero {
+        padding-top: 4vh;
+    }
+
+    h1 {
+        font-family: Georgia, serif;
+        color: var(--uca-blue);
+        font-size: clamp(2.6rem, 6vw, 5rem);
+        line-height: 1.05;
+        margin: 0;
+        max-width: 14ch;
+    }
+
+    .hero h2 {
+        color: var(--uca-orange);
+        font-weight: normal;
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+        margin: 1rem 0 0 0;
+    }
+
+    /* Histograma con curva normal */
+    .grafico {
+        margin-top: 5vh;
+        background: var(--light-gray);
+        border-bottom: 3px solid var(--uca-blue);
+    }
+
+    .grafico svg {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .barra {
+        fill: var(--uca-blue);
+        opacity: 0.88;
+        transform-box: fill-box;
+        transform-origin: bottom;
+        animation: crecer 0.7s cubic-bezier(.2,.7,.3,1) both;
+    }
+
+    .curva {
+        fill: none;
+        stroke: var(--uca-orange);
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: 2000;
+        stroke-dashoffset: 2000;
+        animation: trazar 1.4s ease-out 1s forwards;
+    }
+
+    .media {
+        stroke: var(--ink);
+        stroke-width: 1.5;
+        stroke-dasharray: 6 6;
+        opacity: 0;
+        animation: aparecer 0.5s ease 2.2s forwards;
+    }
+
+    .etiqueta {
+        font-family: Georgia, serif;
+        font-style: italic;
+        font-size: 26px;
+        fill: var(--ink);
+        opacity: 0;
+        animation: aparecer 0.5s ease 2.2s forwards;
+    }
+
+    @keyframes crecer  { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes trazar  { to { stroke-dashoffset: 0; } }
+    @keyframes aparecer { to { opacity: 1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+        .barra, .curva, .media, .etiqueta { animation: none; }
+        .curva { stroke-dashoffset: 0; }
+        .media, .etiqueta { opacity: 1; }
+    }
+
+    /* ---------- Lista de temas ---------- */
+
+    .temas-seccion {
+        padding: 8vh 0 6vh;
+    }
+
+    .temas-seccion > h3 {
+        font-family: Georgia, serif;
+        color: var(--uca-blue);
+        font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+        margin: 0 0 1.5rem 0;
+    }
+
+    ol.temas {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        counter-reset: tema;
+        border-top: 1px solid var(--line);
+    }
+
+    ol.temas li {
+        counter-increment: tema;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .fila {
+        display: grid;
+        grid-template-columns: 4.5rem 1fr auto;
+        align-items: baseline;
+        gap: 1.2rem;
+        padding: 1.4rem 1rem;
+        color: inherit;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .fila::before {
+        content: counter(tema);
+        font-family: Georgia, serif;
+        font-size: 2.6rem;
+        line-height: 1;
+        color: var(--uca-orange);
+    }
+
+    .fila strong {
+        display: block;
+        font-size: 1.3rem;
+        color: var(--uca-blue);
+    }
+
+    .fila em {
+        font-style: normal;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        color: var(--uca-blue);
+    }
+
+    a.fila:hover {
+        background: var(--light-gray);
+    }
+
+    a.fila:hover em {
+        text-decoration: underline;
+    }
+
+    a.fila:focus-visible {
+        outline: 3px solid var(--uca-orange);
+        outline-offset: -3px;
+    }
+
+    /* Temas todavía no publicados */
+    li.pendiente .fila::before,
+    li.pendiente .fila strong {
+        color: #b5bbbd;
+    }
+
+    li.pendiente .fila em {
+        color: #9aa1a3;
+    }
+
+    /* ---------- Pie ---------- */
+
+    footer {
+        background: var(--uca-blue);
+        color: white;
+        font-size: 0.95rem;
+    }
+
+    footer .wrap {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    footer p { margin: 0; }
+
+    /* ---------- Móvil ---------- */
+
+    @media (max-width: 640px) {
+        #logo { width: 110px; }
+        .fila {
+            grid-template-columns: 3rem 1fr;
+            padding: 1.1rem 0.5rem;
+        }
+        .fila::before { font-size: 2rem; }
+        .fila em { grid-column: 2; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="wrap">
+        <!-- Cambia la ruta si tu logo tiene otro nombre -->
+        <img id="logo" src="logo_uca.png" alt="Universidad de Cádiz">
+        <span class="curso">Curso 2026–2027</span>
+    </div>
+</header>
+
+<main>
+    <section class="hero wrap">
+        <h1>Análisis de Datos en Psicología I</h1>
+        <h2>Grado en Psicología, Universidad de Cádiz</h2>
+
+        <div class="grafico" aria-hidden="true">
+            <svg id="histograma" viewBox="0 0 1000 320" preserveAspectRatio="xMidYMax meet"></svg>
+        </div>
+    </section>
+
+    <section class="temas-seccion wrap">
+        <h3>Diapositivas</h3>
+
+        <!--
+            Cada tema es un <li>.
+            Publicado:  <li><a class="fila" href="temaN.html">...</a></li>
+            Pendiente:  <li class="pendiente"><div class="fila">...</div></li>
+            El número se pone solo, según el orden de la lista.
+        -->
+        <ol class="temas">
+            <li class="pendiente">
+                <div class="fila">
+                    <strong>Análisis de datos. Ideas generales</strong>
+                    <em>Próximamente</em>
+                </div>
+            </li>
+            <li>
+                <a class="fila" href="tema2.html">
+                    <strong>Análisis de datos de una variable</strong>
+                    <em>Abrir</em>
+                </a>
+            </li>
+            <li>
+                <a class="fila" href="tema3.html">
+                    <strong>Análisis de la relación entre dos variables</strong>
+                    <em>Abrir</em>
+                </a>
+            </li>
+            <li class="pendiente">
+                <div class="fila">
+                    <strong>Modelización de la relación entre dos variables</strong>
+                    <em>Próximamente</em>
+                </div>
+            </li>
+            <li class="pendiente">
+                <div class="fila">
+                    <strong>El diseño muestral. Ideas generales</strong>
+                    <em>Próximamente</em>
+                </div>
+            </li>
+            <li class="pendiente">
+                <div class="fila">
+                    <strong>Nociones de probabilidad</strong>
+                    <em>Próximamente</em>
+                </div>
+            </li>
+            <li class="pendiente">
+                <div class="fila">
+                    <strong>Variables aleatorias. Distribuciones de probabilidad</strong>
+                    <em>Próximamente</em>
+                </div>
+            </li>
+        </ol>
+    </section>
+</main>
+
+<footer>
+    <div class="wrap">
+        <p>Prof. Nicolás Z., Universidad de Cádiz</p>
+    </div>
+</footer>
+
+<script>
+    // Histograma de una muestra "normal" con su curva de densidad
+    (function () {
+        const svg = document.getElementById("histograma");
+        const ns = "http://www.w3.org/2000/svg";
+        const W = 1000, H = 320, base = H - 10, alto = 250;
+        const nBarras = 25, margen = 40;
+        const ancho = (W - 2 * margen) / nBarras;
+        const pdf = z => Math.exp(-z * z / 2);
+
+        // Barras: densidad normal con un poco de "ruido de muestra" fijo
+        for (let i = 0; i < nBarras; i++) {
+            const z = -3 + 6 * (i + 0.5) / nBarras;
+            const ruido = 1 + 0.13 * Math.sin(i * 2.7) + 0.07 * Math.cos(i * 5.1);
+            const h = alto * pdf(z) * ruido;
+            const r = document.createElementNS(ns, "rect");
+            r.setAttribute("class", "barra");
+            r.setAttribute("x", margen + i * ancho + 2);
+            r.setAttribute("y", base - h);
+            r.setAttribute("width", ancho - 4);
+            r.setAttribute("height", h);
+            r.style.animationDelay = (0.04 * i) + "s";
+            svg.appendChild(r);
+        }
+
+        // Curva normal
+        let d = "";
+        for (let k = 0; k <= 200; k++) {
+            const z = -3 + 6 * k / 200;
+            const x = margen + (W - 2 * margen) * k / 200;
+            const y = base - alto * pdf(z);
+            d += (k === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1);
+        }
+        const curva = document.createElementNS(ns, "path");
+        curva.setAttribute("class", "curva");
+        curva.setAttribute("d", d);
+        svg.appendChild(curva);
+
+        // Línea de la media
+        const linea = document.createElementNS(ns, "line");
+        linea.setAttribute("class", "media");
+        linea.setAttribute("x1", W / 2); linea.setAttribute("x2", W / 2);
+        linea.setAttribute("y1", base);  linea.setAttribute("y2", base - alto - 25);
+        svg.appendChild(linea);
+
+        const texto = document.createElementNS(ns, "text");
+        texto.setAttribute("class", "etiqueta");
+        texto.setAttribute("x", W / 2 + 12);
+        texto.setAttribute("y", base - alto - 8);
+        texto.textContent = "x\u0304";
+        svg.appendChild(texto);
+    })();
+</script>
+
+</body>
+</html>
