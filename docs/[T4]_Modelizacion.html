@@ -1,0 +1,3007 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="estilo.css">
+  <title>Tema 4: Modelización de la relación entre dos variables &mdash; Ejemplo aplicado a Psicología</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <style>
+    .lead-note {
+      color: var(--uca-gray);
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    .small-note {
+      font-size: 1.05rem;
+      color: var(--uca-gray);
+      margin-top: 1rem;
+    }
+
+    .small-note.special {
+      font-size: 1.0rem;
+      color: var(--uca-gray);
+      margin-top: 0.2rem;
+    }
+
+    .formula-box {
+      background: var(--light-gray);
+      border-left: 4px solid var(--uca-blue);
+      padding: 0.2rem 0.8rem;
+      margin: 1rem 0;
+      font-size: clamp(1.15rem, 1.40vw, 2.4rem);
+      overflow-x: auto;
+    }
+
+    .formula-box.small {
+      font-size: clamp(1rem, 1.20vw, 1.9rem);
+    }
+
+    .formula-box.small.special{
+      font-size: clamp(1.05rem, 1.25vw, 2.0rem);
+      padding: 0.2rem 0.6rem;
+      margin: 0.8rem 0;
+    }
+
+    .formula-box.large {
+      font-size: clamp(1.4rem, 2.1vw, 2.8rem);
+    }
+
+    .two-col {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .two-col>* {
+      flex: 1 1 40%;
+    }
+
+    .three-col {
+      display: flex;
+      gap: 1.2rem;
+      width: 100%;
+    }
+
+    .three-col>* {
+      flex: 1 1 0;
+    }
+
+    .four-col {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .four-col>* {
+      flex: 1 1 0;
+    }
+
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 1.4rem;
+      width: 100%;
+    }
+
+    .grid-2x2 .mini-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0.6rem 1.2rem;
+      text-align: left;
+    }
+
+    .grid-2x2 .mini-card .fig-svg {
+      width: 70%;
+      height: 100%;
+      max-height: none;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .grid-2x2 {
+      flex: 1 1 auto;
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .grid-2x2 .mini-card {
+      min-height: 0;
+    }
+
+    .grid-2x2 .mini-card .qtag {
+      white-space: nowrap;
+      font-size: clamp(1rem, 1.25vw, 1.4rem);
+      color: #333;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .mini-card {
+      background: var(--light-gray);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+    }
+
+    .mini-card.center {
+      text-align: center;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+    }
+
+    .fig-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0.6rem 0;
+    }
+
+    .fig-svg.short {
+      max-height: 52vh;
+    }
+
+    .slide:first-child .col h3 {
+      margin: 0.3rem 0 0.6rem;
+    }
+
+    .slide:first-child .col ul {
+      margin: 0;
+    }
+
+    .cover-svg {
+      max-height: 58vh;
+    }
+
+    .idea-svg {
+      max-height: 40vh !important;
+      cursor: pointer;
+    }
+
+    .idea-svg .rough,
+    .idea-svg .fitline {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .idea-svg .leg-rough,
+    .idea-svg .leg-fit {
+      opacity: 0;
+    }
+
+    .idea-svg.play .rough {
+      animation: draw 1.8s ease-in-out .5s forwards;
+    }
+
+    .idea-svg.play .leg-rough {
+      animation: fadein .4s ease .5s forwards;
+    }
+
+    .idea-svg.play .fitline {
+      animation: draw 1s ease-in-out 2.8s forwards;
+    }
+
+    .idea-svg.play .leg-fit {
+      animation: fadein .4s ease 2.8s forwards;
+    }
+
+    .anim-svg {
+      cursor: pointer;
+    }
+
+    .ab-svg .ln {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .ab-svg .ic,
+    .ab-svg .lg {
+      opacity: 0;
+    }
+
+    .ab-svg.play .ln0 {
+      animation: draw .8s ease-in-out 0.5s forwards;
+    }
+
+    .ab-svg.play .ic0,
+    .ab-svg.play .lg0 {
+      animation: fadein .3s ease 0.5s forwards;
+    }
+
+    .ab-svg.play .ln1 {
+      animation: draw .8s ease-in-out 1.6s forwards;
+    }
+
+    .ab-svg.play .ic1,
+    .ab-svg.play .lg1 {
+      animation: fadein .3s ease 1.6s forwards;
+    }
+
+    .ab-svg.play .ln2 {
+      animation: draw .8s ease-in-out 2.7s forwards;
+    }
+
+    .ab-svg.play .ic2,
+    .ab-svg.play .lg2 {
+      animation: fadein .3s ease 2.7s forwards;
+    }
+
+    .ab-svg.play .ln3 {
+      animation: draw .8s ease-in-out 3.8s forwards;
+    }
+
+    .ab-svg.play .ic3,
+    .ab-svg.play .lg3 {
+      animation: fadein .3s ease 3.8s forwards;
+    }
+
+    .cand-svg {
+      cursor: pointer;
+    }
+
+    .cand-svg .cand {
+      opacity: 0;
+      transition: opacity .4s;
+    }
+
+    .cand-svg .cand.on {
+      opacity: 1;
+    }
+
+    .cand-svg .cl {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .cand-svg .res {
+      stroke-dashoffset: 1;
+    }
+
+    .cand-svg .clab {
+      opacity: 0;
+    }
+
+    .cand-svg .cand.on .cl {
+      animation: draw .6s ease-in-out .1s forwards;
+    }
+
+    .cand-svg .cand.on .res {
+      animation: draw .4s ease-out .7s forwards;
+    }
+
+    .cand-svg .cand.on .clab {
+      animation: fadein .3s ease .7s forwards;
+    }
+
+    .cand-svg .tag {
+      opacity: 0;
+    }
+
+    .cand-svg.final .cand:not(.best) {
+      opacity: 1;
+    }
+
+    .cand-svg.final .cand:not(.best) .cl {
+      opacity: .35;
+    }
+
+    .cand-svg.final .cand:not(.best) .cl {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+
+    .cand-svg.final .cand:not(.best) .res,
+    .cand-svg.final .cand:not(.best) .clab {
+      display: none;
+    }
+
+    .cand-svg.final .cand:not(.best) .tag {
+      opacity: .85;
+    }
+
+    .sq-svg .sq {
+      opacity: 0;
+    }
+
+    .sq-svg .cand.on .sq {
+      animation: fadein .4s ease .7s forwards;
+    }
+
+    .sq-svg.final .cand:not(.best) .sq {
+      display: none;
+    }
+
+    .two-svg .l1,
+    .two-svg .l2 {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .two-svg .t1,
+    .two-svg .t2,
+    .two-svg .t3 {
+      opacity: 0;
+    }
+
+    .two-svg.play .l1 {
+      animation: draw .9s ease-in-out .4s forwards;
+    }
+
+    .two-svg.play .t1 {
+      animation: fadein .3s ease 1s forwards;
+    }
+
+    .two-svg.play .l2 {
+      animation: draw .9s ease-in-out 1.8s forwards;
+    }
+
+    .two-svg.play .t2 {
+      animation: fadein .3s ease 2.4s forwards;
+    }
+
+    .two-svg.play .t3 {
+      animation: fadein .4s ease 3.1s forwards;
+    }
+
+    .grp-svg .gl,
+    .grp-svg .g0,
+    .grp-svg .g1,
+    .grp-svg .g2 {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .grp-svg .pc,
+    .grp-svg .lg,
+    .grp-svg .lt {
+      opacity: 0;
+    }
+
+    .grp-svg.play .gl {
+      animation: draw .9s ease-in-out .4s forwards, dim .5s ease 2.2s forwards;
+    }
+
+    .grp-svg.play .lt {
+      animation: fadein .3s ease 1.2s forwards;
+    }
+
+    .grp-svg.play .p0 {
+      animation: fadeout .6s ease 2.2s forwards;
+    }
+
+    .grp-svg.play .pc,
+    .grp-svg.play .lg {
+      animation: fadein .6s ease 2.2s forwards;
+    }
+
+    .grp-svg.play .g0 {
+      animation: draw .8s ease-in-out 3.0s forwards;
+    }
+
+    .grp-svg.play .g1 {
+      animation: draw .8s ease-in-out 3.6s forwards;
+    }
+
+    .grp-svg.play .g2 {
+      animation: draw .8s ease-in-out 4.2s forwards;
+    }
+
+    .n15-svg .l1,
+    .n15-svg .l2 {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .n15-svg .t1,
+    .n15-svg .t2,
+    .n15-svg .h15 {
+      opacity: 0;
+    }
+
+    .n15-svg.play .l1 {
+      animation: draw .9s ease-in-out .4s forwards, dim .5s ease 3.0s forwards;
+    }
+
+    .n15-svg.play .t1 {
+      animation: fadein .3s ease 1.1s forwards;
+    }
+
+    .n15-svg.play .s15 {
+      animation: fadeout .5s ease 2.2s forwards;
+    }
+
+    .n15-svg.play .h15 {
+      animation: fadein .5s ease 2.2s forwards;
+    }
+
+    .n15-svg.play .l2 {
+      animation: draw .9s ease-in-out 3.0s forwards;
+    }
+
+    .n15-svg.play .t2 {
+      animation: fadein .3s ease 3.7s forwards;
+    }
+
+    ul.ticks {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul.ticks {
+      font-size: 1.15em;
+    }
+
+    ul.ticks li {
+      position: relative;
+      padding-left: 1.9em;
+      margin: .8em 0;
+    }
+
+    ul.ticks li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #2E9E5B;
+      font-weight: bold;
+    }
+
+    .cover-tab {
+      font-size: clamp(.55rem, 1.05vw, 1.05rem);
+      width: 100%;
+      margin: 0 0 .5rem 0;
+    }
+
+    .cont-table.cover-tab th,
+    .cont-table.cover-tab td {
+      padding: 2px 6px;
+    }
+
+    .cover-tab tr.hd th {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .cover-tab tr th:first-child {
+      text-align: left;
+    }
+
+    .cover-tab td.hl {
+      background: #FDE3C4;
+      font-weight: bold;
+    }
+
+    .slide.cover {
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+
+    .cover-top {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 5%;
+      width: 100%;
+    }
+
+    .cover-top .col {
+      flex: 1 1 0;
+      min-width: 0;
+      width: auto;
+      margin-left: 0 !important;
+    }
+
+    .cover-top {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .cover-top .col:last-child {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .cover-top .lead-note {
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .cover-top .cover-fig {
+      min-height: 0;
+    }
+
+    @keyframes fadeout {
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes dim {
+      to {
+        opacity: .5;
+      }
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fadein {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .fig-center {
+      flex: 1 1 auto;
+      min-height: 22vh;
+      position: relative;
+      margin-top: .05rem;
+    }
+
+    .fig-center>svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      margin: 0 !important;
+    }
+
+    /* Diapositivas texto + figura: texto a la izquierda (1/3), figura a la derecha (2/3) ≈ 60 % del área bajo el título */
+    .intro-cards {
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .intro-cards .mini-card {
+      padding: 0.3rem 1rem;
+    }
+
+    .intro-cards h3 {
+      font-size: clamp(1.1rem, 1.4vw, 1.7rem);
+      margin: 0 0 0.1rem;
+    }
+
+    .intro-cards p {
+      margin: 0;
+    }
+
+    .recta-cols {
+      align-items: stretch;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .recta-cols .recta-eq {
+      font-size: clamp(1.05rem, 1.3vw, 1.6rem);
+    }
+
+    .recta-cols .recta-eq .katex-display {
+      margin: 0.3em 0 0;
+    }
+
+    .recta-cols .mini-card {
+      padding: 0.4rem 1rem;
+    }
+
+    .recta-cols h3 {
+      font-size: clamp(1.1rem, 1.4vw, 1.7rem);
+      margin: 0 0 0.2rem;
+    }
+
+    .recta-cols .small-note {
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .error-cols {
+      margin-bottom: 0.2rem;
+    }
+
+    .error-cols p {
+      margin: 0.3em 0;
+    }
+
+    .error-cols .formula-box {
+      margin: 0.4rem 0;
+    }
+
+    table.data-table.resid-table {
+      width: auto;
+      margin: 0.4rem auto 0.6rem;
+      font-size: clamp(0.75rem, 0.95vw, 1.15rem);
+    }
+
+    table.data-table.resid-table th,
+    table.data-table.resid-table td {
+      padding: 0.05rem 1.4rem;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    table.data-table.resid-table .katex {
+      font-size: 1em;
+    }
+
+    .error-cols ul {
+      margin: 0;
+    }
+
+    .pred-cols {
+      flex-wrap: nowrap;
+      gap: 4vw;
+    }
+
+    .pred-cols>:first-child {
+      flex: 0 0 auto;
+    }
+
+    .pred-cols>:last-child {
+      flex: 1 1 0;
+    }
+
+    /* Notas al pie de la diapositiva: no pisar el logo fijo de la esquina inferior derecha */
+    .slide>p.small-note:last-child {
+      padding-right: 8vw;
+    }
+
+    .n15-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto;
+      gap: 2.5vw;
+      align-items: center;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .n15-cols p {
+      margin: 0;
+    }
+
+    .n15-cols .cont-table.mini-table {
+      font-size: clamp(0.85rem, 1.05vw, 1.3rem);
+      margin: 0;
+    }
+
+    .grp-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 3vw;
+      align-items: center;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .grp-cols p {
+      margin: 0;
+    }
+
+    .grp-cols .cont-table.mini-table {
+      font-size: clamp(0.85rem, 1.05vw, 1.3rem);
+      margin: 0;
+    }
+
+    .fig-split {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: 0 2.2vw;
+      margin-top: 0.4rem;
+    }
+
+    .fig-split .split-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .fig-split .split-text>*:first-child {
+      margin-top: 0;
+    }
+
+    .fig-split .split-text p,
+    .fig-split .split-text li {
+      font-size: clamp(1.0rem, 1.25vw, 1.4rem);
+      line-height: 1.45;
+      margin: 0.45em 0;
+    }
+
+    .fig-split .split-text .small-note {
+      font-size: clamp(0.9rem, 1.08vw, 1.25rem);
+      margin: 0.45em 0;
+    }
+
+    .fig-split .split-text h3 {
+      font-size: clamp(1.15rem, 1.5vw, 1.8rem);
+      margin: 0 0 0.3rem;
+    }
+
+    .fig-split .split-text ul {
+      margin: 0.2em 0;
+    }
+
+    .fig-split .split-text .two-col {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch !important;
+      gap: 0.6rem;
+    }
+
+    .fig-split .split-text .two-col>* {
+      flex: 0 0 auto;
+    }
+
+    .fig-split .split-text .mini-card {
+      padding: 0.5rem 0.9rem;
+    }
+
+    .fig-split .split-text .formula-box {
+      font-size: clamp(1.0rem, 1.2vw, 1.7rem);
+      margin: 0.5rem 0;
+    }
+
+    .fig-split .split-text .formula-box.small,
+    .fig-split .split-text .formula-box.small.special {
+      font-size: clamp(0.95rem, 1.1vw, 1.5rem);
+      margin: 0.5rem 0;
+    }
+
+    .fig-split .split-text .cont-table.mini-table {
+      font-size: clamp(0.8rem, 0.98vw, 1.15rem);
+      margin: 0.4rem 0;
+    }
+
+    .fig-split .fig-center {
+      min-height: 0;
+      margin: 0;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 1rem;
+      margin-top: 0.8rem;
+    }
+
+    .data-table.small {
+      font-size: 0.85rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #ddd;
+      padding: 0.2rem 0.5rem;
+      text-align: center;
+    }
+
+    .data-table thead {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: var(--light-gray);
+    }
+
+    .data-table tr.hl td {
+      background: #ffe0b3;
+      font-weight: bold;
+    }
+
+    code {
+      background: var(--light-gray);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+    }
+
+    .slide h1 {
+      font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+    }
+
+    .slide p,
+    .slide li {
+      font-size: clamp(1.0rem, 1.25vw, 1.35rem);
+    }
+
+    .ext-lab {
+      color: var(--uca-orange);
+      font-weight: bold;
+      font-size: 1.3rem !important;
+      margin: 0.2rem 0 0;
+    }
+
+    .pie-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .pie-svg {
+      height: 34vh !important;
+      width: 34vh !important;
+    }
+
+    .qtag {
+      color: var(--uca-gray);
+      font-size: 0.95rem;
+      margin-top: 0.3rem;
+    }
+
+    .cont-table {
+      border-collapse: collapse;
+      margin: 0.8rem auto;
+      font-size: 1.05rem;
+    }
+
+    .cont-table th,
+    .cont-table td {
+      border: 1px solid #ccc;
+      padding: 0.4rem 1rem;
+      text-align: center;
+    }
+
+    .cont-table thead th {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .cont-table.mini-table {
+      font-size: 0.85rem;
+      margin: 0.2rem auto;
+    }
+
+    .cont-table.mini-table th,
+    .cont-table.mini-table td {
+      padding: 0.25rem 0.6rem;
+    }
+
+    .cont-table tr.best td {
+      background: #ffe0b3;
+      font-weight: bold;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ===================== PORTADA ===================== -->
+  <div class="slide cover">
+    <h1>Tema 4: Modelización de la relación entre dos variables</h1>
+    <div class="cover-top">
+      <div class="col">
+        <h2>Ajuste lineal por mínimos cuadrados</h2>
+        <h3>
+          <ul>
+            <li>La recta de ajuste</li>
+            <li>Método de mínimos cuadrados</li>
+          </ul>
+        </h3>
+        <h2>Bondad del ajuste</h2>
+        <h3>
+          <ul>
+            <li>Coeficiente de determinación \(R^2\)</li>
+            <li>Ajustes no lineales y elección del modelo</li>
+            <li>Predicción</li>
+          </ul>
+        </h3>
+        <h2>Calidad de los datos</h2>
+        <h3>
+          <ul>
+            <li>Homocedasticidad</li>
+            <li>Atípicos, influyentes y grupos</li>
+          </ul>
+        </h3>
+      </div>
+      <div class="col">
+        <table class="cont-table cover-tab">
+          <tbody>
+            <tr class="hd">
+              <th>Estudiante</th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+              <th>7</th>
+              <th>8</th>
+            </tr>
+            <tr>
+              <th>Ansiedad</th>
+              <td>12</td>
+              <td>22</td>
+              <td>18</td>
+              <td>10</td>
+              <td>25</td>
+              <td>15</td>
+              <td>9</td>
+              <td>19</td>
+            </tr>
+            <tr>
+              <th>Nota</th>
+              <td>7.8</td>
+              <td>5.5</td>
+              <td>7.9</td>
+              <td>8.2</td>
+              <td>4.5</td>
+              <td>8.6</td>
+              <td>8.8</td>
+              <td>5.4</td>
+            </tr>
+            <tr class="hd">
+              <th>Estudiante</th>
+              <th>9</th>
+              <th>10</th>
+              <th>11</th>
+              <th>12</th>
+              <th>13</th>
+              <th>14</th>
+              <th>15</th>
+              <th>16</th>
+            </tr>
+            <tr>
+              <th>Ansiedad</th>
+              <td>14</td>
+              <td>11</td>
+              <td>20</td>
+              <td>17</td>
+              <td>10</td>
+              <td>16</td>
+              <td class="hl">38</td>
+              <td>7</td>
+            </tr>
+            <tr>
+              <th>Nota</th>
+              <td>8.9</td>
+              <td>7.0</td>
+              <td>6.0</td>
+              <td>8.4</td>
+              <td>9.2</td>
+              <td>6.8</td>
+              <td class="hl">4.8</td>
+              <td>9.5</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="lead-note">Nuestros 16 estudiantes: ya sabemos que Ansiedad y Nota están
+          relacionadas (\(r=-0.81\)). Ahora queremos <strong>la fórmula</strong> de esa relación.</p>
+        <div class="fig-center cover-fig"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+          class="fig-svg cover-svg">
+          <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+            text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+            fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+            x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+            font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+            text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+            fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+            x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+            font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+            text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+            fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+            y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+            text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+            fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+            (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+            transform="rotate(-90 14 180.0)">Nota examen</text>
+          <circle cx="221.5" cy="133.5" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="360.2" cy="192.9" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="304.8" cy="130.9" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="193.8" cy="123.2" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="401.9" cy="218.8" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="263.1" cy="112.8" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="179.9" cy="107.7" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="318.6" cy="195.5" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="249.2" cy="105.1" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="207.6" cy="154.2" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="332.5" cy="180.0" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="290.9" cy="118.0" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="193.8" cy="97.3" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="277.0" cy="159.3" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="582.2" cy="211.0" r="5.5" fill="#005877" opacity="0.85" />
+          <circle cx="152.1" cy="89.6" r="5.5" fill="#005877" opacity="0.85" />
+        </svg></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== INTRO ===================== -->
+  <div class="slide">
+    <h1>Del "están relacionadas" al "¿cómo?"</h1>
+    <p>En el Tema 3 medimos <strong>cuánto</strong> se relacionan Ansiedad y Nota. Ahora buscamos una
+      función \(y=f(x)\) que explique razonablemente bien la Nota a partir de la Ansiedad.</p>
+    <div class="two-col intro-cards">
+      <div class="mini-card center">
+        <h3>\(Y\): variable dependiente</h3>
+        <p>(explicada) &rarr; <strong>Nota de examen</strong></p>
+      </div>
+      <div class="mini-card center">
+        <h3>\(X\): variable independiente</h3>
+        <p>(explicativa) &rarr; <strong>Ansiedad (BAI)</strong></p>
+      </div>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+        class="fig-svg anim-svg idea-svg">
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="332.5" y="372"
+          font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14" y="180.0" font-size="12.5"
+          text-anchor="middle" fill="#333" transform="rotate(-90 14 180.0)">Nota examen</text>
+        <polyline class="rough" pathLength="1"
+          points="152.1,89.6 179.9,107.7 193.8,123.2 193.8,97.3 207.6,154.2 221.5,133.5 249.2,105.1 263.1,112.8 277.0,159.3 290.9,118.0 304.8,130.9 318.6,195.5 332.5,180.0 360.2,192.9 401.9,218.8 582.2,211.0"
+          fill="none" stroke="#6B6E6D" stroke-width="2" stroke-linejoin="round" />
+        <line class="fitline" pathLength="1" x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#E87B00"
+          stroke-width="3" />
+        <circle cx="221.5" cy="133.5" r="5.5" fill="#005877" />
+        <circle cx="360.2" cy="192.9" r="5.5" fill="#005877" />
+        <circle cx="304.8" cy="130.9" r="5.5" fill="#005877" />
+        <circle cx="193.8" cy="123.2" r="5.5" fill="#005877" />
+        <circle cx="401.9" cy="218.8" r="5.5" fill="#005877" />
+        <circle cx="263.1" cy="112.8" r="5.5" fill="#005877" />
+        <circle cx="179.9" cy="107.7" r="5.5" fill="#005877" />
+        <circle cx="318.6" cy="195.5" r="5.5" fill="#005877" />
+        <circle cx="249.2" cy="105.1" r="5.5" fill="#005877" />
+        <circle cx="207.6" cy="154.2" r="5.5" fill="#005877" />
+        <circle cx="332.5" cy="180.0" r="5.5" fill="#005877" />
+        <circle cx="290.9" cy="118.0" r="5.5" fill="#005877" />
+        <circle cx="193.8" cy="97.3" r="5.5" fill="#005877" />
+        <circle cx="277.0" cy="159.3" r="5.5" fill="#005877" />
+        <circle cx="582.2" cy="211.0" r="5.5" fill="#005877" />
+        <circle cx="152.1" cy="89.6" r="5.5" fill="#005877" />
+        <g class="leg-rough">
+          <line x1="403.625" y1="50" x2="425.625" y2="50" stroke="#6B6E6D" stroke-width="2" /><text x="433.625" y="55"
+            font-size="14" fill="#333">Une todos los puntos (rugosa)</text>
+        </g>
+        <g class="leg-fit">
+          <line x1="403.625" y1="76" x2="425.625" y2="76" stroke="#E87B00" stroke-width="3" /><text x="433.625" y="81"
+            font-size="14" fill="#333">Idealiza y suaviza (recta)</text>
+        </g>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">A este proceso se le llama <strong>ajuste</strong> entre las variables. La función
+      idealiza y <em>suaviza</em> la nube de puntos, que siempre trae errores de medición y de selección de individuos.
+      Por simplicidad e interpretabilidad, empezamos siempre por un modelo <mark>lineal</mark>.</p>
+  </div>
+
+  <!-- ===================== RECTA ===================== -->
+  <div class="slide">
+    <h1>La recta de ajuste</h1>
+    <div class="three-col recta-cols">
+      <div class="mini-card">
+        <h3>Ecuación de la recta</h3>
+        <div class="recta-eq">\[ y(x) = a + b\,x \]</div>
+      </div>
+      <div class="mini-card">
+        <h3>\(a\): ordenada en el origen</h3>
+        <p class="small-note">Punto donde la recta corta al eje \(OY\) (valor de \(y\) cuando \(x=0\)).</p>
+      </div>
+      <div class="mini-card">
+        <h3>\(b\): pendiente</h3>
+        <p class="small-note">Cambio en \(y\) cuando \(x\) aumenta una unidad: \(y(x+1) = y(x) + b\). En un ajuste se llama
+          <strong>coeficiente de regresión</strong>.</p>
+      </div>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+        class="fig-svg anim-svg ab-svg">
+        <defs>
+          <clipPath id="abclip">
+            <rect x="55" y="25" width="555" height="310" />
+          </clipPath>
+        </defs>
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+          x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+          x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+          font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+          text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+          fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+          y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+          text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+          (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+          transform="rotate(-90 14 180.0)">Nota examen</text>
+        <circle cx="221.5" cy="133.5" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="360.2" cy="192.9" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="304.8" cy="130.9" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="193.8" cy="123.2" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="401.9" cy="218.8" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="263.1" cy="112.8" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="179.9" cy="107.7" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="318.6" cy="195.5" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="249.2" cy="105.1" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="207.6" cy="154.2" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="332.5" cy="180.0" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="290.9" cy="118.0" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="193.8" cy="97.3" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="277.0" cy="159.3" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="582.2" cy="211.0" r="5" fill="#005877" opacity="0.45" />
+        <circle cx="152.1" cy="89.6" r="5" fill="#005877" opacity="0.45" />
+        <g clip-path="url(#abclip)">
+          <line class="ln ln0" pathLength="1" x1="55.0" y1="76.7" x2="610.0" y2="231.7" stroke="#7a3e9d"
+            stroke-width="2.6" />
+          <line class="ln ln1" pathLength="1" x1="55.0" y1="128.3" x2="610.0" y2="283.3" stroke="#2a9d8f"
+            stroke-width="2.6" />
+          <line class="ln ln2" pathLength="1" x1="55.0" y1="76.7" x2="610.0" y2="128.3" stroke="#c9a227"
+            stroke-width="2.6" />
+          <line class="ln ln3" pathLength="1" x1="55.0" y1="37.9" x2="610.0" y2="296.2" stroke="#6B6E6D"
+            stroke-width="2.6" />
+        </g>
+        <circle class="ic ic0" cx="55.0" cy="76.7" r="3.5" fill="#7a3e9d" stroke="white" stroke-width="1" />
+        <circle class="ic ic1" cx="55.0" cy="128.3" r="3.5" fill="#2a9d8f" stroke="white" stroke-width="1" />
+        <circle class="ic ic2" cx="55.0" cy="76.7" r="3.5" fill="#c9a227" stroke="white" stroke-width="1" />
+        <circle class="ic ic3" cx="55.0" cy="37.9" r="3.5" fill="#6B6E6D" stroke="white" stroke-width="1" />
+        <g class="lg lg0">
+          <line x1="71.7" y1="216.2" x2="93.7" y2="216.2" stroke="#7a3e9d" stroke-width="2.6" /><text x="99.7" y="220.7"
+            font−size="13" fill="#333">
+            <tspan font−weight="bold">A</tspan>: a = 10, b = −0.15
+          </text>
+        </g>
+        <g class="lg lg1">
+          <line x1="71.7" y1="235.2" x2="93.7" y2="235.2" stroke="#2a9d8f" stroke-width="2.6" /><text x="99.7" y="239.7"
+            font−size="13" fill="#333">
+            <tspan font−weight="bold">B</tspan>: a = 8, b = −0.15
+          </text>
+        </g>
+        <g class="lg lg2">
+          <line x1="71.7" y1="254.2" x2="93.7" y2="254.2" stroke="#c9a227" stroke-width="2.6" /><text x="99.7" y="258.7"
+            font−size="13" fill="#333">
+            <tspan font−weight="bold">C</tspan>: a = 10, b = −0.05
+          </text>
+        </g>
+        <g class="lg lg3">
+          <line x1="71.7" y1="273.2" x2="93.7" y2="273.2" stroke="#6B6E6D" stroke-width="2.6" /><text x="99.7" y="277.7"
+            font−size="13" fill="#333">
+            <tspan font−weight="bold">D</tspan>: a = 11.5, b = −0.25
+          </text>
+        </g>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">A y B: misma \(b\), distinta \(a\) &rarr; paralelas. A y C: misma
+      \(a\), distinta \(b\) &rarr; distinta inclinación.
+      Dando valores a \(a\) y \(b\) se obtiene cualquier recta del plano. ¿Cuál de todas es "la mejor"?</p>
+  </div>
+
+  <!-- ===================== ERRORES ===================== -->
+  <div class="slide">
+    <h1>¿Cuánto se equivoca la recta?</h1>
+    <div class="two-col error-cols" style="align-items:flex-start">
+      <div>
+        <p>Para cada estudiante, la recta propone un <strong>valor ajustado</strong> y se comete un
+          <strong>error</strong> (distancia vertical):</p>
+        <div class="formula-box small special">\[ y_i^* = a + b\,x_i \qquad e_i = y_i - y_i^* \]</div>
+      </div>
+      <div>
+        <p>Pero los errores positivos y negativos se compensan. <strong>Toda</strong> recta que pase por
+          \((\bar{x},\bar{y})\) cumple:</p>
+        <div class="formula-box small special">\[ \sum_{i=1}^n e_i = 0 \;\Leftrightarrow\; \bar{e} = 0 \]</div>
+      </div>
+    </div>
+    <!-- <p class="small-note" style="margin-top:0.4rem">¿Recuerdas \(m_1\)? En el Tema 2 también valía siempre 0.</p> -->
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" class="fig-svg cand-svg">
+        <defs>
+          <clipPath id="cdclip">
+            <rect x="55" y="25" width="555" height="310" />
+          </clipPath>
+        </defs>
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+          x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+          x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+          font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+          text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+          fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+          y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+          text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+          (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+          transform="rotate(-90 14 180.0)">Nota examen</text>
+        <g class="cand" data-k="0">
+          <g clip-path="url(#cdclip)">
+            <line class="cl" pathLength="1" x1="55.0" y1="171.2" x2="610.0" y2="109.2" stroke="#c9a227"
+              stroke-width="2.8" />
+            <line class="res" pathLength="1" x1="221.5" y1="133.5" x2="221.5" y2="152.6" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="360.2" y1="192.9" x2="360.2" y2="137.1" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="304.8" y1="130.9" x2="304.8" y2="143.3" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="123.2" x2="193.8" y2="155.7" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="401.9" y1="218.8" x2="401.9" y2="132.5" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="263.1" y1="112.8" x2="263.1" y2="148.0" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="179.9" y1="107.7" x2="179.9" y2="157.3" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="318.6" y1="195.5" x2="318.6" y2="141.8" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="249.2" y1="105.1" x2="249.2" y2="149.5" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="207.6" y1="154.2" x2="207.6" y2="154.2" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="332.5" y1="180.0" x2="332.5" y2="140.2" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="290.9" y1="118.0" x2="290.9" y2="144.9" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="97.3" x2="193.8" y2="155.7" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="277.0" y1="159.3" x2="277.0" y2="146.4" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="582.2" y1="211.0" x2="582.2" y2="112.3" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="152.1" y1="89.6" x2="152.1" y2="160.4" stroke="#c9a227"
+              stroke-width="1.8" stroke-dasharray="1" />
+          </g><text class="tag" x="471.2" y="117.7" font-size="14" font-weight="bold" fill="#c9a227"
+            text-anchor="middle">1</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#c9a227" stroke-width="1.5" />
+            <text x="417.1" y="58" font−size="14" fill="#333">
+              <tspan font−weight="bold" fill="#c9a227">Recta 1</tspan>: a = 6.34, b = 0.06
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Σ e<tspan baseline-shift="sub" font-size="10">i
+              </tspan> = 0<tspan dx="22">ē = 0</tspan></text>
+          </g>
+        </g>
+        <g class="cand" data-k="1">
+          <g clip-path="url(#cdclip)">
+            <line class="cl" pathLength="1" x1="55.0" y1="145.6" x2="610.0" y2="145.6" stroke="#7a3e9d"
+              stroke-width="2.8" />
+            <line class="res" pathLength="1" x1="221.5" y1="133.5" x2="221.5" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="360.2" y1="192.9" x2="360.2" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="304.8" y1="130.9" x2="304.8" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="123.2" x2="193.8" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="401.9" y1="218.8" x2="401.9" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="263.1" y1="112.8" x2="263.1" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="179.9" y1="107.7" x2="179.9" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="318.6" y1="195.5" x2="318.6" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="249.2" y1="105.1" x2="249.2" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="207.6" y1="154.2" x2="207.6" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="332.5" y1="180.0" x2="332.5" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="290.9" y1="118.0" x2="290.9" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="97.3" x2="193.8" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="277.0" y1="159.3" x2="277.0" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="582.2" y1="211.0" x2="582.2" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="152.1" y1="89.6" x2="152.1" y2="145.6" stroke="#7a3e9d"
+              stroke-width="1.8" stroke-dasharray="1" />
+          </g><text class="tag" x="471.2" y="138.6" font-size="14" font-weight="bold" fill="#7a3e9d"
+            text-anchor="middle">2</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#7a3e9d" stroke-width="1.5" />
+            <text x="417.1" y="58" font−size="14" fill="#333">
+              <tspan font−weight="bold" fill="#7a3e9d">Recta 2</tspan>: a = 7.33, b = 0
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Σ e<tspan baseline-shift="sub" font-size="10">i
+              </tspan> = 0<tspan dx="22">ē = 0</tspan></text>
+          </g>
+        </g>
+        <g class="cand" data-k="2">
+          <g clip-path="url(#cdclip)">
+            <line class="cl" pathLength="1" x1="55.0" y1="26.8" x2="610.0" y2="316.1" stroke="#2a9d8f"
+              stroke-width="2.8" />
+            <line class="res" pathLength="1" x1="221.5" y1="133.5" x2="221.5" y2="113.6" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="360.2" y1="192.9" x2="360.2" y2="185.9" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="304.8" y1="130.9" x2="304.8" y2="157.0" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="123.2" x2="193.8" y2="99.1" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="401.9" y1="218.8" x2="401.9" y2="207.6" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="263.1" y1="112.8" x2="263.1" y2="135.3" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="179.9" y1="107.7" x2="179.9" y2="91.9" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="318.6" y1="195.5" x2="318.6" y2="164.2" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="249.2" y1="105.1" x2="249.2" y2="128.1" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="207.6" y1="154.2" x2="207.6" y2="106.4" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="332.5" y1="180.0" x2="332.5" y2="171.5" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="290.9" y1="118.0" x2="290.9" y2="149.8" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="97.3" x2="193.8" y2="99.1" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="277.0" y1="159.3" x2="277.0" y2="142.5" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="582.2" y1="211.0" x2="582.2" y2="301.7" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="152.1" y1="89.6" x2="152.1" y2="77.4" stroke="#2a9d8f"
+              stroke-width="1.8" stroke-dasharray="1" />
+          </g><text class="tag" x="471.2" y="236.8" font-size="14" font-weight="bold" fill="#2a9d8f"
+            text-anchor="middle">3</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#2a9d8f" stroke-width="1.5" />
+            <text x="417.1" y="58" font−size="14" fill="#333">
+              <tspan font−weight="bold" fill="#2a9d8f">Recta 3</tspan>: a = 11.93, b = −0.28
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Σ e<tspan baseline-shift="sub" font-size="10">i
+              </tspan> = 0<tspan dx="22">ē = 0</tspan></text>
+          </g>
+        </g>
+        <g class="cand" data-k="3">
+          <g clip-path="url(#cdclip)">
+            <line class="cl" pathLength="1" x1="55.0" y1="103.0" x2="610.0" y2="206.3" stroke="#6B6E6D"
+              stroke-width="2.8" />
+            <line class="res" pathLength="1" x1="221.5" y1="133.5" x2="221.5" y2="134.0" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="360.2" y1="192.9" x2="360.2" y2="159.8" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="304.8" y1="130.9" x2="304.8" y2="149.5" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="123.2" x2="193.8" y2="128.8" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="401.9" y1="218.8" x2="401.9" y2="167.6" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="263.1" y1="112.8" x2="263.1" y2="141.8" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="179.9" y1="107.7" x2="179.9" y2="126.3" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="318.6" y1="195.5" x2="318.6" y2="152.1" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="249.2" y1="105.1" x2="249.2" y2="139.2" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="207.6" y1="154.2" x2="207.6" y2="131.4" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="332.5" y1="180.0" x2="332.5" y2="154.7" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="290.9" y1="118.0" x2="290.9" y2="146.9" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="97.3" x2="193.8" y2="128.8" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="277.0" y1="159.3" x2="277.0" y2="144.3" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="582.2" y1="211.0" x2="582.2" y2="201.2" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="152.1" y1="89.6" x2="152.1" y2="121.1" stroke="#6B6E6D"
+              stroke-width="1.8" stroke-dasharray="1" />
+          </g><text class="tag" x="471.2" y="173.5" font-size="14" font-weight="bold" fill="#6B6E6D"
+            text-anchor="middle">4</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#6B6E6D" stroke-width="1.5" />
+            <text x="417.1" y="58" font−size="14" fill="#333">
+              <tspan font−weight="bold" fill="#6B6E6D">Recta 4</tspan>: a = 8.98, b = −0.1
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Σ e<tspan baseline-shift="sub" font-size="10">i
+              </tspan> = 0<tspan dx="22">ē = 0</tspan></text>
+          </g>
+        </g>
+        <g class="cand best" data-k="4">
+          <g clip-path="url(#cdclip)">
+            <line class="cl" pathLength="1" x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#E87B00"
+              stroke-width="2.8" />
+            <line class="res" pathLength="1" x1="221.5" y1="133.5" x2="221.5" y2="125.7" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="360.2" y1="192.9" x2="360.2" y2="170.5" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="304.8" y1="130.9" x2="304.8" y2="152.6" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="123.2" x2="193.8" y2="116.8" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="401.9" y1="218.8" x2="401.9" y2="184.0" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="263.1" y1="112.8" x2="263.1" y2="139.2" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="179.9" y1="107.7" x2="179.9" y2="112.3" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="318.6" y1="195.5" x2="318.6" y2="157.1" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="249.2" y1="105.1" x2="249.2" y2="134.7" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="207.6" y1="154.2" x2="207.6" y2="121.2" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="332.5" y1="180.0" x2="332.5" y2="161.6" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="290.9" y1="118.0" x2="290.9" y2="148.1" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="193.8" y1="97.3" x2="193.8" y2="116.8" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="277.0" y1="159.3" x2="277.0" y2="143.6" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="582.2" y1="211.0" x2="582.2" y2="242.2" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+            <line class="res" pathLength="1" x1="152.1" y1="89.6" x2="152.1" y2="103.3" stroke="#E87B00"
+              stroke-width="1.8" stroke-dasharray="1" />
+          </g>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#E87B00" stroke-width="1.5" />
+            <text x="417.1" y="58" font-size="14" fill="#333">
+              <tspan font-weight="bold" fill="#E87B00">La mejor recta</tspan>
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Σ e<tspan baseline-shift="sub" font-size="10">i
+              </tspan> = 0<tspan dx="22">ē = 0</tspan></text>
+          </g>
+        </g>
+        <circle cx="221.5" cy="133.5" r="5" fill="#005877" />
+        <circle cx="360.2" cy="192.9" r="5" fill="#005877" />
+        <circle cx="304.8" cy="130.9" r="5" fill="#005877" />
+        <circle cx="193.8" cy="123.2" r="5" fill="#005877" />
+        <circle cx="401.9" cy="218.8" r="5" fill="#005877" />
+        <circle cx="263.1" cy="112.8" r="5" fill="#005877" />
+        <circle cx="179.9" cy="107.7" r="5" fill="#005877" />
+        <circle cx="318.6" cy="195.5" r="5" fill="#005877" />
+        <circle cx="249.2" cy="105.1" r="5" fill="#005877" />
+        <circle cx="207.6" cy="154.2" r="5" fill="#005877" />
+        <circle cx="332.5" cy="180.0" r="5" fill="#005877" />
+        <circle cx="290.9" cy="118.0" r="5" fill="#005877" />
+        <circle cx="193.8" cy="97.3" r="5" fill="#005877" />
+        <circle cx="277.0" cy="159.3" r="5" fill="#005877" />
+        <circle cx="582.2" cy="211.0" r="5" fill="#005877" />
+        <circle cx="152.1" cy="89.6" r="5" fill="#005877" />
+        <circle cx="283.1" cy="145.6" r="6" fill="white" stroke="#333" stroke-width="2" /><text x="273.1" y="167.6"
+          font-size="13" fill="#333" text-anchor="end">(x̄, ȳ)</text>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">La mejor recta también, pero no es la única: \(\sum e_i\)
+      <strong>no</strong> sirve para elegirla ni para medir el desajuste.</p>
+  </div>
+
+  <!-- ===================== MMC ===================== -->
+  <div class="slide">
+    <h1>Método de Mínimos Cuadrados (MMC)</h1>
+    <p>Elevamos al cuadrado (como en la varianza) y buscamos la recta que hace mínima la media de los \(e_i^2\):</p>
+    <div class="formula-box">\[ \min_{(a,b)} \frac{\sum e_i^2}{n} \;\equiv\; \min_{(a,b)} \sum_i \big(y_i - (a +
+      b\,x_i)\big)^2 \]</div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+        class="fig-svg cand-svg sq-svg">
+        <defs>
+          <clipPath id="sqclip">
+            <rect x="55" y="25" width="555" height="310" />
+          </clipPath>
+        </defs>
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+          x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+          x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+          font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+          text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+          fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+          y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+          text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+          (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+          transform="rotate(-90 14 180.0)">Nota examen</text>
+        <g class="cand" data-k="0">
+          <g clip-path="url(#sqclip)">
+            <rect class="sq" x="221.5" y="133.5" width="19.0" height="19.0" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="360.2" y="137.0" width="55.9" height="55.9" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="304.8" y="130.9" width="12.3" height="12.3" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="123.2" width="32.4" height="32.4" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="401.9" y="132.3" width="86.4" height="86.4" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="263.1" y="112.8" width="35.0" height="35.0" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="179.9" y="107.7" width="49.5" height="49.5" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="318.6" y="141.6" width="53.9" height="53.9" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="249.2" y="105.1" width="44.3" height="44.3" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="207.6" y="154.0" width="0.1" height="0.1" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="332.5" y="140.1" width="39.9" height="39.9" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="290.9" y="118.0" width="26.7" height="26.7" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="97.3" width="58.3" height="58.3" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="277.0" y="146.3" width="13.0" height="13.0" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="483.4" y="112.2" width="98.8" height="98.8" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <rect class="sq" x="152.1" y="89.6" width="70.7" height="70.7" fill="#c9a227" fill-opacity="0.22"
+              stroke="#c9a227" stroke-width="1.2" />
+            <line class="cl" pathLength="1" x1="55.0" y1="171.1" x2="610.0" y2="109.1" stroke="#c9a227"
+              stroke-width="2.8" />
+          </g><text class="tag" x="471.2" y="117.6" font-size="13.5" font-weight="bold" fill="#c9a227"
+            text-anchor="middle">1 (61.9)</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#c9a227" stroke-width="1.5" />
+            <text x="417.1" y="58" font-size="14" fill="#333">
+              <tspan font-weight="bold" fill="#c9a227">Recta 1</tspan>
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Área total = Σ e<tspan baseline-shift="sub"
+                font-size="10">i</tspan>
+              <tspan baseline-shift="super" font-size="10">2</tspan> = 61.9
+            </text>
+          </g>
+        </g>
+        <g class="cand" data-k="1">
+          <g clip-path="url(#sqclip)">
+            <rect class="sq" x="221.5" y="133.5" width="12.1" height="12.1" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="360.2" y="145.6" width="47.3" height="47.3" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="304.8" y="130.9" width="14.7" height="14.7" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="123.2" width="22.4" height="22.4" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="401.9" y="145.6" width="73.1" height="73.1" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="263.1" y="112.8" width="32.8" height="32.8" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="179.9" y="107.7" width="37.9" height="37.9" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="318.6" y="145.6" width="49.9" height="49.9" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="249.2" y="105.1" width="40.5" height="40.5" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="207.6" y="145.6" width="8.6" height="8.6" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="332.5" y="145.6" width="34.4" height="34.4" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="290.9" y="118.0" width="27.6" height="27.6" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="97.3" width="48.3" height="48.3" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="277.0" y="145.6" width="13.7" height="13.7" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="516.9" y="145.6" width="65.4" height="65.4" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <rect class="sq" x="152.1" y="89.6" width="56.0" height="56.0" fill="#7a3e9d" fill-opacity="0.22"
+              stroke="#7a3e9d" stroke-width="1.2" />
+            <line class="cl" pathLength="1" x1="55.0" y1="145.6" x2="610.0" y2="145.6" stroke="#7a3e9d"
+              stroke-width="2.8" />
+          </g><text class="tag" x="471.2" y="138.6" font-size="13.5" font-weight="bold" fill="#7a3e9d"
+            text-anchor="middle">2 (40.5)</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#7a3e9d" stroke-width="1.5" />
+            <text x="417.1" y="58" font-size="14" fill="#333">
+              <tspan font-weight="bold" fill="#7a3e9d">Recta 2</tspan>
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Área total = Σ e<tspan baseline-shift="sub"
+                font-size="10">i</tspan>
+              <tspan baseline-shift="super" font-size="10">2</tspan> = 40.5
+            </text>
+          </g>
+        </g>
+        <g class="cand" data-k="2">
+          <g clip-path="url(#sqclip)">
+            <rect class="sq" x="221.5" y="113.5" width="20.0" height="20.0" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="360.2" y="185.8" width="7.1" height="7.1" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="304.8" y="130.9" width="26.0" height="26.0" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="99.0" width="24.1" height="24.1" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="401.9" y="207.5" width="11.2" height="11.2" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="263.1" y="112.8" width="22.4" height="22.4" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="179.9" y="91.8" width="15.9" height="15.9" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="318.6" y="164.1" width="31.4" height="31.4" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="249.2" y="105.1" width="22.9" height="22.9" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="207.6" y="106.3" width="47.9" height="47.9" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="332.5" y="171.4" width="8.6" height="8.6" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="290.9" y="118.0" width="31.7" height="31.7" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="97.3" width="1.7" height="1.7" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="277.0" y="142.4" width="16.9" height="16.9" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="491.7" y="211.0" width="90.6" height="90.6" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <rect class="sq" x="152.1" y="77.3" width="12.2" height="12.2" fill="#2a9d8f" fill-opacity="0.22"
+              stroke="#2a9d8f" stroke-width="1.2" />
+            <line class="cl" pathLength="1" x1="55.0" y1="26.7" x2="610.0" y2="316.0" stroke="#2a9d8f"
+              stroke-width="2.8" />
+          </g><text class="tag" x="471.2" y="236.7" font-size="13.5" font-weight="bold" fill="#2a9d8f"
+            text-anchor="middle">3 (24.1)</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#2a9d8f" stroke-width="1.5" />
+            <text x="417.1" y="58" font-size="14" fill="#333">
+              <tspan font-weight="bold" fill="#2a9d8f">Recta 3</tspan>
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Área total = Σ e<tspan baseline-shift="sub"
+                font-size="10">i</tspan>
+              <tspan baseline-shift="super" font-size="10">2</tspan> = 24.1
+            </text>
+          </g>
+        </g>
+        <g class="cand" data-k="3">
+          <g clip-path="url(#sqclip)">
+            <rect class="sq" x="221.5" y="133.5" width="0.6" height="0.6" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="360.2" y="160.0" width="32.9" height="32.9" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="304.8" y="130.9" width="18.7" height="18.7" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="123.2" width="5.8" height="5.8" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="401.9" y="167.7" width="51.0" height="51.0" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="263.1" y="112.8" width="29.1" height="29.1" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="179.9" y="107.7" width="18.7" height="18.7" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="318.6" y="152.2" width="43.3" height="43.3" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="249.2" y="105.1" width="34.2" height="34.2" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="207.6" y="131.6" width="22.6" height="22.6" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="332.5" y="154.8" width="25.2" height="25.2" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="290.9" y="118.0" width="29.1" height="29.1" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="97.3" width="31.6" height="31.6" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="277.0" y="144.5" width="14.9" height="14.9" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="572.6" y="201.3" width="9.7" height="9.7" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <rect class="sq" x="152.1" y="89.6" width="31.6" height="31.6" fill="#6B6E6D" fill-opacity="0.22"
+              stroke="#6B6E6D" stroke-width="1.2" />
+            <line class="cl" pathLength="1" x1="55.0" y1="103.1" x2="610.0" y2="206.5" stroke="#6B6E6D"
+              stroke-width="2.8" />
+          </g><text class="tag" x="471.2" y="173.6" font-size="13.5" font-weight="bold" fill="#6B6E6D"
+            text-anchor="middle">4 (18.9)</text>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#6B6E6D" stroke-width="1.5" />
+            <text x="417.1" y="58" font-size="14" fill="#333">
+              <tspan font-weight="bold" fill="#6B6E6D">Recta 4</tspan>
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Área total = Σ e<tspan baseline-shift="sub"
+                font-size="10">i</tspan>
+              <tspan baseline-shift="super" font-size="10">2</tspan> = 18.9
+            </text>
+          </g>
+        </g>
+        <g class="cand best" data-k="4">
+          <g clip-path="url(#sqclip)">
+            <rect class="sq" x="221.5" y="125.7" width="7.8" height="7.8" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="360.2" y="170.5" width="22.4" height="22.4" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="304.8" y="130.9" width="21.7" height="21.7" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="116.8" width="6.4" height="6.4" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="401.9" y="184.0" width="34.8" height="34.8" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="263.1" y="112.8" width="26.3" height="26.3" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="179.9" y="107.7" width="4.6" height="4.6" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="318.6" y="157.1" width="38.4" height="38.4" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="249.2" y="105.1" width="29.6" height="29.6" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="207.6" y="121.2" width="32.9" height="32.9" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="332.5" y="161.6" width="18.4" height="18.4" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="290.9" y="118.0" width="30.1" height="30.1" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="193.8" y="97.3" width="19.4" height="19.4" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="277.0" y="143.6" width="15.7" height="15.7" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="551.0" y="211.0" width="31.2" height="31.2" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <rect class="sq" x="152.1" y="89.6" width="13.7" height="13.7" fill="#E87B00" fill-opacity="0.22"
+              stroke="#E87B00" stroke-width="1.2" />
+            <line class="cl" pathLength="1" x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#E87B00"
+              stroke-width="2.8" />
+          </g>
+          <g class="clab">
+            <rect x="406.0" y="38" width="232" height="52" rx="6" fill="white" stroke="#E87B00" stroke-width="1.5" />
+            <text x="417.1" y="58" font-size="14" fill="#333">
+              <tspan font-weight="bold" fill="#E87B00">La mejor recta: área mínima</tspan>
+            </text><text x="417.1" y="80" font-size="14" fill="#333">Área total = Σ e<tspan baseline-shift="sub"
+                font-size="10">i</tspan>
+              <tspan baseline-shift="super" font-size="10">2</tspan> = 14.2
+            </text>
+          </g>
+        </g>
+        <circle cx="221.5" cy="133.5" r="4.5" fill="#005877" />
+        <circle cx="360.2" cy="192.9" r="4.5" fill="#005877" />
+        <circle cx="304.8" cy="130.9" r="4.5" fill="#005877" />
+        <circle cx="193.8" cy="123.2" r="4.5" fill="#005877" />
+        <circle cx="401.9" cy="218.8" r="4.5" fill="#005877" />
+        <circle cx="263.1" cy="112.8" r="4.5" fill="#005877" />
+        <circle cx="179.9" cy="107.7" r="4.5" fill="#005877" />
+        <circle cx="318.6" cy="195.5" r="4.5" fill="#005877" />
+        <circle cx="249.2" cy="105.1" r="4.5" fill="#005877" />
+        <circle cx="207.6" cy="154.2" r="4.5" fill="#005877" />
+        <circle cx="332.5" cy="180.0" r="4.5" fill="#005877" />
+        <circle cx="290.9" cy="118.0" r="4.5" fill="#005877" />
+        <circle cx="193.8" cy="97.3" r="4.5" fill="#005877" />
+        <circle cx="277.0" cy="159.3" r="4.5" fill="#005877" />
+        <circle cx="582.2" cy="211.0" r="4.5" fill="#005877" />
+        <circle cx="152.1" cy="89.6" r="4.5" fill="#005877" />
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">Cada \(e_i^2\) es el <strong>área de un cuadrado</strong> de lado
+      \(|e_i|\): un error el doble de grande pesa cuatro veces más.</p>
+  </div>
+
+  <!-- ===================== MMC: AREA MEDIA ===================== -->
+  <div class="slide">
+    <h1>MMC: la recta que reduce el área media</h1>
+    <p>"Estiramos" la recta: cada tramo es un estudiante, y sobre él dibujamos el cuadrado de su error (arriba si el
+      punto queda por encima de la recta, abajo si queda por debajo).</p>
+    <div class="formula-box small">\[ \text{Área media} = \frac{\sum e_i^2}{n} \qquad\text{la mejor recta es la que la
+      hace mínima} \]</div>
+    <div class="fig-center"><svg viewBox="0 0 840 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg strip-svg"
+        data-st='[{"name": "Recta 1", "color": "#c9a227", "e": [2.735, 1.915, 1.255, 2.255, -0.005, 0.735, 1.715, 1.355, -0.505, 1.035, 0.475, -2.085, -1.545, -2.165, -3.345, -3.825], "tot": 61.9, "mean": 3.87}, {"name": "Recta 2", "color": "#7a3e9d", "e": [2.1688, 1.4688, 0.8687, 1.8687, -0.3312, 0.4688, 1.5688, 1.2687, -0.5312, 1.0688, 0.5688, -1.9312, -1.3312, -1.8312, -2.8312, -2.5312], "tot": 40.5, "mean": 2.53}, {"name": "Recta 3", "color": "#2a9d8f", "e": [-0.4737, -0.6137, -0.9337, 0.0663, -1.8537, -0.7738, 0.8863, 0.8662, -0.6537, 1.2263, 1.0063, -1.2137, -0.3337, -0.2737, -0.4337, 3.5063], "tot": 24.1, "mean": 1.51}, {"name": "Recta 4", "color": "#6B6E6D", "e": [1.225, 0.725, 0.225, 1.225, -0.875, 0.025, 1.325, 1.125, -0.575, 1.125, 0.725, -1.675, -0.975, -1.275, -1.975, -0.375], "tot": 18.9, "mean": 1.18}, {"name": "La mejor recta", "color": "#E87B00", "e": [0.532, 0.1788, -0.2477, 0.7523, -1.2743, -0.3009, 1.146, 1.0194, -0.6071, 1.1663, 0.8397, -1.4868, -0.7134, -0.8665, -1.3462, 1.2085], "tot": 14.2, "mean": 0.89}]'
+        data-geo="30,42,165,24">
+        <line class="sbase" x1="30" y1="165" x2="702" y2="165" stroke="#999" stroke-width="3" />
+        <line x1="30" y1="160" x2="30" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="72" y1="160" x2="72" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="114" y1="160" x2="114" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="156" y1="160" x2="156" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="198" y1="160" x2="198" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="240" y1="160" x2="240" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="282" y1="160" x2="282" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="324" y1="160" x2="324" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="366" y1="160" x2="366" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="408" y1="160" x2="408" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="450" y1="160" x2="450" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="492" y1="160" x2="492" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="534" y1="160" x2="534" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="576" y1="160" x2="576" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="618" y1="160" x2="618" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="660" y1="160" x2="660" y2="170" stroke="#999" stroke-width="1.5" />
+        <line x1="702" y1="160" x2="702" y2="170" stroke="#999" stroke-width="1.5" />
+        <rect class="ssq" x="51.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="51.0" cy="165" r="3.2" fill="#005877" /><text x="51.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#16</text>
+        <rect class="ssq" x="93.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="93.0" cy="165" r="3.2" fill="#005877" /><text x="93.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#7</text>
+        <rect class="ssq" x="135.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="135.0" cy="165" r="3.2" fill="#005877" /><text x="135.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#4</text>
+        <rect class="ssq" x="177.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="177.0" cy="165" r="3.2" fill="#005877" /><text x="177.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#13</text>
+        <rect class="ssq" x="219.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="219.0" cy="165" r="3.2" fill="#005877" /><text x="219.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#10</text>
+        <rect class="ssq" x="261.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="261.0" cy="165" r="3.2" fill="#005877" /><text x="261.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#1</text>
+        <rect class="ssq" x="303.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="303.0" cy="165" r="3.2" fill="#005877" /><text x="303.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#9</text>
+        <rect class="ssq" x="345.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="345.0" cy="165" r="3.2" fill="#005877" /><text x="345.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#6</text>
+        <rect class="ssq" x="387.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="387.0" cy="165" r="3.2" fill="#005877" /><text x="387.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#14</text>
+        <rect class="ssq" x="429.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="429.0" cy="165" r="3.2" fill="#005877" /><text x="429.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#12</text>
+        <rect class="ssq" x="471.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="471.0" cy="165" r="3.2" fill="#005877" /><text x="471.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#3</text>
+        <rect class="ssq" x="513.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="513.0" cy="165" r="3.2" fill="#005877" /><text x="513.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#8</text>
+        <rect class="ssq" x="555.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="555.0" cy="165" r="3.2" fill="#005877" /><text x="555.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#11</text>
+        <rect class="ssq" x="597.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="597.0" cy="165" r="3.2" fill="#005877" /><text x="597.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#2</text>
+        <rect class="ssq" x="639.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="639.0" cy="165" r="3.2" fill="#005877" /><text x="639.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#5</text>
+        <rect class="ssq" x="681.0" y="165" width="0" height="0" fill-opacity="0.28" stroke-width="1.3" />
+        <circle cx="681.0" cy="165" r="3.2" fill="#005877" /><text x="681.0" y="322" font-size="10.5" fill="#999"
+          text-anchor="middle">#15</text><text x="366" y="306" font-size="11.5" fill="#777"
+          text-anchor="middle">estudiantes, ordenados por ansiedad (de izquierda a derecha, como en la nube)</text>
+        <line x1="724" y1="40" x2="724" y2="290" stroke="#ddd" stroke-width="1.5" stroke-dasharray="4,3" />
+        <rect class="smean" x="777" y="165" width="0" height="0" fill-opacity="0.45" stroke-width="2" /><text x="777"
+          y="247" font-size="12.5" fill="#333" text-anchor="middle" font-weight="bold">cuadrado medio</text><text
+          class="smeanv" x="777" y="264" font-size="12.5" fill="#333" text-anchor="middle"></text><text class="stitle"
+          x="30" y="24" font-size="16" font-weight="bold"></text><text class="stot" x="30" y="46" font-size="14"
+          fill="#333"></text>
+      </svg></div>
+  </div>
+
+  <!-- ===================== CALCULO ===================== -->
+  <div class="slide">
+    <h1>Calculando la recta: Nota en función de Ansiedad</h1>
+    <p>Resolviendo el problema de MMC se obtienen los valores de \(a\) y \(b\) de <mark>la mejor recta</mark>:</p>
+    <div class="two-col">
+      <div class="formula-box small">\[ b = \frac{S_{XY}}{S_X^2} \]</div>
+      <div class="formula-box small">\[ a = \bar{y} - b\,\bar{x} \]</div>
+    </div>
+    <p>Del Tema 3: \(S_{XY}=-9.49\), \(S_X^2=54.75\), \(\bar{x}=16.44\), \(\bar{y}=7.33\).</p>
+    <div class="two-col">
+      <div class="formula-box small">\[ b = \frac{-9.49}{54.75} = -0.173 \]</div>
+      <div class="formula-box small">\[ a = 7.33 - (-0.173)(16.44) = 10.18 \]</div>
+    </div>
+    <div class="formula-box">\[ \text{Nota}^* = 10.18 - 0.173\cdot\text{Ansiedad} \]</div>
+    <p><mark>Por cada punto más de ansiedad, la nota baja, en promedio, 0.17 puntos</mark>
+      (unos 1.7 puntos cada 10 de ansiedad).</p>
+    <!-- <p class="small-note">\(a=10.18\) sería la nota con ansiedad 0: nadie en los datos tiene ansiedad 0 (mínimo = 7),
+      así que
+      \(a\) aquí es más un ancla matemática que algo interpretable.</p> -->
+  </div>
+
+  <!-- ===================== REFORMULACION ===================== -->
+  <div class="slide">
+    <h1>Otra forma de escribir la recta</h1>
+    <p>Sustituyendo \(a=\bar{y}-b\bar{x}\) en \(y=a+bx\):</p>
+    <div class="formula-box large">\[ y - \bar{y} = \frac{S_{XY}}{S_X^2}\,(x - \bar{x}) \quad\Longleftrightarrow\quad y
+      = a + b\,x \]</div>
+    <p>Es la recta que pasa por \((\bar{x},\bar{y})\) con pendiente \(S_{XY}/S_X^2\). Con nuestros datos:</p>
+    <div class="formula-box">\[ \text{Nota}^* - 7.33 = -0.173\,(\text{Ansiedad} - 16.44) \quad\Longleftrightarrow\quad
+      \text{Nota}^* = 10.18 - 0.173\cdot\text{Ansiedad} \]</div>
+    <p class="small-note">Es la <strong>misma recta</strong>, escrita de otra forma. Lectura directa: un estudiante con
+      ansiedad media tiene, según el modelo, nota media; y cada punto de ansiedad por encima de la media supone 0.173
+      puntos de nota por debajo de la media.</p>
+  </div>
+
+  <!-- ===================== GRAFICO RECTA ===================== -->
+  <div class="slide">
+    <h1>La recta sobre la nube</h1>
+    <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+      <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+        text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+        fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+        x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+        font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+        text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+        fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+        x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+        font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5" text-anchor="end"
+        fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end" fill="#777">4</text><text x="47"
+        y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47" y="131.3" font-size="10.5"
+        text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5" text-anchor="end"
+        fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end" fill="#777">12</text><text
+        x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14" y="180.0"
+        font-size="12.5" text-anchor="middle" fill="#333" transform="rotate(-90 14 180.0)">Nota examen</text>
+      <line x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#E87B00" stroke-width="2.5" />
+      <circle cx="221.5" cy="133.5" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="360.2" cy="192.9" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="304.8" cy="130.9" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="193.8" cy="123.2" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="401.9" cy="218.8" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="263.1" cy="112.8" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="179.9" cy="107.7" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="318.6" cy="195.5" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="249.2" cy="105.1" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="207.6" cy="154.2" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="332.5" cy="180.0" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="290.9" cy="118.0" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="193.8" cy="97.3" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="277.0" cy="159.3" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="582.2" cy="211.0" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="152.1" cy="89.6" r="5" fill="#005877" opacity="0.85" />
+      <circle cx="283.1" cy="145.6" r="6" fill="#E87B00" stroke="white" stroke-width="1.5" /><text x="429.6" y="180.9"
+        font-size="13" fill="#E87B00" font-weight="bold">y* = 10.18 − 0.173x</text>
+    </svg>
+    <p class="small-note">La recta pasa por el <strong>centro de gravedad</strong> \((\bar{x},\bar{y})=(16.44,\,7.33)\)
+      (punto naranja).</p>
+  </div>
+
+  <!-- ===================== X en funcion de Y ===================== -->
+  <div class="slide">
+    <h1>¿Y si ajustamos X en función de Y?</h1>
+    <div class="two-col error-cols" style="align-items:flex-start">
+      <div>
+        <p>Mismo método (MMC), pero ahora explicamos la <strong>Ansiedad</strong> a partir de la <strong>Nota</strong>:
+        </p>
+        <div class="formula-box small">\[ x = a' + b'\,y \qquad b' = \frac{S_{XY}}{S_Y^2} \qquad a' = \bar{x} -
+          b'\,\bar{y} \]</div>
+      </div>
+      <div>
+        <p>Con nuestros datos: cada punto más de nota, 3.75 puntos menos de ansiedad esperada.</p>
+        <div class="formula-box small">\[ b' = \frac{-9.49}{2.53} = -3.75 \qquad a' = 43.91 \]</div>
+      </div>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+        class="fig-svg anim-svg two-svg">
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+          x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+          x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+          font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+          text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+          fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+          y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+          text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+          (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+          transform="rotate(-90 14 180.0)">Nota examen</text>
+        <circle cx="221.5" cy="133.5" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="360.2" cy="192.9" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="304.8" cy="130.9" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="193.8" cy="123.2" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="401.9" cy="218.8" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="263.1" cy="112.8" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="179.9" cy="107.7" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="318.6" cy="195.5" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="249.2" cy="105.1" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="207.6" cy="154.2" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="332.5" cy="180.0" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="290.9" cy="118.0" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="193.8" cy="97.3" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="277.0" cy="159.3" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="582.2" cy="211.0" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <circle cx="152.1" cy="89.6" r="4.5" fill="#6B6E6D" opacity="0.55" />
+        <line class="l1" pathLength="1" x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#E87B00" stroke-width="2.5" />
+        <line class="l2" pathLength="1" x1="55.0" y1="32.3" x2="610.0" y2="308.0" stroke="#005877" stroke-width="2.5" />
+        <text class="t1" x="388.0" y="167.5" font-size="13" fill="#E87B00" font-weight="bold">
+          <tspan font-style="italic">y = f(x)</tspan>: Y en función de X
+        </text><text class="t2" x="561.1" y="301.7" font-size="13" fill="#005877" font-weight="bold" text-anchor="end">
+          <tspan font-style="italic">x = g(y)</tspan>: X en función de Y
+        </text>
+        <g class="t3">
+          <circle cx="283.1" cy="145.6" r="7" fill="#E87B00" stroke="white" stroke-width="2" />
+          <line x1="289.1" y1="139.6" x2="342.4" y2="91.0" stroke="#E87B00" stroke-width="1.2" /><text x="346.4"
+            y="87.0" font-size="13" fill="#E87B00" font-weight="bold">(x̄, ȳ) = (16.44, 7.33)</text>
+        </g>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem"><strong>No</strong> es la misma recta despejada: las dos se cruzan
+      en \((\bar{x},\bar{y})\).</p>
+  </div>
+
+  <!-- ===================== PROPIEDADES ===================== -->
+  <div class="slide">
+    <h1>Propiedades de las rectas de ajuste</h1>
+    <ul>
+      <li>Las dos rectas se cortan en el centro de gravedad \((\bar{x},\bar{y})\).</li>
+      <li>\(b\) y \(b'\) tienen siempre el <strong>mismo signo</strong>, el de \(S_{XY}\) (aquí ambos negativos).</li>
+      <li>Solo coinciden si el ajuste es perfecto (\(r=\pm1\)); entonces \(b'=1/b\) y \(a'=-a/b\).</li>
+    </ul>
+    <div class="formula-box large">\[ r = \pm\sqrt{b\,b'} \]</div>
+    <div class="formula-box small">\[ r = -\sqrt{(-0.173)(-3.75)} = -\sqrt{0.650} = -0.806 \]</div>
+    <p class="small-note">El signo de la raíz es el de \(S_{XY}\). Recuperamos el \(r=-0.81\) del Tema 3.</p>
+  </div>
+
+  <!-- ===================== y* y e ===================== -->
+  <div class="slide">
+    <h1>Dos variables nuevas: \(y^*\) y \(e\)</h1>
+    <table class="data-table small resid-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ansiedad</th>
+          <th>Nota \(y\)</th>
+          <th>Ajustada \(y^*\)</th>
+          <th>Residuo \(e\)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>12</td>
+          <td>7.8</td>
+          <td>8.10</td>
+          <td>-0.30</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>22</td>
+          <td>5.5</td>
+          <td>6.37</td>
+          <td>-0.87</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>18</td>
+          <td>7.9</td>
+          <td>7.06</td>
+          <td>+0.84</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>10</td>
+          <td>8.2</td>
+          <td>8.45</td>
+          <td>-0.25</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>25</td>
+          <td>4.5</td>
+          <td>5.85</td>
+          <td>-1.35</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>15</td>
+          <td>8.6</td>
+          <td>7.58</td>
+          <td>+1.02</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>9</td>
+          <td>8.8</td>
+          <td>8.62</td>
+          <td>+0.18</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>19</td>
+          <td>5.4</td>
+          <td>6.89</td>
+          <td>-1.49</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>14</td>
+          <td>8.9</td>
+          <td>7.75</td>
+          <td>+1.15</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>11</td>
+          <td>7</td>
+          <td>8.27</td>
+          <td>-1.27</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>20</td>
+          <td>6</td>
+          <td>6.71</td>
+          <td>-0.71</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>17</td>
+          <td>8.4</td>
+          <td>7.23</td>
+          <td>+1.17</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>10</td>
+          <td>9.2</td>
+          <td>8.45</td>
+          <td>+0.75</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>16</td>
+          <td>6.8</td>
+          <td>7.41</td>
+          <td>-0.61</td>
+        </tr>
+        <tr class=hl>
+          <td>15</td>
+          <td>38</td>
+          <td>4.8</td>
+          <td>3.59</td>
+          <td>+1.21</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>7</td>
+          <td>9.5</td>
+          <td>8.97</td>
+          <td>+0.53</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="two-col error-cols" style="align-items:flex-start">
+      <div>
+        <p>Al ajustar, cada estudiante recibe un valor ajustado \(y^*\) y un <strong>residuo</strong> \(e\).</p>
+        <div class="formula-box small">\[ y_i = y_i^* + e_i \;\Rightarrow\; \bar{y} = \bar{y}^* + \bar{e} = \bar{y}^* \]
+        </div>
+      </div>
+      <div>
+        <p>\(\bar{e}=0\) y \(\bar{y}^*=\bar{y}=7.33\).</p>
+        <p class="small-note">El estudiante #15 (ansiedad 38) tiene residuo \(+1.21\): sacó más nota de la que la recta
+          predice.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== VARIANZAS ===================== -->
+  <div class="slide">
+    <h1>La varianza se reparte</h1>
+    <div class="formula-box large">\[ S_Y^2 = S_{y^*}^2 + S_e^2 \]</div>
+    <p class="small-note" style="margin:0">Recordatorio (Tema 2): la varianza es la media de las desviaciones al
+      cuadrado respecto a la media.</p>
+    <div class="formula-box small">\[ S_Y^2 = \frac{\sum (y_i-\bar{y})^2}{n} \qquad S_{y^*}^2 = \frac{\sum
+      (y_i^*-\bar{y})^2}{n} \qquad S_e^2 = \frac{\sum (e_i-\bar{e})^2}{n} = \frac{\sum e_i^2}{n} \]</div>
+    <p>Información total = parte <strong>explicada</strong> por el modelo + parte <strong>residual</strong>. Lo
+      comprobamos:</p>
+    <div class="formula-box">\[ 2.533 = 1.647 + 0.887 \]</div>
+    <p>Como las varianzas son no negativas:</p>
+    <div class="two-col">
+      <div class="formula-box small">\[ 0 \le S_e^2 \le S_Y^2 \]</div>
+      <div class="formula-box small">\[ 0 \le S_{y^*}^2 \le S_Y^2 \]</div>
+    </div>
+    <p class="small-note">Atajo para hacerlo a mano: en la recta, \(S_{y^*}^2 = b\,S_{XY} = (-0.173)(-9.49) = 1.647\).
+    </p>
+  </div>
+
+  <!-- ===================== EXTREMOS ===================== -->
+  <div class="slide">
+    <h1>Calidad del ajuste: los dos extremos</h1>
+    <div class="two-col">
+      <div class="mini-card center"><svg viewBox="0 0 260 162" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="20" y="20" width="230" height="135" fill="none" stroke="#ddd" />
+          <line x1="25" y1="142.4" x2="245" y2="36.8" stroke="#E87B00" stroke-width="2.5" />
+          <circle cx="30" cy="140" r="4.5" fill="#005877" />
+          <circle cx="55" cy="128" r="4.5" fill="#005877" />
+          <circle cx="80" cy="116" r="4.5" fill="#005877" />
+          <circle cx="105" cy="104" r="4.5" fill="#005877" />
+          <circle cx="130" cy="92" r="4.5" fill="#005877" />
+          <circle cx="155" cy="80" r="4.5" fill="#005877" />
+          <circle cx="180" cy="68" r="4.5" fill="#005877" />
+          <circle cx="205" cy="56" r="4.5" fill="#005877" />
+          <circle cx="230" cy="44" r="4.5" fill="#005877" />
+        </svg>
+        <p class="ext-lab">\(S_e^2=0\)</p>
+        <p class="qtag">Varianza <strong>residual</strong> (de los errores) nula<br>Ajuste perfecto · dependencia
+          funcional · \(R^2=1\)</p>
+      </div>
+      <div class="mini-card center"><svg viewBox="0 0 260 162" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="20" y="20" width="230" height="135" fill="none" stroke="#ddd" />
+          <circle cx="161.3" cy="100.4" r="4.5" fill="#005877" />
+          <circle cx="218.4" cy="35.1" r="4.5" fill="#005877" />
+          <circle cx="192.9" cy="34.1" r="4.5" fill="#005877" />
+          <circle cx="77.3" cy="89.2" r="4.5" fill="#005877" />
+          <circle cx="93.0" cy="83.6" r="4.5" fill="#005877" />
+          <circle cx="213.4" cy="135.5" r="4.5" fill="#005877" />
+          <circle cx="31.1" cy="102.4" r="4.5" fill="#005877" />
+          <circle cx="202.5" cy="89.1" r="4.5" fill="#005877" />
+          <circle cx="197.4" cy="87.1" r="4.5" fill="#005877" />
+          <circle cx="128.3" cy="58.5" r="4.5" fill="#005877" />
+          <circle cx="93.6" cy="31.4" r="4.5" fill="#005877" />
+          <circle cx="88.5" cy="52.1" r="4.5" fill="#005877" />
+          <circle cx="83.5" cy="109.6" r="4.5" fill="#005877" />
+          <circle cx="123.5" cy="53.1" r="4.5" fill="#005877" />
+          <circle cx="136.0" cy="72.5" r="4.5" fill="#005877" />
+          <circle cx="146.2" cy="30.4" r="4.5" fill="#005877" />
+          <circle cx="239.1" cy="125.5" r="4.5" fill="#005877" />
+          <circle cx="196.5" cy="47.8" r="4.5" fill="#005877" />
+          <circle cx="160.7" cy="60.8" r="4.5" fill="#005877" />
+          <circle cx="237.7" cy="131.2" r="4.5" fill="#005877" />
+          <circle cx="75.2" cy="88.6" r="4.5" fill="#005877" />
+          <circle cx="63.6" cy="127.4" r="4.5" fill="#005877" />
+          <line x1="25" y1="88" x2="245" y2="88" stroke="#E87B00" stroke-width="2.5" />
+        </svg>
+        <p class="ext-lab">\(S_{y^*}^2=0\quad(y^*=\bar{y})\)</p>
+        <p class="qtag">Varianza <strong>explicada</strong> (de los valores ajustados) nula<br>Variables independientes
+          · máximo error · \(R^2=0\)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== R2 ===================== -->
+  <div class="slide">
+    <h1>Coeficiente de determinación</h1>
+    <p>\(S_e^2\) y \(S_{y^*}^2\) no son interpretables por sí solas (unidades al cuadrado). Normalizamos dividiendo por
+      \(S_Y^2\):</p>
+    <div class="formula-box large">\[ R^2 = \frac{S_{y^*}^2}{S_Y^2} = 1 - \frac{S_e^2}{S_Y^2} \]</div>
+    <div class="formula-box">\[ R^2 = \frac{1.647}{2.533} = 1 - \frac{0.887}{2.533} = 0.650 \]</div>
+  </div>
+
+  <!-- ===================== PROPIEDADES R2 ===================== -->
+  <div class="slide">
+    <h1>Propiedades de \(R^2\)</h1>
+    <ul>
+      <li>\(0 \le R^2 \le 1\), y <strong>no tiene signo</strong> (no existe un "\(R\)" con signo en general).</li>
+      <li>\(S_e^2=0 \Rightarrow R^2=1\): relación funcional exacta.</li>
+      <li>\(S_{y^*}^2=0 \Rightarrow R^2=0\): independencia respecto al modelo de ajuste.</li>
+    </ul>
+    <p>En el ajuste lineal:</p>
+    <div class="formula-box large">\[ R^2 = r^2 = \frac{S_{XY}^2}{S_X^2\,S_Y^2} \]</div>
+    <div class="formula-box small">\[ (-0.806)^2 = 0.650 \;\checkmark \]</div>
+  </div>
+
+  <!-- ===================== INTERPRETACION ===================== -->
+  <div class="slide">
+    <h1>Interpretación de \(R^2 = 0.650\)</h1>
+    <div class="fig-split">
+      <div class="split-text">
+      <p style="text-align:center"><mark>La Ansiedad explica, a través de la recta, el 65 % de la variabilidad de las
+          Notas.</mark></p>
+      <p>¿Y el 35 % restante? Dos posibles causas:</p>
+      <div class="two-col">
+        <div class="mini-card center">
+          <h3>Falta de información</h3>
+          <p>Otras variables (sueño, horas de estudio...) también influyen.</p>
+        </div>
+        <div class="mini-card center">
+          <h3>Mala elección del modelo</h3>
+          <p>La relación no es una recta.</p>
+        </div>
+      </div>
+      </div>
+      <div class="fig-center"><svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="fig-svg pie-svg">
+          <circle cx="150" cy="150" r="120" fill="white" stroke="#6B6E6D" stroke-width="2" stroke-dasharray="6,4" />
+          <path d="M150,150 L150.0,30.0 A120,120 0 1 1 52.9,220.5 Z" fill="#E87B00" fill-opacity="0.85" stroke="#E87B00"
+            stroke-width="2" />
+          <line x1="150" y1="150" x2="52.9" y2="220.5" stroke="#6B6E6D" stroke-width="2" stroke-dasharray="6,4" /><text
+            x="208.8" y="174.0" font-size="26" font-weight="bold" fill="white" text-anchor="middle">65 %</text><text
+            x="208.8" y="196.0" font-size="14" fill="white" text-anchor="middle">explicado</text><text x="91.2" y="114.0"
+            font-size="22" font-weight="bold" fill="#6B6E6D" text-anchor="middle">35 %</text><text x="91.2" y="134.0"
+            font-size="13" fill="#6B6E6D" text-anchor="middle">sin explicar</text>
+        </svg></div>
+    </div>
+  </div>
+
+  <!-- ===================== A B ===================== -->
+  <div class="slide">
+    <h1>Las dos causas, en dibujo</h1>
+    <div class="two-col">
+      <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="20" y="15" width="230" height="140" fill="none" stroke="#ddd" />
+          <line x1="25" y1="96" x2="245" y2="122" stroke="#E87B00" stroke-width="2.5" />
+          <circle cx="40.0" cy="60.2" r="4" fill="#005877" />
+          <circle cx="40.0" cy="136.8" r="4" fill="#005877" />
+          <circle cx="67.1" cy="62.9" r="4" fill="#005877" />
+          <circle cx="67.1" cy="124.2" r="4" fill="#005877" />
+          <circle cx="94.3" cy="52.0" r="4" fill="#005877" />
+          <circle cx="94.3" cy="120.8" r="4" fill="#005877" />
+          <circle cx="121.4" cy="53.1" r="4" fill="#005877" />
+          <circle cx="121.4" cy="119.9" r="4" fill="#005877" />
+          <circle cx="148.6" cy="50.7" r="4" fill="#005877" />
+          <circle cx="148.6" cy="107.7" r="4" fill="#005877" />
+          <circle cx="175.7" cy="51.5" r="4" fill="#005877" />
+          <circle cx="175.7" cy="113.2" r="4" fill="#005877" />
+          <circle cx="202.9" cy="43.9" r="4" fill="#005877" />
+          <circle cx="202.9" cy="109.8" r="4" fill="#005877" />
+          <circle cx="230.0" cy="35.3" r="4" fill="#005877" />
+          <circle cx="230.0" cy="109.5" r="4" fill="#005877" />
+        </svg>
+        <p class="qtag"><strong>Figura A:</strong> falta de información</p>
+      </div>
+      <div class="mini-card center"><svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="20" y="15" width="230" height="140" fill="none" stroke="#ddd" />
+          <line x1="25" y1="80.7" x2="245" y2="80.7" stroke="#6B6E6D" stroke-width="2" stroke-dasharray="6,3" />
+          <polyline
+            points="25.0,154.9 29.5,145.8 34.0,136.9 38.5,128.5 43.0,120.5 47.4,112.8 51.9,105.5 56.4,98.6 60.9,92.1 65.4,86.0 69.9,80.3 74.4,74.9 78.9,69.9 83.4,65.3 87.9,61.1 92.3,57.3 96.8,53.8 101.3,50.8 105.8,48.1 110.3,45.8 114.8,43.9 119.3,42.3 123.8,41.2 128.3,40.4 132.8,40.0 137.2,40.0 141.7,40.4 146.2,41.2 150.7,42.3 155.2,43.9 159.7,45.8 164.2,48.1 168.7,50.8 173.2,53.8 177.7,57.3 182.1,61.1 186.6,65.3 191.1,69.9 195.6,74.9 200.1,80.3 204.6,86.0 209.1,92.1 213.6,98.6 218.1,105.5 222.6,112.8 227.0,120.5 231.5,128.5 236.0,136.9 240.5,145.8 245.0,154.9"
+            fill="none" stroke="#E87B00" stroke-width="2.5" />
+          <circle cx="30.0" cy="144.7" r="4" fill="#005877" />
+          <circle cx="47.5" cy="112.7" r="4" fill="#005877" />
+          <circle cx="65.0" cy="86.5" r="4" fill="#005877" />
+          <circle cx="82.5" cy="66.2" r="4" fill="#005877" />
+          <circle cx="100.0" cy="51.6" r="4" fill="#005877" />
+          <circle cx="117.5" cy="42.9" r="4" fill="#005877" />
+          <circle cx="135.0" cy="40.0" r="4" fill="#005877" />
+          <circle cx="152.5" cy="42.9" r="4" fill="#005877" />
+          <circle cx="170.0" cy="51.6" r="4" fill="#005877" />
+          <circle cx="187.5" cy="66.2" r="4" fill="#005877" />
+          <circle cx="205.0" cy="86.5" r="4" fill="#005877" />
+          <circle cx="222.5" cy="112.7" r="4" fill="#005877" />
+          <circle cx="240.0" cy="144.7" r="4" fill="#005877" /><text x="26" y="94.7" font-size="11" fill="#6B6E6D">y = a
+            + bx</text>
+        </svg>
+        <p class="qtag"><strong>Figura B:</strong> mala elección del modelo</p>
+      </div>
+    </div>
+    <p class="small-note"><strong>A:</strong> para un mismo \(x_0\) hay dos valores de \(Y\) muy distintos; la recta es
+      lo mejor posible,
+      \(X\) no da más. <strong>B:</strong> una parábola explicaría casi el 100 %. El ajuste tiene también un valor
+      <em>cualitativo</em>: el patrón (lineal, parabólico, exponencial...).
+    </p>
+  </div>
+
+  <!-- ===================== NO LINEALES ===================== -->
+  <div class="slide">
+    <h1>Ajustes no lineales</h1>
+    <p>Si la recta no es el patrón adecuado (Figura B), probamos otros modelos. Los más habituales:</p>
+    <div class="grid-2x2">
+      <div class="mini-card center"><svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="22" y="18" width="216" height="116" fill="none" stroke="#ddd" />
+          <polyline
+            points="22.0,53.8 25.7,59.0 29.3,64.0 33.0,68.9 36.6,73.5 40.3,77.9 44.0,82.2 47.6,86.2 51.3,90.1 54.9,93.8 58.6,97.2 62.3,100.5 65.9,103.6 69.6,106.4 73.3,109.1 76.9,111.6 80.6,113.9 84.2,116.0 87.9,117.8 91.6,119.5 95.2,121.0 98.9,122.3 102.5,123.4 106.2,124.3 109.9,125.1 113.5,125.6 117.2,125.9 120.8,126.0 124.5,125.9 128.2,125.6 131.8,125.2 135.5,124.5 139.2,123.6 142.8,122.6 146.5,121.3 150.1,119.9 153.8,118.2 157.5,116.4 161.1,114.3 164.8,112.1 168.4,109.7 172.1,107.0 175.8,104.2 179.4,101.2 183.1,97.9 186.7,94.5 190.4,90.9 194.1,87.1 197.7,83.1 201.4,78.9 205.1,74.5 208.7,69.9 212.4,65.1 216.0,60.1 219.7,54.9 223.4,49.5 227.0,43.9 230.7,38.1 234.3,32.2 238.0,26.0"
+            fill="none" stroke="#E87B00" stroke-width="2.2" />
+          <circle cx="33.7" cy="75.3" r="3.5" fill="#005877" />
+          <circle cx="57.8" cy="100.1" r="3.5" fill="#005877" />
+          <circle cx="81.8" cy="118.5" r="3.5" fill="#005877" />
+          <circle cx="105.9" cy="122.9" r="3.5" fill="#005877" />
+          <circle cx="130.0" cy="126.7" r="3.5" fill="#005877" />
+          <circle cx="154.1" cy="117.5" r="3.5" fill="#005877" />
+          <circle cx="178.2" cy="98.0" r="3.5" fill="#005877" />
+          <circle cx="202.2" cy="73.6" r="3.5" fill="#005877" />
+          <circle cx="226.3" cy="42.6" r="3.5" fill="#005877" />
+        </svg>
+        <p class="qtag"><strong>Parabólico</strong><br>\(y=a+bx+cx^2\)</p>
+      </div>
+      <div class="mini-card center"><svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="22" y="18" width="216" height="116" fill="none" stroke="#ddd" />
+          <polyline
+            points="22.0,126.0 25.7,122.2 29.3,118.8 33.0,115.6 36.6,112.6 40.3,109.8 44.0,107.1 47.6,104.5 51.3,102.1 54.9,99.7 58.6,97.4 62.3,95.2 65.9,93.1 69.6,91.0 73.3,89.0 76.9,87.0 80.6,85.1 84.2,83.2 87.9,81.4 91.6,79.6 95.2,77.9 98.9,76.2 102.5,74.5 106.2,72.8 109.9,71.2 113.5,69.6 117.2,68.0 120.8,66.5 124.5,65.0 128.2,63.5 131.8,62.0 135.5,60.6 139.2,59.1 142.8,57.7 146.5,56.3 150.1,55.0 153.8,53.6 157.5,52.3 161.1,50.9 164.8,49.6 168.4,48.3 172.1,47.0 175.8,45.8 179.4,44.5 183.1,43.3 186.7,42.0 190.4,40.8 194.1,39.6 197.7,38.4 201.4,37.3 205.1,36.1 208.7,34.9 212.4,33.8 216.0,32.6 219.7,31.5 223.4,30.4 227.0,29.3 230.7,28.2 234.3,27.1 238.0,26.0"
+            fill="none" stroke="#E87B00" stroke-width="2.2" />
+          <circle cx="33.7" cy="119.0" r="3.5" fill="#005877" />
+          <circle cx="57.8" cy="96.7" r="3.5" fill="#005877" />
+          <circle cx="81.8" cy="92.7" r="3.5" fill="#005877" />
+          <circle cx="105.9" cy="69.7" r="3.5" fill="#005877" />
+          <circle cx="130.0" cy="57.0" r="3.5" fill="#005877" />
+          <circle cx="154.1" cy="55.8" r="3.5" fill="#005877" />
+          <circle cx="178.2" cy="42.8" r="3.5" fill="#005877" />
+          <circle cx="202.2" cy="35.7" r="3.5" fill="#005877" />
+          <circle cx="226.3" cy="31.5" r="3.5" fill="#005877" />
+        </svg>
+        <p class="qtag"><strong>Potencial</strong><br>\(y=a\,x^{b}\)</p>
+      </div>
+      <div class="mini-card center"><svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="22" y="18" width="216" height="116" fill="none" stroke="#ddd" />
+          <polyline
+            points="22.0,126.0 25.7,125.8 29.3,125.6 33.0,125.3 36.6,125.1 40.3,124.8 44.0,124.5 47.6,124.2 51.3,123.9 54.9,123.5 58.6,123.2 62.3,122.8 65.9,122.4 69.6,122.0 73.3,121.5 76.9,121.1 80.6,120.6 84.2,120.0 87.9,119.5 91.6,118.9 95.2,118.2 98.9,117.6 102.5,116.9 106.2,116.1 109.9,115.3 113.5,114.5 117.2,113.6 120.8,112.7 124.5,111.7 128.2,110.6 131.8,109.5 135.5,108.4 139.2,107.1 142.8,105.8 146.5,104.4 150.1,102.9 153.8,101.4 157.5,99.8 161.1,98.0 164.8,96.2 168.4,94.2 172.1,92.2 175.8,90.0 179.4,87.7 183.1,85.2 186.7,82.7 190.4,79.9 194.1,77.0 197.7,74.0 201.4,70.7 205.1,67.3 208.7,63.7 212.4,59.8 216.0,55.8 219.7,51.5 223.4,47.0 227.0,42.2 230.7,37.1 234.3,31.7 238.0,26.0"
+            fill="none" stroke="#E87B00" stroke-width="2.2" />
+          <circle cx="33.7" cy="125.1" r="3.5" fill="#005877" />
+          <circle cx="57.8" cy="116.5" r="3.5" fill="#005877" />
+          <circle cx="81.8" cy="114.3" r="3.5" fill="#005877" />
+          <circle cx="105.9" cy="118.7" r="3.5" fill="#005877" />
+          <circle cx="130.0" cy="111.6" r="3.5" fill="#005877" />
+          <circle cx="154.1" cy="103.9" r="3.5" fill="#005877" />
+          <circle cx="178.2" cy="85.6" r="3.5" fill="#005877" />
+          <circle cx="202.2" cy="70.2" r="3.5" fill="#005877" />
+          <circle cx="226.3" cy="39.4" r="3.5" fill="#005877" />
+        </svg>
+        <p class="qtag"><strong>Exponencial</strong><br>\(y=a\,e^{bx}\)</p>
+      </div>
+      <div class="mini-card center"><svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="22" y="18" width="216" height="116" fill="none" stroke="#ddd" />
+          <polyline
+            points="22.0,26.0 25.7,44.7 29.3,57.9 33.0,67.7 36.6,75.2 40.3,81.2 44.0,86.2 47.6,90.2 51.3,93.7 54.9,96.6 58.6,99.1 62.3,101.3 65.9,103.3 69.6,105.0 73.3,106.6 76.9,108.0 80.6,109.2 84.2,110.4 87.9,111.4 91.6,112.4 95.2,113.2 98.9,114.1 102.5,114.8 106.2,115.5 109.9,116.1 113.5,116.7 117.2,117.3 120.8,117.8 124.5,118.3 128.2,118.8 131.8,119.2 135.5,119.7 139.2,120.0 142.8,120.4 146.5,120.8 150.1,121.1 153.8,121.4 157.5,121.7 161.1,122.0 164.8,122.3 168.4,122.6 172.1,122.8 175.8,123.1 179.4,123.3 183.1,123.5 186.7,123.7 190.4,123.9 194.1,124.1 197.7,124.3 201.4,124.5 205.1,124.7 208.7,124.8 212.4,125.0 216.0,125.2 219.7,125.3 223.4,125.5 227.0,125.6 230.7,125.7 234.3,125.9 238.0,126.0"
+            fill="none" stroke="#E87B00" stroke-width="2.2" />
+          <circle cx="33.7" cy="69.1" r="3.5" fill="#005877" />
+          <circle cx="57.8" cy="91.8" r="3.5" fill="#005877" />
+          <circle cx="81.8" cy="103.5" r="3.5" fill="#005877" />
+          <circle cx="105.9" cy="118.0" r="3.5" fill="#005877" />
+          <circle cx="130.0" cy="120.5" r="3.5" fill="#005877" />
+          <circle cx="154.1" cy="124.1" r="3.5" fill="#005877" />
+          <circle cx="178.2" cy="120.4" r="3.5" fill="#005877" />
+          <circle cx="202.2" cy="124.8" r="3.5" fill="#005877" />
+          <circle cx="226.3" cy="121.8" r="3.5" fill="#005877" />
+        </svg>
+        <p class="qtag"><strong>Hiperbólico</strong><br>\(y=a+\frac{b}{x}\)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ELECCION ===================== -->
+  <div class="slide">
+    <h1>¿Con qué modelo nos quedamos?</h1>
+    <p>Si no está claro, se ajustan varios y se compara su calidad con el \(R^2\):</p>
+    <table class="cont-table">
+      <thead>
+        <tr>
+          <th>Modelo (Nota vs. Ansiedad)</th>
+          <th>\(R^2\)</th>
+          <th>Parámetros</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="best">
+          <td>Lineal \(y=a+bx\)</td>
+          <td>0.650</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Logarítmico \(y=a+b\ln x\)</td>
+          <td>0.680</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Parabólico \(y=a+bx+cx^2\)</td>
+          <td>0.702</td>
+          <td>3</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>La parábola gana solo 5 puntos de \(R^2\) a cambio de ser más difícil de interpretar.
+      <mark>Si la diferencia es pequeña, nos quedamos con la recta.</mark>
+    </p>
+    <p class="small-note">Equilibrio entre ajuste y utilidad (simplicidad, interpretabilidad): el <em>parsimonious
+        model</em>.</p>
+  </div>
+
+  <!-- ===================== SUAVIZADO ===================== -->
+  <div class="slide">
+    <h1>Suavizado: mejor no pasar por todos los puntos</h1>
+    <svg viewBox="0 0 620 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+      <rect x="30" y="10" width="580" height="240" fill="none" stroke="#ddd" />
+      <polyline
+        points="59.0,155.6 99.2,233.9 139.3,166.8 179.5,175.8 219.6,163.6 259.8,149.1 299.9,173.8 340.1,129.5 380.2,131.7 420.4,41.3 460.5,90.8 500.7,91.9 540.8,80.6 581.0,78.0"
+        fill="none" stroke="#6B6E6D" stroke-width="1.8" />
+      <line x1="30.0" y1="207.2" x2="610.0" y2="58.8" stroke="#E87B00" stroke-width="3" />
+      <circle cx="59.0" cy="155.6" r="4.5" fill="#005877" />
+      <circle cx="99.2" cy="233.9" r="4.5" fill="#005877" />
+      <circle cx="139.3" cy="166.8" r="4.5" fill="#005877" />
+      <circle cx="179.5" cy="175.8" r="4.5" fill="#005877" />
+      <circle cx="219.6" cy="163.6" r="4.5" fill="#005877" />
+      <circle cx="259.8" cy="149.1" r="4.5" fill="#005877" />
+      <circle cx="299.9" cy="173.8" r="4.5" fill="#005877" />
+      <circle cx="340.1" cy="129.5" r="4.5" fill="#005877" />
+      <circle cx="380.2" cy="131.7" r="4.5" fill="#005877" />
+      <circle cx="420.4" cy="41.3" r="4.5" fill="#005877" />
+      <circle cx="460.5" cy="90.8" r="4.5" fill="#005877" />
+      <circle cx="500.7" cy="91.9" r="4.5" fill="#005877" />
+      <circle cx="540.8" cy="80.6" r="4.5" fill="#005877" />
+      <circle cx="581.0" cy="78.0" r="4.5" fill="#005877" /><text x="528.8" y="105.6" font-size="15" fill="#E87B00"
+        font-weight="bold">f</text><text x="135.3" y="154.8" font-size="15" fill="#6B6E6D" font-weight="bold">g</text>
+    </svg>
+    <div class="two-col">
+      <div class="mini-card">
+        <h3 style="color:var(--uca-gray)">g: sobreajuste</h3>
+        <p>Ajuste perfecto, pero rugosa: copia el ruido, poco valor cualitativo, difícil de manejar.</p>
+      </div>
+      <div class="mini-card">
+        <h3 style="color:var(--uca-orange)">f: suave</h3>
+        <p>Buen ajuste y patrón reconocible: elimina las oscilaciones del ruido.</p>
+      </div>
+    </div>
+    <p class="small-note">Es lo que ya intuimos al principio del tema con nuestros 16 estudiantes.</p>
+  </div>
+
+  <!-- ===================== PREDICCION ===================== -->
+  <div class="slide">
+    <h1>Predicción</h1>
+    <p>Con la recta podemos predecir: dado \(x_0\), \(y_0 = f(x_0)\). Pero con <mark><strong>mucha precaución</strong></mark>.</p>
+    <div class="two-col error-cols pred-cols" style="align-items:flex-start">
+      <ul>
+        <li>Primero, calidad global: \(R^2\).</li>
+        <li>Distancia de \(x_0\) a \(\bar{x}=16.44\).</li>
+      </ul>
+      <ul>
+        <li><strong>Interpolación</strong> (dentro de \([x_{(1)},x_{(n)}]=[7,38]\)) vs. <strong>extrapolación</strong>
+          (fuera).</li>
+        <li>Si la dispersión de \(Y\) cambia con \(X\).</li>
+      </ul>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" />
+        <rect x="114.8" y="25" width="264.7" height="310" fill="#005877" opacity="0.07" /><text x="55.0" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">0</text><text x="140.4" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">10</text><text x="225.8" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">20</text><text x="311.2" y="353" font-size="10.5" text-anchor="middle" fill="#777">30</text><text
+          x="396.5" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="481.9" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">50</text><text x="567.3" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">60</text><text x="47" y="303.6" font-size="10.5" text-anchor="end"
+          fill="#777">0</text><text x="47" y="257.6" font-size="10.5" text-anchor="end" fill="#777">2</text><text x="47"
+          y="211.7" font-size="10.5" text-anchor="end" fill="#777">4</text><text x="47" y="165.8" font-size="10.5"
+          text-anchor="end" fill="#777">6</text><text x="47" y="119.9" font-size="10.5" text-anchor="end"
+          fill="#777">8</text><text x="47" y="73.9" font-size="10.5" text-anchor="end" fill="#777">10</text><text x="47"
+          y="28.0" font-size="10.5" text-anchor="end" fill="#777">12</text><text x="332.5" y="372" font-size="12.5"
+          text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14" y="180.0" font-size="12.5"
+          text-anchor="middle" fill="#333" transform="rotate(-90 14 180.0)">Nota examen</text>
+        <line x1="55" y1="300.6" x2="610" y2="300.6" stroke="#999" stroke-width="1" />
+        <line x1="114.8" y1="94.6" x2="379.5" y2="218.1" stroke="#E87B00" stroke-width="2.5" />
+        <line x1="55.0" y1="66.7" x2="114.8" y2="94.6" stroke="#E87B00" stroke-width="2" stroke-dasharray="6,4" />
+        <line x1="379.5" y1="218.1" x2="610.0" y2="325.6" stroke="#E87B00" stroke-width="2" stroke-dasharray="6,4" />
+        <circle cx="157.5" cy="121.4" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="242.8" cy="174.3" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="208.7" cy="119.1" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="140.4" cy="112.3" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="268.5" cy="197.2" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="183.1" cy="103.1" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="131.8" cy="98.5" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="217.2" cy="176.6" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="174.5" cy="96.2" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="148.9" cy="139.8" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="225.8" cy="162.8" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="200.2" cy="107.7" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="140.4" cy="89.3" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="191.6" cy="144.4" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="379.5" cy="190.3" r="4.5" fill="#005877" opacity="0.8" />
+        <circle cx="114.8" cy="82.4" r="4.5" fill="#005877" opacity="0.8" />
+        <rect x="178.1" y="121.5" width="10" height="10" fill="#E87B00" transform="rotate(45 183.1 126.5)" />
+        <line x1="189.1" y1="120.5" x2="268.5" y2="88.7" stroke="#333" stroke-width="1" /><text x="271.5" y="84.7"
+          font-size="12.5" fill="#333" font-weight="bold">x=15 → 7.58</text>
+        <rect x="434.2" y="241.0" width="10" height="10" fill="#E87B00" transform="rotate(45 439.2 246.0)" /><text
+          x="449.2" y="236.0" font-size="12.5" fill="#333" font-weight="bold">x=45 → 2.38</text>
+        <rect x="562.3" y="300.7" width="10" height="10" fill="#E87B00" transform="rotate(45 567.3 305.7)" /><text
+          x="555.3" y="309.7" font-size="12.5" fill="#333" font-weight="bold" text-anchor="end">x=60 → −0.22</text><text
+          x="247.1" y="45" font-size="12" text-anchor="middle" fill="#005877">interpolación: rango observado [7,
+          38]</text><text x="499.0" y="45" font-size="12" text-anchor="middle" fill="#6B6E6D">extrapolación</text>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">¿Una nota de \(-0.22\) con ansiedad 60? La recta no sabe que la nota no baja de 0.</p>
+  </div>
+
+  <!-- ===================== EXTRACCION ===================== -->
+  <div class="slide">
+    <h1>¿De dónde salen los datos?</h1>
+    <div class="two-col">
+      <div class="mini-card">
+        <h3>Medición directa</h3>
+        <p>Se eligen los individuos y se miden \(X\) e \(Y\) en cada uno.</p>
+        <p class="qtag">Ej.: nuestro caso. Medimos Ansiedad y Nota a 16 estudiantes. (PDF: altura y peso.)</p>
+      </div>
+      <div class="mini-card">
+        <h3>Diseño experimental</h3>
+        <p>El investigador <strong>fija</strong> el valor de \(X\) y mide el efecto en \(Y\).</p>
+        <p class="qtag">Ej.: dosis de un fármaco (\(X\)) y su efecto (\(Y\)).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== HOMOCEDASTICIDAD ===================== -->
+  <div class="slide">
+    <h1>Homocedasticidad vs. Heterocedasticidad</h1>
+    <div class="two-col">
+      <div class="mini-card center">
+        <h3>Homocedasticidad</h3>
+        <p>La variabilidad de \(Y\) es <strong>constante</strong> a lo largo del rango de \(X\).</p>
+      </div>
+      <div class="mini-card center">
+        <h3>Heterocedasticidad</h3>
+        <p>La varianza de \(Y\) <strong>cambia</strong> de forma evidente con \(X\).</p>
+      </div>
+    </div>
+    <p>La heterocedasticidad distorsiona el análisis del ajuste y <mark>afecta directamente a la calidad de las
+        predicciones</mark>.
+      Es más evidente en diseños experimentales, pero también aparece con variables medidas.</p>
+  </div>
+
+  <div class="slide">
+    <h1>Ejemplo: heterocedasticidad</h1>
+    <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+      <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="47" y="338.0" font-size="10.5"
+        text-anchor="end" fill="#777">0</text><text x="47" y="276.0" font-size="10.5" text-anchor="end"
+        fill="#777">20</text><text x="47" y="214.0" font-size="10.5" text-anchor="end" fill="#777">40</text><text x="47"
+        y="152.0" font-size="10.5" text-anchor="end" fill="#777">60</text><text x="47" y="90.0" font-size="10.5"
+        text-anchor="end" fill="#777">80</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+        fill="#777">100</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Concentración
+        del fármaco</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+        transform="rotate(-90 14 180.0)">Parámetro sanguíneo</text><text x="101.2" y="353" font-size="11"
+        text-anchor="middle" fill="#777">1</text>
+      <circle cx="90.2" cy="294.1" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="93.8" cy="292.2" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="97.6" cy="290.4" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="101.2" cy="288.5" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="105.0" cy="286.6" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="108.7" cy="284.8" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="112.3" cy="282.9" r="4.5" fill="#005877" opacity="0.85" /><text x="193.8" y="353" font-size="11"
+        text-anchor="middle" fill="#777">2</text>
+      <circle cx="182.6" cy="266.6" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="186.3" cy="261.5" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="190.0" cy="256.4" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="193.8" cy="251.3" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="197.5" cy="246.2" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="201.2" cy="241.1" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="204.8" cy="236.0" r="4.5" fill="#005877" opacity="0.85" /><text x="286.2" y="353" font-size="11"
+        text-anchor="middle" fill="#777">4</text>
+      <circle cx="275.1" cy="239.2" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="278.9" cy="230.8" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="282.5" cy="222.5" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="286.2" cy="214.1" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="290.0" cy="205.7" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="293.6" cy="197.4" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="297.4" cy="189.0" r="4.5" fill="#005877" opacity="0.85" /><text x="378.8" y="353" font-size="11"
+        text-anchor="middle" fill="#777">8</text>
+      <circle cx="367.6" cy="211.8" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="371.3" cy="200.2" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="375.1" cy="188.5" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="378.8" cy="176.9" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="382.4" cy="165.3" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="386.2" cy="153.7" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="389.9" cy="142.0" r="4.5" fill="#005877" opacity="0.85" /><text x="471.2" y="353" font-size="11"
+        text-anchor="middle" fill="#777">16</text>
+      <circle cx="460.2" cy="184.3" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="463.8" cy="169.5" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="467.6" cy="154.6" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="471.2" cy="139.7" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="474.9" cy="124.8" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="478.7" cy="109.9" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="482.3" cy="95.1" r="4.5" fill="#005877" opacity="0.85" /><text x="563.8" y="353" font-size="11"
+        text-anchor="middle" fill="#777">32</text>
+      <circle cx="552.7" cy="156.9" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="556.3" cy="138.8" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="560.0" cy="120.6" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="563.8" cy="102.5" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="567.4" cy="84.4" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="571.1" cy="66.2" r="4.5" fill="#005877" opacity="0.85" />
+      <circle cx="574.9" cy="48.1" r="4.5" fill="#005877" opacity="0.85" />
+      <line x1="73.5" y1="299.7" x2="591.5" y2="91.3" stroke="#E87B00" stroke-width="2.5" />
+    </svg>
+    <p class="small-note">Concentración de fármaco en niveles 1 : 2 : 4 : 8 : 16 : 32, 7 personas por nivel, \(Y\) =
+      parámetro sanguíneo.
+      La dispersión crece con la dosis: las predicciones a dosis altas son mucho menos fiables.</p>
+  </div>
+
+  <!-- ===================== ATIPICOS ===================== -->
+  <div class="slide">
+    <h1>Valores atípicos y valores influyentes</h1>
+    <div class="two-col intro-cards" style="align-items:stretch">
+      <div class="mini-card">
+        <h3>Atípicos</h3>
+        <p>Los que señala el diagrama de caja de una o ambas variables.</p>
+      </div>
+      <div class="mini-card">
+        <h3>Influyentes</h3>
+        <p>Los que, al añadirse, alteran severamente la recta.</p>
+      </div>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="147.5" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">3</text><text x="240.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">6</text><text
+          x="332.5" y="353" font-size="10.5" text-anchor="middle" fill="#777">9</text><text x="425.0" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">12</text><text x="517.5" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">15</text><text x="610.0" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">18</text><text x="47" y="338.0" font-size="10.5" text-anchor="end" fill="#777">0</text><text
+          x="47" y="286.3" font-size="10.5" text-anchor="end" fill="#777">3</text><text x="47" y="234.7"
+          font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47" y="183.0" font-size="10.5"
+          text-anchor="end" fill="#777">9</text><text x="47" y="131.3" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="47" y="79.7" font-size="10.5" text-anchor="end" fill="#777">15</text><text
+          x="47" y="28.0" font-size="10.5" text-anchor="end" fill="#777">18</text><text x="332.5" y="372"
+          font-size="12.5" text-anchor="middle" fill="#333">X</text><text x="14" y="180.0" font-size="12.5"
+          text-anchor="middle" fill="#333" transform="rotate(-90 14 180.0)">Y</text>
+        <line x1="85.8" y1="317.8" x2="579.2" y2="42.2" stroke="#6B6E6D" stroke-width="1.8" stroke-dasharray="6,4" />
+        <circle cx="296.4" cy="197.7" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="297.0" cy="220.7" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="242.8" cy="231.1" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="200.4" cy="267.8" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="157.5" cy="285.3" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="218.4" cy="249.6" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="223.1" cy="249.7" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="155.9" cy="272.0" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="156.5" cy="279.1" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="332.3" cy="187.2" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="268.2" cy="211.0" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="190.9" cy="249.1" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="228.0" cy="258.2" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="327.7" cy="185.8" r="4.5" fill="#005877" opacity="0.85" />
+        <circle cx="317.1" cy="50.8" r="7" fill="#E87B00" /><text x="328.1" y="55.8" font-size="16" font-weight="bold"
+          fill="#E87B00">A</text>
+        <circle cx="548.3" cy="59.4" r="7" fill="#E87B00" /><text x="559.3" y="64.4" font-size="16" font-weight="bold"
+          fill="#E87B00">B</text>
+        <circle cx="532.9" cy="248.9" r="7" fill="#E87B00" /><text x="543.9" y="253.9" font-size="16" font-weight="bold"
+          fill="#E87B00">C</text>
+      </svg></div>
+    <p class="small-note" style="margin:0.4rem 0 0">\(B\) y \(C\): atípicos en \(X\). \(A\) y \(B\): atípicos en \(Y\).
+      <strong>\(A\) y \(C\) son influyentes</strong>; \(B\) no, porque sigue la tendencia.
+      Un atípico puede ser influyente o no: se valora eliminarlo. Un influyente es claro candidato a eliminación.</p>
+  </div>
+
+  <!-- ===================== #15 ===================== -->
+  <div class="slide">
+    <h1>¿Es influyente nuestro estudiante #15?</h1>
+    <div class="n15-cols">
+      <div>
+        <p>Era atípico en Ansiedad (Tema 2). Repetimos el ajuste sin él:</p>
+      </div>
+      <div>
+        <p>Un solo estudiante cambia la pendiente un <mark>43 %</mark>: de −1.7 a −2.5 puntos de nota cada 10 de
+        ansiedad.</p>
+      </div>
+      <table class="cont-table mini-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>n</th>
+            <th>\(b\)</th>
+            <th>\(a\)</th>
+            <th>\(R^2\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Con #15</td>
+            <td>16</td>
+            <td>−0.173</td>
+            <td>10.18</td>
+            <td>0.650</td>
+          </tr>
+          <tr class="best">
+            <td>Sin #15</td>
+            <td>15</td>
+            <td>−0.247</td>
+            <td>11.20</td>
+            <td>0.686</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+        class="fig-svg anim-svg n15-svg">
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+          x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+          x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+          font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+          text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+          fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+          y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+          text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+          (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+          transform="rotate(-90 14 180.0)">Nota examen</text>
+        <line class="l1" pathLength="1" x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#E87B00" stroke-width="2.8" />
+        <line class="l2" pathLength="1" x1="55.0" y1="45.7" x2="610.0" y2="300.5" stroke="#005877" stroke-width="2.8" />
+        <circle cx="221.5" cy="133.5" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="360.2" cy="192.9" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="304.8" cy="130.9" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="193.8" cy="123.2" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="401.9" cy="218.8" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="263.1" cy="112.8" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="179.9" cy="107.7" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="318.6" cy="195.5" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="249.2" cy="105.1" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="207.6" cy="154.2" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="332.5" cy="180.0" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="290.9" cy="118.0" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="193.8" cy="97.3" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="277.0" cy="159.3" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle cx="152.1" cy="89.6" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="s15" cx="582.2" cy="211.0" r="7" fill="#E87B00" />
+        <g class="h15">
+          <circle cx="582.2" cy="211.0" r="7" fill="white" stroke="#6B6E6D" stroke-width="1.8" stroke-dasharray="3,2" />
+          <line x1="576.2" y1="205.0" x2="588.2" y2="217.0" stroke="#6B6E6D" stroke-width="1.8" />
+          <line x1="576.2" y1="217.0" x2="588.2" y2="205.0" stroke="#6B6E6D" stroke-width="1.8" />
+        </g><text x="582.2" y="197.0" font-size="13" font-weight="bold" fill="#333" text-anchor="middle">#15</text><text
+          class="t1" x="332.5" y="131.6" font-size="13.5" fill="#E87B00" font-weight="bold">Con #15: y* = 10.18 −
+          0.173x</text><text class="t2" x="235.4" y="188.5" font-size="13.5" fill="#005877" font-weight="bold"
+          text-anchor="end">Sin #15: y* = 11.20 − 0.247x</text>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">Atípico en \(X\) e influyente: "aplana" la recta porque su nota
+      (4.8) es más alta de lo que predice la tendencia del resto.</p>
+  </div>
+
+  <!-- ===================== GRUPOS ===================== -->
+  <div class="slide">
+    <h1>Grupos diferenciados</h1>
+    <div class="grp-cols">
+      <div>
+        <p>Un ajuste solo es aceptable si la nube es <strong>homogénea</strong>. Si hay grupos, se ajusta cada uno y se
+          comparan.</p>
+      </div>
+      <table class="cont-table mini-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Repaso activo</th>
+            <th>Relectura</th>
+            <th>Ninguna</th>
+            <th><em>Todos</em></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(n\)</td>
+            <td>9</td>
+            <td>4</td>
+            <td>3</td>
+            <td>16</td>
+          </tr>
+          <tr>
+            <td>\(b\)</td>
+            <td>−0.088</td>
+            <td>−0.159</td>
+            <td>−0.049</td>
+            <td>−0.173</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fig-center"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"
+        class="fig-svg anim-svg grp-svg">
+        <rect x="55" y="25" width="555" height="310" fill="none" stroke="#ddd" /><text x="55.0" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">0</text><text x="124.4" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">5</text><text x="193.8" y="353" font-size="10.5" text-anchor="middle" fill="#777">10</text><text
+          x="263.1" y="353" font-size="10.5" text-anchor="middle" fill="#777">15</text><text x="332.5" y="353"
+          font-size="10.5" text-anchor="middle" fill="#777">20</text><text x="401.9" y="353" font-size="10.5"
+          text-anchor="middle" fill="#777">25</text><text x="471.2" y="353" font-size="10.5" text-anchor="middle"
+          fill="#777">30</text><text x="540.6" y="353" font-size="10.5" text-anchor="middle" fill="#777">35</text><text
+          x="610.0" y="353" font-size="10.5" text-anchor="middle" fill="#777">40</text><text x="47" y="338.0"
+          font-size="10.5" text-anchor="end" fill="#777">0</text><text x="47" y="286.3" font-size="10.5"
+          text-anchor="end" fill="#777">2</text><text x="47" y="234.7" font-size="10.5" text-anchor="end"
+          fill="#777">4</text><text x="47" y="183.0" font-size="10.5" text-anchor="end" fill="#777">6</text><text x="47"
+          y="131.3" font-size="10.5" text-anchor="end" fill="#777">8</text><text x="47" y="79.7" font-size="10.5"
+          text-anchor="end" fill="#777">10</text><text x="47" y="28.0" font-size="10.5" text-anchor="end"
+          fill="#777">12</text><text x="332.5" y="372" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+          (BAI)</text><text x="14" y="180.0" font-size="12.5" text-anchor="middle" fill="#333"
+          transform="rotate(-90 14 180.0)">Nota examen</text>
+        <line class="gl" pathLength="1" x1="55.0" y1="72.0" x2="610.0" y2="251.2" stroke="#6B6E6D" stroke-width="2.5" />
+        <line class="g0" pathLength="1" x1="138.2" y1="98.5" x2="318.6" y2="128.0" stroke="#005877"
+          stroke-width="2.8" />
+        <line class="g1" pathLength="1" x1="193.8" y1="146.7" x2="374.1" y2="200.1" stroke="#E87B00"
+          stroke-width="2.8" />
+        <line class="g2" pathLength="1" x1="318.6" y1="192.4" x2="596.1" y2="217.5" stroke="#2E9E5B"
+          stroke-width="2.8" />
+        <circle class="p0" cx="221.5" cy="133.5" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="221.5" cy="133.5" r="5.5" fill="#005877" />
+        <circle class="p0" cx="360.2" cy="192.9" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="360.2" cy="192.9" r="5.5" fill="#E87B00" />
+        <circle class="p0" cx="304.8" cy="130.9" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="304.8" cy="130.9" r="5.5" fill="#005877" />
+        <circle class="p0" cx="193.8" cy="123.2" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="193.8" cy="123.2" r="5.5" fill="#005877" />
+        <circle class="p0" cx="401.9" cy="218.8" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="401.9" cy="218.8" r="5.5" fill="#2E9E5B" />
+        <circle class="p0" cx="263.1" cy="112.8" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="263.1" cy="112.8" r="5.5" fill="#005877" />
+        <circle class="p0" cx="179.9" cy="107.7" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="179.9" cy="107.7" r="5.5" fill="#005877" />
+        <circle class="p0" cx="318.6" cy="195.5" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="318.6" cy="195.5" r="5.5" fill="#E87B00" />
+        <circle class="p0" cx="249.2" cy="105.1" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="249.2" cy="105.1" r="5.5" fill="#005877" />
+        <circle class="p0" cx="207.6" cy="154.2" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="207.6" cy="154.2" r="5.5" fill="#E87B00" />
+        <circle class="p0" cx="332.5" cy="180.0" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="332.5" cy="180.0" r="5.5" fill="#2E9E5B" />
+        <circle class="p0" cx="290.9" cy="118.0" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="290.9" cy="118.0" r="5.5" fill="#005877" />
+        <circle class="p0" cx="193.8" cy="97.3" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="193.8" cy="97.3" r="5.5" fill="#005877" />
+        <circle class="p0" cx="277.0" cy="159.3" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="277.0" cy="159.3" r="5.5" fill="#E87B00" />
+        <circle class="p0" cx="582.2" cy="211.0" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="582.2" cy="211.0" r="5.5" fill="#2E9E5B" />
+        <circle class="p0" cx="152.1" cy="89.6" r="5" fill="#6B6E6D" opacity="0.6" />
+        <circle class="pc" cx="152.1" cy="89.6" r="5.5" fill="#005877" />
+        <g class="lg">
+          <circle cx="401.875" cy="40" r="5" fill="#005877" /><text x="413.875" y="44" font-size="12.5"
+            fill="#333">Repaso activo (b = −0.088)</text>
+          <circle cx="401.875" cy="60" r="5" fill="#E87B00" /><text x="413.875" y="64" font-size="12.5"
+            fill="#333">Relectura (b = −0.159)</text>
+          <circle cx="401.875" cy="80" r="5" fill="#2E9E5B" /><text x="413.875" y="84" font-size="12.5"
+            fill="#333">Ninguna (b = −0.049)</text>
+        </g>
+        <g class="lt">
+          <line x1="393.875" y1="100" x2="407.875" y2="100" stroke="#6B6E6D" stroke-width="2.5" /><text x="413.875"
+            y="104" font-size="12.5" fill="#333">Todos (b = −0.173)</text>
+        </g>
+      </svg></div>
+    <p class="small-note" style="margin-top:0.4rem">Dentro de cada grupo la pendiente es más suave: parte de la
+      relación global se debe a <em>diferencias entre grupos</em>.</p>
+  </div>
+
+  <!-- ===================== CIERRE ===================== -->
+  <div class="slide">
+    <h1>Resumen</h1>
+    <div class="two-col" style="align-items:flex-start">
+      <ul class="ticks">
+        <li>Suavizar la nube con una recta \(y^*=a+bx\).</li>
+        <li>MMC: la recta que minimiza \(\sum e_i^2\).</li>
+        <li>\(b=S_{XY}/S_X^2\), \(a=\bar{y}-b\bar{x}\).</li>
+        <li>Dos rectas: \(Y\) sobre \(X\) y \(X\) sobre \(Y\).</li>
+        <li>\(S_Y^2=S_{y^*}^2+S_e^2\).</li>
+      </ul>
+      <ul class="ticks">
+        <li>\(R^2=r^2\): proporción de varianza explicada.</li>
+        <li>Otros modelos si la recta no encaja.</li>
+        <li>Predecir con cautela: interpolar, no extrapolar.</li>
+        <li>Homocedasticidad, influyentes y grupos.</li>
+      </ul>
+    </div>
+    <p class="lead-note"><strong>Ojo:</strong> antes de ajustar, <strong>dibuja la nube</strong>.</p>
+  </div>
+
+  <img id="logo" src="LogoUca.png">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+  <script>
+    (function () {
+      document.querySelectorAll(".anim-svg").forEach(function (svg) {
+        function play() { svg.classList.remove("play"); void svg.getBoundingClientRect(); svg.classList.add("play"); }
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) play(); else svg.classList.remove("play");
+          });
+        }, { threshold: 0.6 }).observe(svg);
+        svg.addEventListener("click", play);
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      document.querySelectorAll(".cand-svg").forEach(function (svg) {
+        var gs = svg.querySelectorAll(".cand"), i = -1, timer = null;
+        function show(k) {
+          gs.forEach(function (g) { g.classList.remove("on"); });
+          svg.classList.remove("final");
+          void svg.getBoundingClientRect(); i = k; gs[i].classList.add("on");
+          if (i == gs.length - 1) svg.classList.add("final");
+        }
+        function stop() { if (timer) clearInterval(timer); timer = null; }
+        function run() {
+          stop(); show(0); timer = setInterval(function () {
+            if (i + 1 >= gs.length) { stop(); return; } show(i + 1);
+          }, 2800);
+        }
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) run(); else { stop(); svg.classList.remove("final"); gs.forEach(function (g) { g.classList.remove("on"); }); }
+          });
+        }, { threshold: 0.6 }).observe(svg);
+        svg.addEventListener("click", run);
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      document.querySelectorAll(".strip-svg").forEach(function (svg) {
+        var st = JSON.parse(svg.getAttribute("data-st")), g = svg.getAttribute("data-geo").split(",").map(Number);
+        var L0 = g[0], seg = g[1], base = g[2], s = g[3];
+        var sq = svg.querySelectorAll(".ssq"), mean = svg.querySelector(".smean"), mv = svg.querySelector(".smeanv"),
+          tt = svg.querySelector(".stitle"), tot = svg.querySelector(".stot"), bl = svg.querySelector(".sbase");
+        var cur = st[0].e.map(function () { return 0; }), curM = 0, raf = null, timer = null, k = -1;
+        function draw(e, m, col) {
+          for (var i = 0; i < e.length; i++) {
+            var side = Math.abs(e[i]) * s, cx = L0 + i * seg + seg / 2;
+            sq[i].setAttribute("x", cx - side / 2); sq[i].setAttribute("y", e[i] > 0 ? base - side : base);
+            sq[i].setAttribute("width", side); sq[i].setAttribute("height", side);
+            sq[i].setAttribute("fill", col); sq[i].setAttribute("stroke", col);
+          }
+          var ms = Math.sqrt(m) * s, mx = L0 + 16 * seg + 75;
+          mean.setAttribute("x", mx - ms / 2); mean.setAttribute("y", base - ms / 2);
+          mean.setAttribute("width", ms); mean.setAttribute("height", ms);
+          mean.setAttribute("fill", col); mean.setAttribute("stroke", col);
+        }
+        function go(j) {
+          k = j; var S = st[j], from = cur.slice(), fromM = curM, t0 = null;
+          tt.textContent = S.name; tt.setAttribute("fill", S.color); bl.setAttribute("stroke", S.color);
+          tot.textContent = "Área total = " + S.tot.toFixed(1) + "   ·   Área media = " + S.tot.toFixed(1) + " / 16 = " + S.mean.toFixed(2);
+          mv.textContent = "área = " + S.mean.toFixed(2);
+          if (raf) cancelAnimationFrame(raf);
+          function step(ts) {
+            if (t0 === null) t0 = ts; var p = Math.min(1, (ts - t0) / 800), q = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+            cur = from.map(function (v, i) { return v + (S.e[i] - v) * q; }); curM = fromM + (S.mean - fromM) * q;
+            draw(cur, curM, S.color); if (p < 1) raf = requestAnimationFrame(step);
+          }
+          raf = requestAnimationFrame(step);
+        }
+        function stop() { if (timer) clearInterval(timer); timer = null; }
+        function run() {
+          stop(); cur = cur.map(function () { return 0; }); curM = 0; go(0);
+          timer = setInterval(function () { if (k + 1 >= st.length) { stop(); return; } go(k + 1); }, 2800);
+        }
+        new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) run(); else stop(); }); }, { threshold: 0.6 }).observe(svg);
+        svg.style.cursor = "pointer"; svg.addEventListener("click", run);
+      });
+    })();
+  </script>
+</body>
+
+</html>

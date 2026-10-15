@@ -202,6 +202,53 @@
         outline-offset: -3px;
     }
 
+    /* Filas intermedias (p. ej. 3.5) con varias opciones */
+    ol.temas li.extra {
+        counter-increment: none;
+    }
+
+    li.extra .fila::before {
+        content: attr(data-num);
+    }
+
+    .opciones {
+        grid-column: 2 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.6rem 1.2rem;
+    }
+
+    .opciones a {
+        color: inherit;
+        text-decoration: none;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    .opciones a strong {
+        display: inline;
+        margin-right: 0.6rem;
+    }
+
+    .opciones a:hover {
+        background: var(--light-gray);
+    }
+
+    .opciones a:hover em {
+        text-decoration: underline;
+    }
+
+    .opciones a:focus-visible {
+        outline: 3px solid var(--uca-orange);
+    }
+
+    .opciones .sep {
+        color: var(--line);
+        font-size: 1.4rem;
+    }
+
     /* Temas todavía no publicados */
     li.pendiente .fila::before,
     li.pendiente .fila strong {
@@ -288,8 +335,25 @@
                     <em>Abrir</em>
                 </a>
             </li>
+            <!-- Fila intermedia: no cuenta en la numeración, usa el número de data-num -->
+            <li class="extra">
+                <div class="fila" data-num="3.5">
+                    <span class="opciones">
+                        <a href="[T3.5]_Cuestionario_tipo_test.html">
+                            <strong>Cuestionario tipo test</strong>
+                            <em>Abrir</em>
+                        </a>
+                        <span class="sep">|</span>
+                        <a href="[T3.5]_Cuestionario_desarrollo.html">
+                            <strong>Cuestionario de desarrollo</strong>
+                            <em>Abrir</em>
+                        </a>
+                    </span>
+                </div>
+            </li>
+
             <li class="pendiente">
-                <div class="fila">
+                <div class="fila" href="[T4]_Modelizacion.html">
                     <strong>Modelización de la relación entre dos variables</strong>
                     <em>Próximamente</em>
                 </div>

@@ -1,0 +1,3261 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="estilo.css">
+  <title>Cuestionario tipo test &mdash; Temas 1, 2 y 3</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <style>
+    .lead-note {
+      color: var(--uca-gray);
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    .small-note {
+      font-size: 1.05rem;
+      color: var(--uca-gray);
+      margin-top: 1rem;
+    }
+
+    .formula-box {
+      background: var(--light-gray);
+      border-left: 4px solid var(--uca-blue);
+      padding: .8rem 1.4rem;
+      margin: 1rem 0;
+      font-size: 1.35rem;
+      overflow-x: auto;
+    }
+
+    .formula-box.small {
+      font-size: .95rem;
+      padding: .2rem 1rem;
+      margin: .5rem 0;
+    }
+
+    .three-col {
+      display: flex;
+      gap: 1.2rem;
+      width: 100%;
+    }
+
+    .three-col>* {
+      flex: 1 1 0;
+    }
+
+    .mini-card {
+      background: var(--light-gray);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+    }
+
+    .fig-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 40vh;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 1rem;
+      margin-top: .8rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #ddd;
+      padding: .3rem .6rem;
+      text-align: center;
+    }
+
+    .data-table thead {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: var(--light-gray);
+    }
+
+    .data-table.small {
+      font-size: .85rem;
+    }
+
+    .data-table.small td,
+    .data-table.small th {
+      padding: .15rem .5rem;
+    }
+
+    .data-table.compact {
+      font-size: .8rem;
+      margin: 0;
+    }
+
+    .data-table.compact th {
+      background: var(--uca-blue);
+      color: white;
+      text-align: left;
+    }
+
+    .ordered-data {
+      font-family: monospace;
+      font-size: .95rem;
+      background: white;
+      padding: .4rem .7rem;
+      border-radius: 6px;
+      line-height: 1.4;
+    }
+
+    .qtag {
+      color: var(--uca-gray);
+      font-size: .95rem;
+    }
+
+    .cont-table {
+      border-collapse: collapse;
+      margin: .4rem auto;
+      font-size: .95rem;
+    }
+
+    .cont-table th,
+    .cont-table td {
+      border: 1px solid #ccc;
+      padding: .3rem .8rem;
+      text-align: center;
+    }
+
+    .cont-table thead tr:first-child th {
+      background: var(--uca-orange);
+      color: white;
+    }
+
+    .cont-table thead tr:nth-child(2) th {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .cont-table td.tot,
+    .cont-table .tot-row th,
+    .cont-table .tot-row td {
+      background: var(--light-gray);
+      font-weight: bold;
+    }
+
+    .slide h1 {
+      font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+    }
+
+    .slide p,
+    .slide li {
+      font-size: clamp(1.05rem, 1.3vw, 1.4rem);
+    }
+
+    /* ---- Cuestionario ---- */
+    .quiz {
+      padding: 4vh 7vw;
+      justify-content: flex-start;
+    }
+
+    .qhead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2vh;
+    }
+
+    .chip {
+      color: white;
+      font-size: clamp(.85rem, 1.1vw, 1.1rem);
+      padding: .25em .9em;
+      border-radius: 999px;
+      font-weight: bold;
+    }
+
+    .chip.t1 {
+      background: var(--uca-blue);
+    }
+
+    .chip.t2 {
+      background: var(--uca-orange);
+    }
+
+    .chip.t3 {
+      background: var(--uca-gray);
+    }
+
+    .qnum {
+      color: var(--uca-orange);
+      font-family: Georgia, serif;
+      font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+    }
+
+    .lvl {
+      font-family: Arial, sans-serif;
+      font-size: .65em;
+      color: white;
+      padding: .15em .7em;
+      border-radius: 999px;
+      margin-left: .6rem;
+      vertical-align: middle;
+    }
+
+    .lvl.l1 {
+      background: #1d9a58;
+    }
+
+    .lvl.l2 {
+      background: #d99a00;
+    }
+
+    .lvl.l3 {
+      background: #c0392b;
+    }
+
+    .quiz .qtext {
+      font-weight: bold;
+      color: var(--uca-blue);
+      margin: 0 0 1.2vh 0;
+      font-size: clamp(1.05rem, 1.5vw, 1.55rem);
+      line-height: 1.35;
+    }
+
+    .qbody {
+      display: flex;
+      gap: 1.6rem;
+      align-items: flex-start;
+    }
+
+    .qtable {
+      flex: 1 1 80%;
+      min-width: 0;
+    }
+
+    .qbody .opts {
+      flex: 1 1 60%;
+    }
+
+    .qbody.stack {
+      flex-direction: column;
+    }
+
+    .qbody.stack .qtable {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+
+    .qbody.stack .opts {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+
+    .qbody.fm .qfig {
+      flex: 1 1 50%;
+      min-width: 0;
+    }
+
+    .qbody.fm .opts {
+      flex: 1 1 50%;
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: .85vh;
+      width: 100%;
+    }
+
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      background: var(--light-gray);
+      border-radius: 8px;
+      padding: .6vh .9rem;
+      font-size: clamp(.95rem, 1.2vw, 1.25rem);
+      line-height: 1.3;
+      border: 2px solid transparent;
+    }
+
+    .opt .letter {
+      flex: 0 0 1.9em;
+      height: 1.9em;
+      border-radius: 50%;
+      background: var(--uca-blue);
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .opt .otxt {
+      flex: 1;
+    }
+
+    .opt.correct {
+      background: #e3f4ea;
+      border-color: #1d9a58;
+    }
+
+    .opt.correct .letter {
+      background: #1d9a58;
+    }
+
+    .opt .ok {
+      color: #1d9a58;
+      font-weight: bold;
+      font-size: 1.3em;
+    }
+
+    .opt.dim {
+      opacity: .45;
+    }
+
+    .explain {
+      margin-top: 1.4vh;
+      background: white;
+      border-left: 5px solid var(--uca-orange);
+      padding: .8vh 1.2rem;
+      font-size: clamp(.95rem, 1.15vw, 1.2rem);
+      line-height: 1.45;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .12);
+    }
+
+    .quiz.answer .opt {
+      font-size: clamp(.85rem, 1.05vw, 1.1rem);
+      padding: .4vh .8rem;
+    }
+
+    .quiz.answer .qtext {
+      font-size: clamp(.95rem, 1.3vw, 1.35rem);
+      margin-bottom: .8vh;
+    }
+
+    .quiz.answer .fig-svg {
+      max-height: 33vh;
+    }
+
+    .quiz.answer .cont-table,
+    .quiz.answer .data-table {
+      font-size: .8rem;
+    }
+
+    .keygrid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: .6rem;
+      margin-top: 2vh;
+    }
+
+    .kcell {
+      background: var(--light-gray);
+      border-radius: 8px;
+      text-align: center;
+      padding: .6rem 0;
+      display: flex;
+      flex-direction: column;
+      border-bottom: 4px solid transparent;
+    }
+
+    .kcell.l1 {
+      border-color: #1d9a58;
+    }
+
+    .kcell.l2 {
+      border-color: #d99a00;
+    }
+
+    .kcell.l3 {
+      border-color: #c0392b;
+    }
+
+    .kcell span {
+      color: var(--uca-gray);
+      font-size: .9rem;
+    }
+
+    .kcell strong {
+      color: var(--uca-blue);
+      font-size: 1.6rem;
+    }
+
+    .qfig.pie-big {
+      flex: 1 1 62%;
+    }
+
+    .qfig.pie-big .fig-svg {
+      max-height: 55vh;
+    }
+
+    .quiz.answer .qfig.pie-big .fig-svg {
+      max-height: 45vh;
+    }
+
+    .qbody.stack .qfig {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .qbody.stack .qfig .fig-svg {
+      max-height: 60vh;
+    }
+
+    .quiz.answer .qbody.stack .qfig .fig-svg {
+      max-height: 60vh;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="slide">
+    <h1>Cuestionario tipo test</h1>
+    <h2>Análisis de Datos &middot; Temas 1, 2 y 3</h2>
+    <h3>
+      <ul>
+        <li>Tema 1: Los datos y las distribuciones de frecuencias</li>
+        <li>Tema 2: Análisis univariante</li>
+        <li>Tema 3: Correlación y contingencia</li>
+      </ul>
+    </h3>
+  </div>
+
+  <div class="slide">
+    <h1>Datos de referencia</h1>
+    <p>16 estudiantes de Psicología (los mismos de los Temas 2 y 3). Consúltalos cuando una pregunta lo necesite:</p>
+    <table class="data-table small">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Sexo</th>
+          <th>Ansiedad (BAI)</th>
+          <th>Sueño (h)</th>
+          <th>T. reacción (ms)</th>
+          <th>Nota examen</th>
+          <th>Técnica</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>M</td>
+          <td>12</td>
+          <td>7.5</td>
+          <td>420</td>
+          <td>7.8</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>F</td>
+          <td>22</td>
+          <td>5</td>
+          <td>510</td>
+          <td>5.5</td>
+          <td>Relectura</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>F</td>
+          <td>18</td>
+          <td>6</td>
+          <td>470</td>
+          <td>7.9</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>M</td>
+          <td>10</td>
+          <td>8</td>
+          <td>400</td>
+          <td>8.2</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>F</td>
+          <td>25</td>
+          <td>4.5</td>
+          <td>560</td>
+          <td>4.5</td>
+          <td>Ninguna</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>M</td>
+          <td>15</td>
+          <td>6.5</td>
+          <td>450</td>
+          <td>8.6</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>F</td>
+          <td>9</td>
+          <td>7</td>
+          <td>410</td>
+          <td>8.8</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>M</td>
+          <td>19</td>
+          <td>5.5</td>
+          <td>500</td>
+          <td>5.4</td>
+          <td>Relectura</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>F</td>
+          <td>14</td>
+          <td>6.5</td>
+          <td>440</td>
+          <td>8.9</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>M</td>
+          <td>11</td>
+          <td>8.5</td>
+          <td>395</td>
+          <td>7.0</td>
+          <td>Relectura</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>M</td>
+          <td>20</td>
+          <td>5</td>
+          <td>520</td>
+          <td>6.0</td>
+          <td>Ninguna</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>F</td>
+          <td>17</td>
+          <td>6</td>
+          <td>460</td>
+          <td>8.4</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>F</td>
+          <td>10</td>
+          <td>7</td>
+          <td>430</td>
+          <td>9.2</td>
+          <td>Repaso activo</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>M</td>
+          <td>16</td>
+          <td>6.5</td>
+          <td>455</td>
+          <td>6.8</td>
+          <td>Relectura</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>F</td>
+          <td>38</td>
+          <td>4</td>
+          <td>590</td>
+          <td>4.8</td>
+          <td>Ninguna</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>M</td>
+          <td>7</td>
+          <td>8</td>
+          <td>390</td>
+          <td>9.5</td>
+          <td>Repaso activo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="slide">
+    <h1>Resumen numérico de referencia</h1>
+    <div class="three-col">
+      <div class="mini-card">
+        <h3>Ansiedad (BAI)</h3>
+        <p class="qtag" style="font-size:1.1rem">\(\bar x=16.44\), \(S=7.40\), \(S^2=54.75\)<br>\(Q_1=10.75\),
+          \(Me=15.5\), \(Q_3=19.25\)<br>mín = 7, máx = 38</p>
+      </div>
+      <div class="mini-card">
+        <h3>Sueño, Reacción y Nota</h3>
+        <p class="qtag" style="font-size:1.1rem">Sueño: \(\bar y=6.34\), \(S=1.27\)<br>T. reacción: \(\bar y=462.5\),
+          \(S=57.47\)<br>Nota: \(\bar y=7.33\), \(S=1.59\)</p>
+      </div>
+      <div class="mini-card">
+        <h3>Relaciones</h3>
+        <p class="qtag" style="font-size:1.1rem">Ansiedad&ndash;Nota: \(S_{XY}=-9.49\),
+          \(r=-0.81\)<br>Sexo&ndash;Técnica (n=150): \(\chi^2=6.18\), \(C=0.199\), \(C_P=0.281\)</p>
+      </div>
+    </div>
+    <p class="small-note">Las cifras son las de las clases de los Temas 2 y 3. Algunas preguntas usan datos hipotéticos,
+      indicados en el enunciado.</p>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 1 / 30
+      </span></div>
+    <p class="qtext">La matriz de datos de referencia tiene 7 columnas: ID, Sexo, Ansiedad, Sueño, T. reacción, Nota y
+      Técnica. ¿Cuántas son variables numéricas sobre las que tiene sentido calcular una media?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">5: las anteriores y el ID</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">4: Ansiedad, Sueño, T. reacción y Nota</span>
+      </div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">3: Sueño, T. reacción y Nota (la Ansiedad es un
+          factor porque son puntos de una escala)</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">6: las anteriores, el ID y el Sexo codificado
+          como 0/1</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 1 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">La matriz de datos de referencia tiene 7 columnas: ID, Sexo, Ansiedad, Sueño, T. reacción, Nota y
+      Técnica. ¿Cuántas son variables numéricas sobre las que tiene sentido calcular una media?</p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">5: las anteriores y el ID</span></div>
+      <div class="opt correct"><span class="letter">B</span><span class="otxt">4: Ansiedad, Sueño, T. reacción y
+          Nota</span><span class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">C</span><span class="otxt">3: Sueño, T. reacción y Nota (la Ansiedad es
+          un factor porque son puntos de una escala)</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">6: las anteriores, el ID y el Sexo codificado
+          como 0/1</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Ansiedad (BAI) es <mark>discreta</mark> (se obtiene con una
+      escala) y Sueño, T. reacción y Nota son continuas: 4 variables numéricas. El ID es una <em>etiqueta</em> (solo
+      identifica) y Sexo y Técnica son factores, aunque se codifiquen con números.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead">
+      <span class="chip t1">Tema 1 · Datos y frecuencias</span>
+      <span class="qnum">Pregunta 2 / 30 </span>
+    </div>
+    <p class="qtext">Nos quedamos solo con los <strong>hombres que duermen menos de 6 horas</strong>. ¿Cuántos
+      estudiantes quedan tras el filtrado?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <table class="data-table small compact">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+              <td>8</td>
+              <td>9</td>
+              <td>10</td>
+              <td>11</td>
+              <td>12</td>
+              <td>13</td>
+              <td>14</td>
+              <td>15</td>
+              <td>16</td>
+            </tr>
+            <tr>
+              <th>Sexo</th>
+              <td>M</td>
+              <td>F</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+              <td>M</td>
+              <td>F</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+            </tr>
+            <tr>
+              <th>Sueño (h)</th>
+              <td>7.5</td>
+              <td>5</td>
+              <td>6</td>
+              <td>8</td>
+              <td>4.5</td>
+              <td>6.5</td>
+              <td>7</td>
+              <td>5.5</td>
+              <td>6.5</td>
+              <td>8.5</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+              <td>6.5</td>
+              <td>4</td>
+              <td>8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt">
+          <span class="letter">A</span>
+          <span class="otxt">3 estudiantes (#2, #5 y #15)</span>
+        </div>
+        <div class="opt">
+          <span class="letter">B</span>
+          <span class="otxt">5 estudiantes (#2, #5, #8, #11 y #15)</span>
+        </div>
+        <div class="opt"><span class="letter">C</span>
+          <span class="otxt">1 estudiante (#11, que duerme exactamente 5 h)</span>
+        </div>
+        <div class="opt"><span class="letter">D</span>
+          <span class="otxt">2 estudiantes (#8 y #11)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 2 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Nos quedamos solo con los <strong>hombres que duermen menos de 6 horas</strong>. ¿Cuántos
+      estudiantes quedan tras el filtrado?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <table class="data-table small compact">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+              <td>8</td>
+              <td>9</td>
+              <td>10</td>
+              <td>11</td>
+              <td>12</td>
+              <td>13</td>
+              <td>14</td>
+              <td>15</td>
+              <td>16</td>
+            </tr>
+            <tr>
+              <th>Sexo</th>
+              <td>M</td>
+              <td>F</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+              <td>M</td>
+              <td>F</td>
+              <td>F</td>
+              <td>M</td>
+              <td>F</td>
+              <td>M</td>
+            </tr>
+            <tr>
+              <th>Sueño (h)</th>
+              <td>7.5</td>
+              <td>5</td>
+              <td>6</td>
+              <td>8</td>
+              <td>4.5</td>
+              <td>6.5</td>
+              <td>7</td>
+              <td>5.5</td>
+              <td>6.5</td>
+              <td>8.5</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+              <td>6.5</td>
+              <td>4</td>
+              <td>8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">3 estudiantes (#2, #5 y #15)</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">5 estudiantes (#2, #5, #8, #11 y
+            #15)</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">1 estudiante (#11, que duerme exactamente 5
+            h)</span></div>
+        <div class="opt correct"><span class="letter">D</span><span class="otxt">2 estudiantes (#8 y #11)</span><span
+            class="ok">&#10003;</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Es un filtrado con <mark>dos condiciones a la vez</mark> (Sexo=M
+      y Sueño&lt;6). Duermen menos de 6 h los estudiantes #2, #5, #8, #11 y #15; de ellos, solo el #8 (5.5 h) y el #11
+      (5 h) son hombres.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 3 / 30
+      </span></div>
+    <p class="qtext">¿Cuál de estas clasificaciones es <strong>incorrecta</strong>?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">El ID del estudiante es una variable discreta,
+          porque son números enteros</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">El Sexo es un factor no ordenado</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">La Ansiedad (BAI) es una variable discreta,
+          porque se obtiene con una escala</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">Las Horas de sueño son una variable continua,
+          porque se miden</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 3 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">¿Cuál de estas clasificaciones es <strong>incorrecta</strong>?</p>
+    <div class="opts">
+      <div class="opt correct"><span class="letter">A</span><span class="otxt">El ID del estudiante es una variable
+          discreta, porque son números enteros</span><span class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">El Sexo es un factor no ordenado</span></div>
+      <div class="opt dim"><span class="letter">C</span><span class="otxt">La Ansiedad (BAI) es una variable discreta,
+          porque se obtiene con una escala</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">Las Horas de sueño son una variable continua,
+          porque se miden</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Index e ID <mark>no son objeto de análisis</mark>: son etiquetas
+      únicas que solo identifican al individuo. Que el código sea numérico no lo convierte en variable (la media de un
+      ID no significa nada).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 4 / 30
+      </span></div>
+    <p class="qtext">Clasifica estas tres operaciones: <strong>(1)</strong> crear «Ansiedad por hora de sueño» = BAI /
+      Sueño. <strong>(2)</strong> pasar una valoración de 1 a 7 a negativa (1&ndash;3), neutra (4) o positiva
+      (5&ndash;7). <strong>(3)</strong> agrupar las Horas de sueño en los intervalos (0,6], (6,7.5] y (7.5,10].</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">(1) recodificación; (2) transformación; (3)
+          segmentación</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">(1) transformación; (2) segmentación; (3)
+          recodificación</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">(1) transformación; (2) recodificación; (3)
+          segmentación</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">(1) segmentación; (2) recodificación; (3)
+          transformación</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 4 / 30 <span class="lvl l2">Media</span></span></div>
+    <p class="qtext">Clasifica estas tres operaciones: <strong>(1)</strong> crear «Ansiedad por hora de sueño» = BAI /
+      Sueño. <strong>(2)</strong> pasar una valoración de 1 a 7 a negativa (1&ndash;3), neutra (4) o positiva
+      (5&ndash;7). <strong>(3)</strong> agrupar las Horas de sueño en los intervalos (0,6], (6,7.5] y (7.5,10].</p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">(1) recodificación; (2) transformación; (3)
+          segmentación</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">(1) transformación; (2) segmentación; (3)
+          recodificación</span></div>
+      <div class="opt correct"><span class="letter">C</span><span class="otxt">(1) transformación; (2) recodificación;
+          (3) segmentación</span><span class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">(1) segmentación; (2) recodificación; (3)
+          transformación</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> <mark>Transformación</mark>: expresión matemática (como el IMC).
+      <mark>Recodificación</mark>: pasar de una escala a otra con menos categorías. <mark>Segmentación</mark>: construir
+      intervalos de una variable numérica (como los grupos de edad).
+    </div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 5 / 30
+      </span></div>
+    <p class="qtext">Recodificamos el Tiempo de reacción en «Rápido» (&lt;450 ms) y «Lento» (&ge;450 ms). ¿Qué
+      afirmación es correcta?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">Se obtiene un factor no ordenado, porque Rápido y
+          Lento son nombres</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">Se obtiene una variable discreta que conserva el
+          valor exacto de cada tiempo</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">No se pierde información, porque los tiempos
+          originales pueden reconstruirse a partir de las clases</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">Se obtiene un factor ordenado y ya no
+          distinguimos entre 455 y 590 ms; conviene conservar la columna original</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 5 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Recodificamos el Tiempo de reacción en «Rápido» (&lt;450 ms) y «Lento» (&ge;450 ms). ¿Qué
+      afirmación es correcta?</p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">Se obtiene un factor no ordenado, porque
+          Rápido y Lento son nombres</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">Se obtiene una variable discreta que conserva
+          el valor exacto de cada tiempo</span></div>
+      <div class="opt dim"><span class="letter">C</span><span class="otxt">No se pierde información, porque los tiempos
+          originales pueden reconstruirse a partir de las clases</span></div>
+      <div class="opt correct"><span class="letter">D</span><span class="otxt">Se obtiene un factor ordenado y ya no
+          distinguimos entre 455 y 590 ms; conviene conservar la columna original</span><span class="ok">&#10003;</span>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Al pasar de variable a factor se <mark>pierde información</mark>
+      (455 y 590 ms pasan a ser simplemente «Lento») y no se puede reconstruir. En la práctica se crea una columna nueva
+      y se conserva la original. Rápido&lt;Lento tiene orden natural.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 6 / 30
+      </span></div>
+    <p class="qtext">El diagrama de tarta representa la Técnica de preparación de los 16 estudiantes. ¿Qué podemos
+      concluir?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <path d="M320,165 L320.0,40.0 A125,125 0 1 1 272.2,280.5 Z" fill="#005877" stroke="white" stroke-width="2" />
+          <text x="396.0" y="185.1" font-size="15" text-anchor="middle" fill="white" font-weight="bold">
+            56 %
+          </text>
+          <text x="456.3" y="196.1" font-size="13" text-anchor="start" fill="#333" font-weight="bold">
+            Repaso activo
+          </text>
+          <path d="M320,165 L272.2,280.5 A125,125 0 0 1 204.5,117.2 Z" fill="#E87B00" stroke="white" stroke-width="2" />
+          <text x="248.4" y="199.7" font-size="15" text-anchor="middle" fill="white" font-weight="bold">
+            25 %
+          </text>
+          <text x="191.6" y="222.2" font-size="13" text-anchor="end" fill="#333" font-weight="bold">
+            Relectura
+          </text>
+          <path d="M320,165 L204.5,117.2 A125,125 0 0 1 320.0,40.0 Z" fill="#6B6E6D" stroke="white" stroke-width="2" />
+          <text x="276.9" y="105.6" font-size="15" text-anchor="middle" fill="white" font-weight="bold">
+            19 %
+          </text>
+          <text x="242.8" y="53.4" font-size="13" text-anchor="end" fill="#333" font-weight="bold">
+            Ninguna
+          </text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">Relectura y Ninguna juntas superan a Repaso
+            activo</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">Más de la mitad del grupo (9 de 16) usó Repaso
+            activo</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">Solo con el gráfico no se pueden deducir
+            frecuencias, aunque conozcamos n</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">El gráfico permite calcular frecuencias
+            acumuladas de las técnicas</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 6 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">El diagrama de tarta representa la Técnica de preparación de los 16 estudiantes. ¿Qué podemos
+      concluir?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <path d="M320,165 L320.0,40.0 A125,125 0 1 1 272.2,280.5 Z" fill="#005877" stroke="white" stroke-width="2" />
+          <text x="396.0" y="185.1" font-size="15" text-anchor="middle" fill="white" font-weight="bold">56 %</text><text
+            x="456.3" y="196.1" font-size="13" text-anchor="start" fill="#333" font-weight="bold">Repaso activo</text>
+          <path d="M320,165 L272.2,280.5 A125,125 0 0 1 204.5,117.2 Z" fill="#E87B00" stroke="white" stroke-width="2" />
+          <text x="248.4" y="199.7" font-size="15" text-anchor="middle" fill="white" font-weight="bold">25 %</text><text
+            x="191.6" y="222.2" font-size="13" text-anchor="end" fill="#333" font-weight="bold">Relectura</text>
+          <path d="M320,165 L204.5,117.2 A125,125 0 0 1 320.0,40.0 Z" fill="#6B6E6D" stroke="white" stroke-width="2" />
+          <text x="276.9" y="105.6" font-size="15" text-anchor="middle" fill="white" font-weight="bold">19 %</text><text
+            x="242.8" y="53.4" font-size="13" text-anchor="end" fill="#333" font-weight="bold">Ninguna</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">Relectura y Ninguna juntas superan a Repaso
+            activo</span></div>
+        <div class="opt correct"><span class="letter">B</span><span class="otxt">Más de la mitad del grupo (9 de 16) usó
+            Repaso activo</span><span class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">Solo con el gráfico no se pueden deducir
+            frecuencias, aunque conozcamos n</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">El gráfico permite calcular frecuencias
+            acumuladas de las técnicas</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Un sector del 56 % sobre \(n=16\) equivale a \(0.5625\cdot16=9\)
+      estudiantes. Relectura+Ninguna suman 44 %, menos que Repaso activo. La tarta representa un <mark>factor no
+        ordenado</mark>, para el que no tienen sentido las acumuladas.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 7 / 30
+      </span></div>
+    <p class="qtext">El diagrama de barras muestra la frecuencia relativa <em>acumulada</em> \(F_i\) del nivel de
+      ansiedad. ¿Qué proporción de estudiantes tiene ansiedad <strong>Alta</strong>?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="70" y="25" width="550" height="240" fill="none" stroke="#ddd" />
+          <line x1="70" x2="620" y1="265.0" y2="265.0" stroke="#eee" /><text x="64.0" y="269.0" font-size="11"
+            text-anchor="end" fill="#777">0</text>
+          <line x1="70" x2="620" y1="217.0" y2="217.0" stroke="#eee" /><text x="64.0" y="221.0" font-size="11"
+            text-anchor="end" fill="#777">0.2</text>
+          <line x1="70" x2="620" y1="169.0" y2="169.0" stroke="#eee" /><text x="64.0" y="173.0" font-size="11"
+            text-anchor="end" fill="#777">0.4</text>
+          <line x1="70" x2="620" y1="121.0" y2="121.0" stroke="#eee" /><text x="64.0" y="125.0" font-size="11"
+            text-anchor="end" fill="#777">0.6</text>
+          <line x1="70" x2="620" y1="73.0" y2="73.0" stroke="#eee" /><text x="64.0" y="77.0" font-size="11"
+            text-anchor="end" fill="#777">0.8</text>
+          <line x1="70" x2="620" y1="25.0" y2="25.0" stroke="#eee" /><text x="64.0" y="29.0" font-size="11"
+            text-anchor="end" fill="#777">1</text>
+          <rect x="106.7" y="205.0" width="110.0" height="60.0" fill="#005877" opacity="0.85" /><text x="161.7"
+            y="199.0" font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">0.25</text><text x="161.7"
+            y="283.0" font-size="12.5" text-anchor="middle" fill="#333">Baja</text>
+          <rect x="290.0" y="70.0" width="110.0" height="195.0" fill="#005877" opacity="0.85" /><text x="345.0" y="64.0"
+            font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">0.81</text><text x="345.0" y="283.0"
+            font-size="12.5" text-anchor="middle" fill="#333">Media</text>
+          <rect x="473.3" y="25.0" width="110.0" height="240.0" fill="#005877" opacity="0.85" /><text x="528.3" y="19.0"
+            font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">1</text><text x="528.3" y="283.0"
+            font-size="12.5" text-anchor="middle" fill="#333">Alta</text><text x="14.0" y="145.0" font-size="13"
+            text-anchor="middle" fill="#333" transform="rotate(-90 14 145.0)">F<tspan dy="3" font-size="9">i</tspan>
+          </text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">Aproximadamente 0.19</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">0.81</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">0.25</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">0.56</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 7 / 30 <span class="lvl l2">Media</span></span></div>
+    <p class="qtext">El diagrama de barras muestra la frecuencia relativa <em>acumulada</em> \(F_i\) del nivel de
+      ansiedad. ¿Qué proporción de estudiantes tiene ansiedad <strong>Alta</strong>?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="70" y="25" width="550" height="240" fill="none" stroke="#ddd" />
+          <line x1="70" x2="620" y1="265.0" y2="265.0" stroke="#eee" /><text x="64.0" y="269.0" font-size="11"
+            text-anchor="end" fill="#777">0</text>
+          <line x1="70" x2="620" y1="217.0" y2="217.0" stroke="#eee" /><text x="64.0" y="221.0" font-size="11"
+            text-anchor="end" fill="#777">0.2</text>
+          <line x1="70" x2="620" y1="169.0" y2="169.0" stroke="#eee" /><text x="64.0" y="173.0" font-size="11"
+            text-anchor="end" fill="#777">0.4</text>
+          <line x1="70" x2="620" y1="121.0" y2="121.0" stroke="#eee" /><text x="64.0" y="125.0" font-size="11"
+            text-anchor="end" fill="#777">0.6</text>
+          <line x1="70" x2="620" y1="73.0" y2="73.0" stroke="#eee" /><text x="64.0" y="77.0" font-size="11"
+            text-anchor="end" fill="#777">0.8</text>
+          <line x1="70" x2="620" y1="25.0" y2="25.0" stroke="#eee" /><text x="64.0" y="29.0" font-size="11"
+            text-anchor="end" fill="#777">1</text>
+          <rect x="106.7" y="205.0" width="110.0" height="60.0" fill="#005877" opacity="0.85" /><text x="161.7"
+            y="199.0" font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">0.25</text><text x="161.7"
+            y="283.0" font-size="12.5" text-anchor="middle" fill="#333">Baja</text>
+          <rect x="290.0" y="70.0" width="110.0" height="195.0" fill="#005877" opacity="0.85" /><text x="345.0" y="64.0"
+            font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">0.81</text><text x="345.0" y="283.0"
+            font-size="12.5" text-anchor="middle" fill="#333">Media</text>
+          <rect x="473.3" y="25.0" width="110.0" height="240.0" fill="#005877" opacity="0.85" /><text x="528.3" y="19.0"
+            font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">1</text><text x="528.3" y="283.0"
+            font-size="12.5" text-anchor="middle" fill="#333">Alta</text><text x="14.0" y="145.0" font-size="13"
+            text-anchor="middle" fill="#333" transform="rotate(-90 14 145.0)">F<tspan dy="3" font-size="9">i</tspan>
+          </text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt correct"><span class="letter">A</span><span class="otxt">Aproximadamente 0.19</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">0.81</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">0.25</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">0.56</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(F_i\) acumula hasta el nivel i. La proporción de «Alta» es
+      \(f_3=F_3-F_2=1-0.8125=0.1875\approx0.19\). El valor 0.81 es la proporción de «Baja o Media», y 0.56 sería \(f_2\)
+      (9/16).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 8 / 30
+      </span></div>
+    <p class="qtext">Con la Ansiedad segmentada en intervalos, el intervalo (10, 15] tiene amplitud \(a=5\) y 4 de los
+      16 estudiantes. ¿Cuánto vale su altura de histograma (densidad) \(h_i\)?</p>
+    <div class="qbody ">
+      <div class="qtable">
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th colspan="3">Ansiedad segmentada</th>
+            </tr>
+            <tr>
+              <th>Intervalo</th>
+              <th>a<sub>i</sub></th>
+              <th>n<sub>i</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>(5, 10]</th>
+              <td>5</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <th>(10, 15]</th>
+              <td>5</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <th>(15, 20]</th>
+              <td>5</td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <th>(20, 25]</th>
+              <td>5</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <th>(25, 35]</th>
+              <td>10</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>(35, 40]</th>
+              <td>5</td>
+              <td>1</td>
+            </tr>
+            <tr class="tot-row">
+              <th>Total</th>
+              <td class="tot"></td>
+              <td class="tot">16</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">\(h_i=0.25\)</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">\(h_i=0.80\)</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">\(h_i=0.05\)</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">\(h_i=0.0125\)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 8 / 30 <span class="lvl l2">Media</span></span></div>
+    <p class="qtext">Con la Ansiedad segmentada en intervalos, el intervalo (10, 15] tiene amplitud \(a=5\) y 4 de los
+      16 estudiantes. ¿Cuánto vale su altura de histograma (densidad) \(h_i\)?</p>
+    <div class="qbody ">
+      <div class="qtable">
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th colspan="3">Ansiedad segmentada</th>
+            </tr>
+            <tr>
+              <th>Intervalo</th>
+              <th>a<sub>i</sub></th>
+              <th>n<sub>i</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>(5, 10]</th>
+              <td>5</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <th>(10, 15]</th>
+              <td>5</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <th>(15, 20]</th>
+              <td>5</td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <th>(20, 25]</th>
+              <td>5</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <th>(25, 35]</th>
+              <td>10</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>(35, 40]</th>
+              <td>5</td>
+              <td>1</td>
+            </tr>
+            <tr class="tot-row">
+              <th>Total</th>
+              <td class="tot"></td>
+              <td class="tot">16</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">\(h_i=0.25\)</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">\(h_i=0.80\)</span></div>
+        <div class="opt correct"><span class="letter">C</span><span class="otxt">\(h_i=0.05\)</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">\(h_i=0.0125\)</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(f_i=4/16=0.25\) y \(h_i=f_i/a_i=0.25/5=0.05\). El valor 0.25 es
+      la frecuencia relativa; 0.80 sería \(n_i/a_i\), que no está normalizada por \(n\).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 9 / 30
+      </span></div>
+    <p class="qtext">Con la tabla de intervalos del Tiempo de reacción, ¿cuántos estudiantes tardaron <strong>más de 440
+        ms</strong> y qué proporción representan?</p>
+    <div class="qbody ">
+      <div class="qtable">
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th colspan="4">Tiempo de reacción segmentado</th>
+            </tr>
+            <tr>
+              <th>Intervalo (ms)</th>
+              <th>a<sub>i</sub></th>
+              <th>n<sub>i</sub></th>
+              <th>f<sub>i</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>(380, 420]</th>
+              <td>40</td>
+              <td>5</td>
+              <td>0.3125</td>
+            </tr>
+            <tr>
+              <th>(420, 440]</th>
+              <td>20</td>
+              <td>2</td>
+              <td>0.125</td>
+            </tr>
+            <tr>
+              <th>(440, 480]</th>
+              <td>40</td>
+              <td>4</td>
+              <td>0.25</td>
+            </tr>
+            <tr>
+              <th>(480, 600]</th>
+              <td>120</td>
+              <td>5</td>
+              <td>0.3125</td>
+            </tr>
+            <tr class="tot-row">
+              <th>Total</th>
+              <td class="tot"></td>
+              <td class="tot">16</td>
+              <td class="tot">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">9 estudiantes; proporción 0.5625</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">11 estudiantes; proporción 0.6875</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">7 estudiantes; proporción 0.4375</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">5 estudiantes; proporción 0.3125</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 9 / 30 <span class="lvl l3">Difícil</span></span></div>
+    <p class="qtext">Con la tabla de intervalos del Tiempo de reacción, ¿cuántos estudiantes tardaron <strong>más de 440
+        ms</strong> y qué proporción representan?</p>
+    <div class="qbody ">
+      <div class="qtable">
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th colspan="4">Tiempo de reacción segmentado</th>
+            </tr>
+            <tr>
+              <th>Intervalo (ms)</th>
+              <th>a<sub>i</sub></th>
+              <th>n<sub>i</sub></th>
+              <th>f<sub>i</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>(380, 420]</th>
+              <td>40</td>
+              <td>5</td>
+              <td>0.3125</td>
+            </tr>
+            <tr>
+              <th>(420, 440]</th>
+              <td>20</td>
+              <td>2</td>
+              <td>0.125</td>
+            </tr>
+            <tr>
+              <th>(440, 480]</th>
+              <td>40</td>
+              <td>4</td>
+              <td>0.25</td>
+            </tr>
+            <tr>
+              <th>(480, 600]</th>
+              <td>120</td>
+              <td>5</td>
+              <td>0.3125</td>
+            </tr>
+            <tr class="tot-row">
+              <th>Total</th>
+              <td class="tot"></td>
+              <td class="tot">16</td>
+              <td class="tot">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt correct"><span class="letter">A</span><span class="otxt">9 estudiantes; proporción
+            0.5625</span><span class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">11 estudiantes; proporción 0.6875</span>
+        </div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">7 estudiantes; proporción 0.4375</span>
+        </div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">5 estudiantes; proporción 0.3125</span>
+        </div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Hasta 440 ms hay \(N_2=5+2=7\) estudiantes (\(F_2=0.4375\)); los
+      que superan 440 son el complemento: \(16-7=9\), es decir \(1-0.4375=0.5625\). El valor 11 sería \(N_3\): «hasta
+      480 ms».</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Pregunta 10 / 30
+      </span></div>
+    <p class="qtext">Este histograma de densidades usa intervalos de distinta amplitud. La barra de (480, 600] es la más
+      baja. ¿Cuál es la interpretación correcta?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="70" y="20" width="550" height="255" fill="none" stroke="#ddd" />
+          <line x1="70" x2="620" y1="275.0" y2="275.0" stroke="#eee" /><text x="64.0" y="279.0" font-size="11"
+            text-anchor="end" fill="#777">0.000</text>
+          <line x1="70" x2="620" y1="217.0" y2="217.0" stroke="#eee" /><text x="64.0" y="221.0" font-size="11"
+            text-anchor="end" fill="#777">0.002</text>
+          <line x1="70" x2="620" y1="159.1" y2="159.1" stroke="#eee" /><text x="64.0" y="163.1" font-size="11"
+            text-anchor="end" fill="#777">0.004</text>
+          <line x1="70" x2="620" y1="101.1" y2="101.1" stroke="#eee" /><text x="64.0" y="105.1" font-size="11"
+            text-anchor="end" fill="#777">0.006</text>
+          <line x1="70" x2="620" y1="43.2" y2="43.2" stroke="#eee" /><text x="64.0" y="47.2" font-size="11"
+            text-anchor="end" fill="#777">0.008</text>
+          <rect x="70.0" y="48.6" width="100.0" height="226.4" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="170.0" y="93.9" width="50.0" height="181.1" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="220.0" y="93.9" width="100.0" height="181.1" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="320.0" y="199.5" width="300.0" height="75.5" fill="#005877" opacity="0.85" stroke="white" /><text
+            x="70.0" y="291.0" font-size="11" text-anchor="middle" fill="#777">380</text><text x="170.0" y="291.0"
+            font-size="11" text-anchor="middle" fill="#777">420</text><text x="220.0" y="291.0" font-size="11"
+            text-anchor="middle" fill="#777">440</text><text x="320.0" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">480</text><text x="620.0" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">600</text><text x="345.0" y="320.0" font-size="12.5" text-anchor="middle" fill="#333">Tiempo de
+            reacción (ms)</text><text x="14.0" y="147.5" font-size="12.5" text-anchor="middle" fill="#333"
+            transform="rotate(-90 14 147.5)">densidad h_i</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">Ese intervalo contiene la menor proporción de
+            estudiantes, pues su barra es la más baja</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">(420, 440] contiene la mayor proporción de
+            estudiantes, por ser el intervalo más estrecho</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">Las alturas son frecuencias absolutas: (380,
+            420] tiene tres veces más estudiantes que (480, 600]</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">Ese intervalo y (380, 420] contienen la misma
+            proporción de estudiantes; su barra es más baja por ser tres veces más ancha</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t1">Tema 1 · Datos y frecuencias</span><span class="qnum">Respuesta &middot;
+        Pregunta 10 / 30 <span class="lvl l3">Difícil</span></span></div>
+    <p class="qtext">Este histograma de densidades usa intervalos de distinta amplitud. La barra de (480, 600] es la más
+      baja. ¿Cuál es la interpretación correcta?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="70" y="20" width="550" height="255" fill="none" stroke="#ddd" />
+          <line x1="70" x2="620" y1="275.0" y2="275.0" stroke="#eee" /><text x="64.0" y="279.0" font-size="11"
+            text-anchor="end" fill="#777">0.000</text>
+          <line x1="70" x2="620" y1="217.0" y2="217.0" stroke="#eee" /><text x="64.0" y="221.0" font-size="11"
+            text-anchor="end" fill="#777">0.002</text>
+          <line x1="70" x2="620" y1="159.1" y2="159.1" stroke="#eee" /><text x="64.0" y="163.1" font-size="11"
+            text-anchor="end" fill="#777">0.004</text>
+          <line x1="70" x2="620" y1="101.1" y2="101.1" stroke="#eee" /><text x="64.0" y="105.1" font-size="11"
+            text-anchor="end" fill="#777">0.006</text>
+          <line x1="70" x2="620" y1="43.2" y2="43.2" stroke="#eee" /><text x="64.0" y="47.2" font-size="11"
+            text-anchor="end" fill="#777">0.008</text>
+          <rect x="70.0" y="48.6" width="100.0" height="226.4" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="170.0" y="93.9" width="50.0" height="181.1" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="220.0" y="93.9" width="100.0" height="181.1" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="320.0" y="199.5" width="300.0" height="75.5" fill="#005877" opacity="0.85" stroke="white" /><text
+            x="70.0" y="291.0" font-size="11" text-anchor="middle" fill="#777">380</text><text x="170.0" y="291.0"
+            font-size="11" text-anchor="middle" fill="#777">420</text><text x="220.0" y="291.0" font-size="11"
+            text-anchor="middle" fill="#777">440</text><text x="320.0" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">480</text><text x="620.0" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">600</text><text x="345.0" y="320.0" font-size="12.5" text-anchor="middle" fill="#333">Tiempo de
+            reacción (ms)</text><text x="14.0" y="147.5" font-size="12.5" text-anchor="middle" fill="#333"
+            transform="rotate(-90 14 147.5)">densidad h_i</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">Ese intervalo contiene la menor proporción
+            de estudiantes, pues su barra es la más baja</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">(420, 440] contiene la mayor proporción de
+            estudiantes, por ser el intervalo más estrecho</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">Las alturas son frecuencias absolutas:
+            (380, 420] tiene tres veces más estudiantes que (480, 600]</span></div>
+        <div class="opt correct"><span class="letter">D</span><span class="otxt">Ese intervalo y (380, 420] contienen la
+            misma proporción de estudiantes; su barra es más baja por ser tres veces más ancha</span><span
+            class="ok">&#10003;</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> En un histograma de densidades la <mark>frecuencia es el
+        área</mark> (altura × amplitud), no la altura. Las barras de (380,420] y (480,600] tienen áreas iguales
+      (\(0.3125\)) porque \(120=3\cdot40\) y \(h\) es tres veces menor.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 11 / 30 </span>
+    </div>
+    <p class="qtext">La Ansiedad tiene media 16.44 y mediana 15.50 (el máximo es 38). Si el valor 38 fuera en realidad
+      26, ¿qué ocurriría?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">La media y la mediana bajarían en la misma
+          cantidad</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">La mediana bajaría hasta 15 y la media seguiría
+          valiendo 16.44</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">La media bajaría hasta \(\approx15.69\) y la
+          mediana seguiría valiendo 15.50</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">Ni la media ni la mediana cambiarían, porque 26
+          sigue siendo el máximo</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        11 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">La Ansiedad tiene media 16.44 y mediana 15.50 (el máximo es 38). Si el valor 38 fuera en realidad
+      26, ¿qué ocurriría?</p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">La media y la mediana bajarían en la misma
+          cantidad</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">La mediana bajaría hasta 15 y la media
+          seguiría valiendo 16.44</span></div>
+      <div class="opt correct"><span class="letter">C</span><span class="otxt">La media bajaría hasta \(\approx15.69\) y
+          la mediana seguiría valiendo 15.50</span><span class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">Ni la media ni la mediana cambiarían, porque
+          26 sigue siendo el máximo</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> La media usa el valor de <em>todos</em> los datos:
+      \((263-38+26)/16=15.69\). La mediana solo depende de los dos valores centrales (15 y 16), que no cambian: <mark>es
+        más robusta ante atípicos</mark>.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 12 / 30 </span>
+    </div>
+    <p class="qtext">Con estas medias y desviaciones típicas, ¿qué variable es la más <strong>homogénea</strong>?</p>
+    <div class="qbody ">
+      <div class="qtable">
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Media</th>
+              <th>S</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Ansiedad (puntos)</th>
+              <td>16.44</td>
+              <td>7.40</td>
+            </tr>
+            <tr>
+              <th>Sueño (horas)</th>
+              <td>6.34</td>
+              <td>1.27</td>
+            </tr>
+            <tr>
+              <th>T. reacción (ms)</th>
+              <td>462.5</td>
+              <td>57.47</td>
+            </tr>
+            <tr>
+              <th>Nota (0&ndash;10)</th>
+              <td>7.33</td>
+              <td>1.59</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">El tiempo de reacción</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">Las horas de sueño</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">La ansiedad</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">La nota</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        12 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Con estas medias y desviaciones típicas, ¿qué variable es la más <strong>homogénea</strong>?</p>
+    <div class="qbody ">
+      <div class="qtable">
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Media</th>
+              <th>S</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Ansiedad (puntos)</th>
+              <td>16.44</td>
+              <td>7.40</td>
+            </tr>
+            <tr>
+              <th>Sueño (horas)</th>
+              <td>6.34</td>
+              <td>1.27</td>
+            </tr>
+            <tr>
+              <th>T. reacción (ms)</th>
+              <td>462.5</td>
+              <td>57.47</td>
+            </tr>
+            <tr>
+              <th>Nota (0&ndash;10)</th>
+              <td>7.33</td>
+              <td>1.59</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="opts">
+        <div class="opt correct"><span class="letter">A</span><span class="otxt">El tiempo de reacción</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">Las horas de sueño</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">La ansiedad</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">La nota</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(CV=S/|\bar x|\): Ansiedad 0.45, Sueño 0.20, Nota 0.22 y T.
+      reacción \(57.47/462.5=0.12\). <mark>El CV no tiene unidad</mark>, así que sirve para comparar aunque las escalas
+      sean distintas: el menor CV es el del tiempo de reacción, pese a tener la mayor S.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 13 / 30 </span>
+    </div>
+    <p class="qtext">El estudiante #11 duerme 5 h (\(\bar x=6.34\), \(S=1.27\), \(z=-1.06\)) y tiene Ansiedad 20 (\(\bar
+      y=16.44\), \(S=7.40\), \(z=0.48\)). ¿Qué es más atípico dentro del grupo?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">Su ansiedad, porque 20 puntos se alejan 3.56 de
+          la media y 5 h solo 1.34</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">Ambas, por igual, porque los signos de \(z\) son
+          opuestos</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">No se pueden comparar, porque una variable está
+          en puntos y la otra en horas</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">Su falta de sueño: \(|-1.06|>|0.48|\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        13 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">El estudiante #11 duerme 5 h (\(\bar x=6.34\), \(S=1.27\), \(z=-1.06\)) y tiene Ansiedad 20 (\(\bar
+      y=16.44\), \(S=7.40\), \(z=0.48\)). ¿Qué es más atípico dentro del grupo?</p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">Su ansiedad, porque 20 puntos se alejan 3.56
+          de la media y 5 h solo 1.34</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">Ambas, por igual, porque los signos de \(z\)
+          son opuestos</span></div>
+      <div class="opt dim"><span class="letter">C</span><span class="otxt">No se pueden comparar, porque una variable
+          está en puntos y la otra en horas</span></div>
+      <div class="opt correct"><span class="letter">D</span><span class="otxt">Su falta de sueño:
+          \(|-1.06|>|0.48|\)</span><span class="ok">&#10003;</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Comparar 3.56 con 1.34 no tiene sentido (unidades distintas). Al
+      <mark>tipificar</mark> se mide la distancia a la media en desviaciones típicas y sin unidad, así que sí son
+      comparables: 1.06 desviaciones frente a 0.48.
+    </div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 14 / 30 </span>
+    </div>
+    <p class="qtext">Una variable cumple \(m_4/S^4=2.1\). ¿Qué podemos decir de su curtosis?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">\(g_2=2.1\): es leptocúrtica, más apuntada que la
+          normal</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">\(g_2=-0.9\): es platicúrtica, más aplastada que
+          la normal</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">\(g_2\approx0\): es mesocúrtica, porque 2.1 está
+          cerca de 3</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">\(g_2=-0.9\): es asimétrica con cola a la
+          izquierda</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        14 / 30 <span class="lvl l2">Media</span></span></div>
+    <p class="qtext">Una variable cumple \(m_4/S^4=2.1\). ¿Qué podemos decir de su curtosis?</p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">\(g_2=2.1\): es leptocúrtica, más apuntada
+          que la normal</span></div>
+      <div class="opt correct"><span class="letter">B</span><span class="otxt">\(g_2=-0.9\): es platicúrtica, más
+          aplastada que la normal</span><span class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">C</span><span class="otxt">\(g_2\approx0\): es mesocúrtica, porque 2.1
+          está cerca de 3</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">\(g_2=-0.9\): es asimétrica con cola a la
+          izquierda</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(g_2=m_4/S^4-3=2.1-3=-0.9<0\): <mark>platicúrtica</mark>. Para
+        la normal \(m_4/S^4=3\). La curtosis mide el aplastamiento; la asimetría la mide \(g_1\), que no depende de
+        \(m_4\).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 15 / 30 </span>
+    </div>
+    <p class="qtext">Con los Tiempos de reacción se obtienen \(P_{.30}=425\) ms y \(P_{.70}=485\) ms. ¿Qué porcentaje de
+      estudiantes tiene un tiempo comprendido entre ambos valores?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <div class="mini-card">
+          <p class="qtag" style="margin:0 0 .3rem">Tiempos de reacción ordenados (n = 16, ms)</p>
+          <p class="ordered-data" style="margin:0">390, 395, 400, 410, 420, 430, 440, 450, 455, 460, 470, 500, 510, 520,
+            560, 590</p>
+        </div>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">Aproximadamente el 60 %</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">Aproximadamente el 55 %</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">Aproximadamente el 70 %</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">Aproximadamente el 40 %</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        15 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Con los Tiempos de reacción se obtienen \(P_{.30}=425\) ms y \(P_{.70}=485\) ms. ¿Qué porcentaje de
+      estudiantes tiene un tiempo comprendido entre ambos valores?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <div class="mini-card">
+          <p class="qtag" style="margin:0 0 .3rem">Tiempos de reacción ordenados (n = 16, ms)</p>
+          <p class="ordered-data" style="margin:0">390, 395, 400, 410, 420, 430, 440, 450, 455, 460, 470, 500, 510, 520,
+            560, 590</p>
+        </div>
+      </div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">Aproximadamente el 60 %</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">Aproximadamente el 55 %</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">Aproximadamente el 70 %</span></div>
+        <div class="opt correct"><span class="letter">D</span><span class="otxt">Aproximadamente el 40 %</span><span
+            class="ok">&#10003;</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(P_{.30}\) deja el 30 % por debajo y \(P_{.70}\) el 70 %, así
+      que <mark>entre ambos queda el 70 % − 30 % = 40 %</mark> (6 de los 16 estudiantes: 430, 440, 450, 455, 460 y 470
+      ms).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 16 / 30 </span>
+    </div>
+    <p class="qtext">Con los 16 Tiempos de reacción ordenados, calculamos \(P_{.70}\). ¿Cuánto vale?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <div class="mini-card">
+          <p class="qtag" style="margin:0 0 .3rem">Tiempos de reacción ordenados (n = 16, ms)</p>
+          <p class="ordered-data" style="margin:0">390, 395, 400, 410, 420, 430, 440, 450, 455, 460, 470, 500, 510, 520,
+            560, 590</p>
+        </div>
+        <div class="formula-box small">\[P_k=x_{(\lfloor L\rfloor)}+(L-\lfloor L\rfloor)\,[x_{(\lfloor
+          L\rfloor+1)}-x_{(\lfloor L\rfloor)}],\quad L=\tfrac{k(n-1)}{100}+1\]</div>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">485 ms</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">470 ms</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">500 ms</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">480 ms</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        16 / 30 <span class="lvl l2">Media</span></span></div>
+    <p class="qtext">Con los 16 Tiempos de reacción ordenados, calculamos \(P_{.70}\). ¿Cuánto vale?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <div class="mini-card">
+          <p class="qtag" style="margin:0 0 .3rem">Tiempos de reacción ordenados (n = 16, ms)</p>
+          <p class="ordered-data" style="margin:0">390, 395, 400, 410, 420, 430, 440, 450, 455, 460, 470, 500, 510, 520,
+            560, 590</p>
+        </div>
+        <div class="formula-box small">\[P_k=x_{(\lfloor L\rfloor)}+(L-\lfloor L\rfloor)\,[x_{(\lfloor
+          L\rfloor+1)}-x_{(\lfloor L\rfloor)}],\quad L=\tfrac{k(n-1)}{100}+1\]</div>
+      </div>
+      <div class="opts">
+        <div class="opt correct"><span class="letter">A</span><span class="otxt">485 ms</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">470 ms</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">500 ms</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">480 ms</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(L=\frac{70\cdot15}{100}+1=11.5\), luego
+      \(P_{.70}=x_{(11)}+0.5\,[x_{(12)}-x_{(11)}]=470+0.5\cdot30=485\) ms. Los valores 470 y 500 son \(x_{(11)}\) y
+      \(x_{(12)}\): faltaba interpolar.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 17 / 30 </span>
+    </div>
+    <p class="qtext">El estudiante con Tiempo de reacción 460 ms ocupa la posición 10 entre los 16 tiempos ordenados.
+      Usando \(L=\frac{k(n-1)}{100}+1\), ¿en qué percentil se encuentra?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <div class="mini-card">
+          <p class="qtag" style="margin:0 0 .3rem">Tiempos de reacción ordenados (n = 16, ms)</p>
+          <p class="ordered-data" style="margin:0">390, 395, 400, 410, 420, 430, 440, 450, 455, 460, 470, 500, 510, 520,
+            560, 590</p>
+        </div>
+      </div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">\(P_{62.5}\)</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">\(P_{66.7}\)</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">\(P_{60}\)</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">\(P_{56.25}\)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        17 / 30 <span class="lvl l3">Difícil</span></span></div>
+    <p class="qtext">El estudiante con Tiempo de reacción 460 ms ocupa la posición 10 entre los 16 tiempos ordenados.
+      Usando \(L=\frac{k(n-1)}{100}+1\), ¿en qué percentil se encuentra?</p>
+    <div class="qbody stack">
+      <div class="qtable">
+        <div class="mini-card">
+          <p class="qtag" style="margin:0 0 .3rem">Tiempos de reacción ordenados (n = 16, ms)</p>
+          <p class="ordered-data" style="margin:0">390, 395, 400, 410, 420, 430, 440, 450, 455, 460, 470, 500, 510, 520,
+            560, 590</p>
+        </div>
+      </div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">\(P_{62.5}\)</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">\(P_{66.7}\)</span></div>
+        <div class="opt correct"><span class="letter">C</span><span class="otxt">\(P_{60}\)</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">\(P_{56.25}\)</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Como 460 es exactamente \(x_{(10)}\), \(L=10\) y despejando:
+      \(k=\frac{(L-1)\cdot100}{n-1}=\frac{9\cdot100}{15}=60\). Los otros valores salen de dividir por \(n=16\) o por 15
+      con \(L\) en vez de \(L-1\).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 18 / 30 </span>
+    </div>
+    <p class="qtext">Este histograma representa la Ansiedad de los 16 estudiantes. ¿Cuál es la descripción más adecuada
+      de su forma?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="70" y="20" width="550" height="255" fill="none" stroke="#ddd" />
+          <line x1="70" x2="620" y1="275.0" y2="275.0" stroke="#eee" /><text x="64.0" y="279.0" font-size="11"
+            text-anchor="end" fill="#777">0</text>
+          <line x1="70" x2="620" y1="227.8" y2="227.8" stroke="#eee" /><text x="64.0" y="231.8" font-size="11"
+            text-anchor="end" fill="#777">1</text>
+          <line x1="70" x2="620" y1="180.6" y2="180.6" stroke="#eee" /><text x="64.0" y="184.6" font-size="11"
+            text-anchor="end" fill="#777">2</text>
+          <line x1="70" x2="620" y1="133.3" y2="133.3" stroke="#eee" /><text x="64.0" y="137.3" font-size="11"
+            text-anchor="end" fill="#777">3</text>
+          <line x1="70" x2="620" y1="86.1" y2="86.1" stroke="#eee" /><text x="64.0" y="90.1" font-size="11"
+            text-anchor="end" fill="#777">4</text>
+          <line x1="70" x2="620" y1="38.9" y2="38.9" stroke="#eee" /><text x="64.0" y="42.9" font-size="11"
+            text-anchor="end" fill="#777">5</text>
+          <rect x="70.0" y="86.1" width="78.6" height="188.9" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="148.6" y="86.1" width="78.6" height="188.9" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="227.1" y="38.9" width="78.6" height="236.1" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="305.7" y="180.6" width="78.6" height="94.4" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="541.4" y="227.8" width="78.6" height="47.2" fill="#005877" opacity="0.85" stroke="white" /><text
+            x="70.0" y="291.0" font-size="11" text-anchor="middle" fill="#777">5</text><text x="148.6" y="291.0"
+            font-size="11" text-anchor="middle" fill="#777">10</text><text x="227.1" y="291.0" font-size="11"
+            text-anchor="middle" fill="#777">15</text><text x="305.7" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">20</text><text x="384.3" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">25</text><text x="462.9" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">30</text><text x="541.4" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">35</text><text x="620.0" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">40</text><text x="345.0" y="320.0" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+            (BAI)</text><text x="14.0" y="147.5" font-size="12.5" text-anchor="middle" fill="#333"
+            transform="rotate(-90 14 147.5)">frecuencia</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">Asimétrica con cola a la izquierda, porque la
+            mayoría de los datos queda a la derecha</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">Asimétrica con cola a la derecha; el intervalo
+            (35, 40] contiene un posible atípico</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">Bimodal, con modas en (5, 10] y en (35,
+            40]</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">Aproximadamente simétrica, con moda en (15,
+            20]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        18 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Este histograma representa la Ansiedad de los 16 estudiantes. ¿Cuál es la descripción más adecuada
+      de su forma?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="70" y="20" width="550" height="255" fill="none" stroke="#ddd" />
+          <line x1="70" x2="620" y1="275.0" y2="275.0" stroke="#eee" /><text x="64.0" y="279.0" font-size="11"
+            text-anchor="end" fill="#777">0</text>
+          <line x1="70" x2="620" y1="227.8" y2="227.8" stroke="#eee" /><text x="64.0" y="231.8" font-size="11"
+            text-anchor="end" fill="#777">1</text>
+          <line x1="70" x2="620" y1="180.6" y2="180.6" stroke="#eee" /><text x="64.0" y="184.6" font-size="11"
+            text-anchor="end" fill="#777">2</text>
+          <line x1="70" x2="620" y1="133.3" y2="133.3" stroke="#eee" /><text x="64.0" y="137.3" font-size="11"
+            text-anchor="end" fill="#777">3</text>
+          <line x1="70" x2="620" y1="86.1" y2="86.1" stroke="#eee" /><text x="64.0" y="90.1" font-size="11"
+            text-anchor="end" fill="#777">4</text>
+          <line x1="70" x2="620" y1="38.9" y2="38.9" stroke="#eee" /><text x="64.0" y="42.9" font-size="11"
+            text-anchor="end" fill="#777">5</text>
+          <rect x="70.0" y="86.1" width="78.6" height="188.9" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="148.6" y="86.1" width="78.6" height="188.9" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="227.1" y="38.9" width="78.6" height="236.1" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="305.7" y="180.6" width="78.6" height="94.4" fill="#005877" opacity="0.85" stroke="white" />
+          <rect x="541.4" y="227.8" width="78.6" height="47.2" fill="#005877" opacity="0.85" stroke="white" /><text
+            x="70.0" y="291.0" font-size="11" text-anchor="middle" fill="#777">5</text><text x="148.6" y="291.0"
+            font-size="11" text-anchor="middle" fill="#777">10</text><text x="227.1" y="291.0" font-size="11"
+            text-anchor="middle" fill="#777">15</text><text x="305.7" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">20</text><text x="384.3" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">25</text><text x="462.9" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">30</text><text x="541.4" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">35</text><text x="620.0" y="291.0" font-size="11" text-anchor="middle"
+            fill="#777">40</text><text x="345.0" y="320.0" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad
+            (BAI)</text><text x="14.0" y="147.5" font-size="12.5" text-anchor="middle" fill="#333"
+            transform="rotate(-90 14 147.5)">frecuencia</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">Asimétrica con cola a la izquierda, porque
+            la mayoría de los datos queda a la derecha</span></div>
+        <div class="opt correct"><span class="letter">B</span><span class="otxt">Asimétrica con cola a la derecha; el
+            intervalo (35, 40] contiene un posible atípico</span><span class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">Bimodal, con modas en (5, 10] y en (35,
+            40]</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">Aproximadamente simétrica, con moda en (15,
+            20]</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> La cola larga hacia valores altos indica \(g_1>0\) (<mark>cola a
+        la derecha</mark>); la barra aislada en (35,40] es un candidato a atípico, no una segunda moda. La única moda
+      está en (15,20], pero eso no implica simetría.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 19 / 30 </span>
+    </div>
+    <p class="qtext">En este diagrama de caja y bigotes de la Ansiedad (\(RI=8.5\)), ¿qué afirmación es correcta?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <line x1="110" x2="615" y1="135" y2="135" stroke="#999" />
+          <line x1="110.0" x2="110.0" y1="15" y2="135" stroke="#eee" /><text x="110.0" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">0</text>
+          <line x1="173.1" x2="173.1" y1="15" y2="135" stroke="#eee" /><text x="173.1" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">5</text>
+          <line x1="236.2" x2="236.2" y1="15" y2="135" stroke="#eee" /><text x="236.2" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">10</text>
+          <line x1="299.4" x2="299.4" y1="15" y2="135" stroke="#eee" /><text x="299.4" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">15</text>
+          <line x1="362.5" x2="362.5" y1="15" y2="135" stroke="#eee" /><text x="362.5" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">20</text>
+          <line x1="425.6" x2="425.6" y1="15" y2="135" stroke="#eee" /><text x="425.6" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">25</text>
+          <line x1="488.8" x2="488.8" y1="15" y2="135" stroke="#eee" /><text x="488.8" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">30</text>
+          <line x1="551.9" x2="551.9" y1="15" y2="135" stroke="#eee" /><text x="551.9" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">35</text>
+          <line x1="615.0" x2="615.0" y1="15" y2="135" stroke="#eee" /><text x="615.0" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">40</text><text x="100.0" y="84.0" font-size="13" text-anchor="end"
+            fill="#333" font-weight="bold">Ansiedad</text>
+          <line x1="198.4" x2="245.7" y1="80.0" y2="80.0" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="353.0" x2="425.6" y1="80.0" y2="80.0" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="198.4" x2="198.4" y1="71.0" y2="89.0" stroke="#333" stroke-width="2" />
+          <line x1="425.6" x2="425.6" y1="71.0" y2="89.0" stroke="#333" stroke-width="2" />
+          <rect x="245.7" y="65.0" width="107.3" height="30" fill="#005877" opacity="0.35" stroke="#333"
+            stroke-width="1.5" />
+          <line x1="305.7" x2="305.7" y1="65.0" y2="95.0" stroke="#111" stroke-width="3.5" />
+          <circle cx="589.8" cy="80.0" r="4.5" fill="white" stroke="#c0392b" stroke-width="2" /><text x="198.4"
+            y="112.0" font-size="10.5" text-anchor="middle" fill="#333">mín</text><text x="198.4" y="124.0"
+            font-size="10" text-anchor="middle" fill="#777">7</text><text x="245.7" y="112.0" font-size="10.5"
+            text-anchor="middle" fill="#333">Q1</text><text x="245.7" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">10.75</text><text x="305.7" y="112.0" font-size="10.5" text-anchor="middle"
+            fill="#333">Me</text><text x="305.7" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">15.5</text><text x="353.0" y="112.0" font-size="10.5" text-anchor="middle"
+            fill="#333">Q3</text><text x="353.0" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">19.25</text><text x="425.6" y="112.0" font-size="10.5" text-anchor="middle"
+            fill="#333">máx*</text><text x="425.6" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">25</text><text x="589.8" y="66.0" font-size="10.5" text-anchor="middle" fill="#c0392b">atípico:
+            38</text><text x="362.5" y="172.0" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">La caja contiene al 75 % de los estudiantes,
+            con ansiedad entre 10.75 y 19.25</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">El punto en 38 es el máximo, pero no es
+            candidato a atípico porque el bigote llega hasta 25</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">La mediana está más cerca de Q1 que de Q3,
+            luego la distribución tiene cola a la izquierda</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">La caja contiene al 50 % de los estudiantes y
+            el bigote superior es más largo que el inferior</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        19 / 30 <span class="lvl l2">Media</span></span></div>
+    <p class="qtext">En este diagrama de caja y bigotes de la Ansiedad (\(RI=8.5\)), ¿qué afirmación es correcta?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <line x1="110" x2="615" y1="135" y2="135" stroke="#999" />
+          <line x1="110.0" x2="110.0" y1="15" y2="135" stroke="#eee" /><text x="110.0" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">0</text>
+          <line x1="173.1" x2="173.1" y1="15" y2="135" stroke="#eee" /><text x="173.1" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">5</text>
+          <line x1="236.2" x2="236.2" y1="15" y2="135" stroke="#eee" /><text x="236.2" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">10</text>
+          <line x1="299.4" x2="299.4" y1="15" y2="135" stroke="#eee" /><text x="299.4" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">15</text>
+          <line x1="362.5" x2="362.5" y1="15" y2="135" stroke="#eee" /><text x="362.5" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">20</text>
+          <line x1="425.6" x2="425.6" y1="15" y2="135" stroke="#eee" /><text x="425.6" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">25</text>
+          <line x1="488.8" x2="488.8" y1="15" y2="135" stroke="#eee" /><text x="488.8" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">30</text>
+          <line x1="551.9" x2="551.9" y1="15" y2="135" stroke="#eee" /><text x="551.9" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">35</text>
+          <line x1="615.0" x2="615.0" y1="15" y2="135" stroke="#eee" /><text x="615.0" y="151.0" font-size="11"
+            text-anchor="middle" fill="#777">40</text><text x="100.0" y="84.0" font-size="13" text-anchor="end"
+            fill="#333" font-weight="bold">Ansiedad</text>
+          <line x1="198.4" x2="245.7" y1="80.0" y2="80.0" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="353.0" x2="425.6" y1="80.0" y2="80.0" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="198.4" x2="198.4" y1="71.0" y2="89.0" stroke="#333" stroke-width="2" />
+          <line x1="425.6" x2="425.6" y1="71.0" y2="89.0" stroke="#333" stroke-width="2" />
+          <rect x="245.7" y="65.0" width="107.3" height="30" fill="#005877" opacity="0.35" stroke="#333"
+            stroke-width="1.5" />
+          <line x1="305.7" x2="305.7" y1="65.0" y2="95.0" stroke="#111" stroke-width="3.5" />
+          <circle cx="589.8" cy="80.0" r="4.5" fill="white" stroke="#c0392b" stroke-width="2" /><text x="198.4"
+            y="112.0" font-size="10.5" text-anchor="middle" fill="#333">mín</text><text x="198.4" y="124.0"
+            font-size="10" text-anchor="middle" fill="#777">7</text><text x="245.7" y="112.0" font-size="10.5"
+            text-anchor="middle" fill="#333">Q1</text><text x="245.7" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">10.75</text><text x="305.7" y="112.0" font-size="10.5" text-anchor="middle"
+            fill="#333">Me</text><text x="305.7" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">15.5</text><text x="353.0" y="112.0" font-size="10.5" text-anchor="middle"
+            fill="#333">Q3</text><text x="353.0" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">19.25</text><text x="425.6" y="112.0" font-size="10.5" text-anchor="middle"
+            fill="#333">máx*</text><text x="425.6" y="124.0" font-size="10" text-anchor="middle"
+            fill="#777">25</text><text x="589.8" y="66.0" font-size="10.5" text-anchor="middle" fill="#c0392b">atípico:
+            38</text><text x="362.5" y="172.0" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">La caja contiene al 75 % de los
+            estudiantes, con ansiedad entre 10.75 y 19.25</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">El punto en 38 es el máximo, pero no es
+            candidato a atípico porque el bigote llega hasta 25</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">La mediana está más cerca de Q1 que de Q3,
+            luego la distribución tiene cola a la izquierda</span></div>
+        <div class="opt correct"><span class="letter">D</span><span class="otxt">La caja contiene al 50 % de los
+            estudiantes y el bigote superior es más largo que el inferior</span><span class="ok">&#10003;</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> La caja \((Q_1,Q_3)\) contiene el <mark>50 % central</mark>.
+      Bigotes: inferior \(10.75-7=3.75\), superior \(25-19.25=5.75\). El 38 supera \(Q_3+1.5\,RI=32\): candidato a
+      atípico. Además \(Me-Q_1=4.75>Q_3-Me=3.75\): la mediana está algo más cerca de \(Q_3\).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Pregunta 20 / 30 </span>
+    </div>
+    <p class="qtext">Ansiedad & sexo. ¿Qué afirmación es correcta?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <line x1="110" x2="615" y1="185" y2="185" stroke="#999" />
+          <line x1="110.0" x2="110.0" y1="15" y2="185" stroke="#eee" /><text x="110.0" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">0</text>
+          <line x1="173.1" x2="173.1" y1="15" y2="185" stroke="#eee" /><text x="173.1" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">5</text>
+          <line x1="236.2" x2="236.2" y1="15" y2="185" stroke="#eee" /><text x="236.2" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">10</text>
+          <line x1="299.4" x2="299.4" y1="15" y2="185" stroke="#eee" /><text x="299.4" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">15</text>
+          <line x1="362.5" x2="362.5" y1="15" y2="185" stroke="#eee" /><text x="362.5" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">20</text>
+          <line x1="425.6" x2="425.6" y1="15" y2="185" stroke="#eee" /><text x="425.6" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">25</text>
+          <line x1="488.8" x2="488.8" y1="15" y2="185" stroke="#eee" /><text x="488.8" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">30</text>
+          <line x1="551.9" x2="551.9" y1="15" y2="185" stroke="#eee" /><text x="551.9" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">35</text>
+          <line x1="615.0" x2="615.0" y1="15" y2="185" stroke="#eee" /><text x="615.0" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">40</text><text x="100.0" y="66.5" font-size="13" text-anchor="end"
+            fill="#333" font-weight="bold">Hombres</text>
+          <line x1="198.4" x2="245.7" y1="62.5" y2="62.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="321.5" x2="362.5" y1="62.5" y2="62.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="198.4" x2="198.4" y1="53.5" y2="71.5" stroke="#333" stroke-width="2" />
+          <line x1="362.5" x2="362.5" y1="53.5" y2="71.5" stroke="#333" stroke-width="2" />
+          <rect x="245.7" y="47.5" width="75.8" height="30" fill="#005877" opacity="0.35" stroke="#333"
+            stroke-width="1.5" />
+          <line x1="280.4" x2="280.4" y1="47.5" y2="77.5" stroke="#111" stroke-width="3.5" /><text x="100.0" y="151.5"
+            font-size="13" text-anchor="end" fill="#333" font-weight="bold">Mujeres</text>
+          <line x1="223.6" x2="274.1" y1="147.5" y2="147.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="397.2" x2="425.6" y1="147.5" y2="147.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="223.6" x2="223.6" y1="138.5" y2="156.5" stroke="#333" stroke-width="2" />
+          <line x1="425.6" x2="425.6" y1="138.5" y2="156.5" stroke="#333" stroke-width="2" />
+          <rect x="274.1" y="132.5" width="123.1" height="30" fill="#E87B00" opacity="0.35" stroke="#333"
+            stroke-width="1.5" />
+          <line x1="330.9" x2="330.9" y1="132.5" y2="162.5" stroke="#111" stroke-width="3.5" />
+          <circle cx="589.8" cy="147.5" r="4.5" fill="white" stroke="#c0392b" stroke-width="2" /><text x="362.5"
+            y="222.0" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">Las mujeres tienen mayor mediana y mayor RI, y
+            el 38 es atípico dentro de su grupo</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">Los hombres tienen menor mediana pero mayor
+            dispersión, pues su bigote inferior llega hasta 7</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">Las cajas no se solapan, luego todas las
+            mujeres puntúan más alto que todos los hombres</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">Ambos grupos tienen atípicos, porque los
+            bigotes no llegan hasta el máximo del eje</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t2">Tema 2 · Univariante</span><span class="qnum">Respuesta &middot; Pregunta
+        20 / 30 <span class="lvl l3">Difícil</span></span></div>
+    <p class="qtext">Ansiedad & sexo. ¿Qué afirmación es correcta?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <line x1="110" x2="615" y1="185" y2="185" stroke="#999" />
+          <line x1="110.0" x2="110.0" y1="15" y2="185" stroke="#eee" /><text x="110.0" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">0</text>
+          <line x1="173.1" x2="173.1" y1="15" y2="185" stroke="#eee" /><text x="173.1" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">5</text>
+          <line x1="236.2" x2="236.2" y1="15" y2="185" stroke="#eee" /><text x="236.2" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">10</text>
+          <line x1="299.4" x2="299.4" y1="15" y2="185" stroke="#eee" /><text x="299.4" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">15</text>
+          <line x1="362.5" x2="362.5" y1="15" y2="185" stroke="#eee" /><text x="362.5" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">20</text>
+          <line x1="425.6" x2="425.6" y1="15" y2="185" stroke="#eee" /><text x="425.6" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">25</text>
+          <line x1="488.8" x2="488.8" y1="15" y2="185" stroke="#eee" /><text x="488.8" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">30</text>
+          <line x1="551.9" x2="551.9" y1="15" y2="185" stroke="#eee" /><text x="551.9" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">35</text>
+          <line x1="615.0" x2="615.0" y1="15" y2="185" stroke="#eee" /><text x="615.0" y="201.0" font-size="11"
+            text-anchor="middle" fill="#777">40</text><text x="100.0" y="66.5" font-size="13" text-anchor="end"
+            fill="#333" font-weight="bold">Hombres</text>
+          <line x1="198.4" x2="245.7" y1="62.5" y2="62.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="321.5" x2="362.5" y1="62.5" y2="62.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="198.4" x2="198.4" y1="53.5" y2="71.5" stroke="#333" stroke-width="2" />
+          <line x1="362.5" x2="362.5" y1="53.5" y2="71.5" stroke="#333" stroke-width="2" />
+          <rect x="245.7" y="47.5" width="75.8" height="30" fill="#005877" opacity="0.35" stroke="#333"
+            stroke-width="1.5" />
+          <line x1="280.4" x2="280.4" y1="47.5" y2="77.5" stroke="#111" stroke-width="3.5" /><text x="100.0" y="151.5"
+            font-size="13" text-anchor="end" fill="#333" font-weight="bold">Mujeres</text>
+          <line x1="223.6" x2="274.1" y1="147.5" y2="147.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="397.2" x2="425.6" y1="147.5" y2="147.5" stroke="#333" stroke-dasharray="3,2" />
+          <line x1="223.6" x2="223.6" y1="138.5" y2="156.5" stroke="#333" stroke-width="2" />
+          <line x1="425.6" x2="425.6" y1="138.5" y2="156.5" stroke="#333" stroke-width="2" />
+          <rect x="274.1" y="132.5" width="123.1" height="30" fill="#E87B00" opacity="0.35" stroke="#333"
+            stroke-width="1.5" />
+          <line x1="330.9" x2="330.9" y1="132.5" y2="162.5" stroke="#111" stroke-width="3.5" />
+          <circle cx="589.8" cy="147.5" r="4.5" fill="white" stroke="#c0392b" stroke-width="2" /><text x="362.5"
+            y="222.0" font-size="12.5" text-anchor="middle" fill="#333">Ansiedad (BAI)</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt correct"><span class="letter">A</span><span class="otxt">Las mujeres tienen mayor mediana y
+            mayor RI, y el 38 es atípico dentro de su grupo (supera \(Q_3+1.5\,RI\approx37.4\))</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">B</span><span class="otxt">Los hombres tienen menor mediana pero mayor
+            dispersión, pues su bigote inferior llega hasta 7</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">Las cajas no se solapan, luego todas las
+            mujeres puntúan más alto que todos los hombres</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">Ambos grupos tienen atípicos, porque los
+            bigotes no llegan hasta el máximo del eje</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> Mujeres: \(Me=17.5\), \(RI=22.75-13=9.75\) y límite superior
+      \(22.75+14.63=37.4\), así que 38 es atípico. Hombres: \(Me=13.5\), \(RI=6\), sin atípicos. Las cajas se solapan en
+      \([13,\,16.75]\): hay mujeres con menos ansiedad que hombres.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 21 /
+        30 </span></div>
+    <p class="qtext">Entre las Horas de sueño y la Nota se obtiene \(S_{XY}=+1.49\). ¿Cómo lo interpretamos?</p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">Relación lineal directa; dormir más tiende a
+          acompañar a mejores notas, pero con \(S_{XY}\) sola no se puede valorar la intensidad</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">Relación lineal directa e intensa, porque
+          \(S_{XY}\) es positiva y mayor que 1</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">Relación lineal inversa: dormir más tiende a
+          bajar la nota</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">No hay relación entre las variables, porque
+          \(S_{XY}\) no es igual a 1</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+        &middot; Pregunta 21 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Entre las Horas de sueño y la Nota se obtiene \(S_{XY}=+1.49\). ¿Cómo lo interpretamos?</p>
+    <div class="opts">
+      <div class="opt correct"><span class="letter">A</span><span class="otxt">Relación lineal directa; dormir más
+          tiende a acompañar a mejores notas, pero con \(S_{XY}\) sola no se puede valorar la intensidad</span><span
+          class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">Relación lineal directa e intensa, porque
+          \(S_{XY}\) es positiva y mayor que 1</span></div>
+      <div class="opt dim"><span class="letter">C</span><span class="otxt">Relación lineal inversa: dormir más tiende a
+          bajar la nota</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">No hay relación entre las variables, porque
+          \(S_{XY}\) no es igual a 1</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> El signo dice el sentido de la relación lineal: positivo =
+      directa. Pero \(S_{XY}\) <mark>conserva las unidades</mark> (horas·puntos), por lo que su tamaño no mide la
+      intensidad: hay que normalizarla con \(S_XS_Y\) (aquí \(r=0.74\)).</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 22 /
+        30 </span></div>
+    <p class="qtext">Un compañero calcula \(S_{XY}=12\), \(S_X=2\) y \(S_Y=5\) y concluye \(r=1.2\). ¿Qué podemos decir?
+    </p>
+    <div class="opts">
+      <div class="opt"><span class="letter">A</span><span class="otxt">Es una relación directa más fuerte que una
+          relación exacta</span></div>
+      <div class="opt"><span class="letter">B</span><span class="otxt">Es una relación directa moderada, porque 1.2 está
+          cerca de 1</span></div>
+      <div class="opt"><span class="letter">C</span><span class="otxt">Hay un error: \(|r|\) no puede superar 1, así que
+          hay que revisar los cálculos</span></div>
+      <div class="opt"><span class="letter">D</span><span class="otxt">El resultado es correcto: r puede superar 1
+          cuando las varianzas son pequeñas</span></div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+        &middot; Pregunta 22 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Un compañero calcula \(S_{XY}=12\), \(S_X=2\) y \(S_Y=5\) y concluye \(r=1.2\). ¿Qué podemos decir?
+    </p>
+    <div class="opts">
+      <div class="opt dim"><span class="letter">A</span><span class="otxt">Es una relación directa más fuerte que una
+          relación exacta</span></div>
+      <div class="opt dim"><span class="letter">B</span><span class="otxt">Es una relación directa moderada, porque 1.2
+          está cerca de 1</span></div>
+      <div class="opt correct"><span class="letter">C</span><span class="otxt">Hay un error: \(|r|\) no puede superar 1,
+          así que hay que revisar los cálculos</span><span class="ok">&#10003;</span></div>
+      <div class="opt dim"><span class="letter">D</span><span class="otxt">El resultado es correcto: r puede superar 1
+          cuando las varianzas son pequeñas</span></div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> \(r=S_{XY}/(S_XS_Y)=12/10=1.2\), pero siempre debe cumplirse
+      \(r\in[-1,1]\), es decir \(|S_{XY}|\le S_XS_Y=10\). Un valor fuera de ese rango indica <mark>un error de
+        cálculo</mark>.</div>
+  </div>
+
+  <div class="slide quiz">
+    <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 23 /
+        30 </span></div>
+    <p class="qtext">Este diagrama de dispersión muestra la Ansiedad y la Nota de los 16 estudiantes. ¿Qué valor de
+      \(r\) es más razonable?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="60" y="20" width="560" height="270" fill="none" stroke="#ddd" /><text x="60.0" y="306.0"
+            font-size="11" text-anchor="middle" fill="#777">5</text><text x="140.0" y="306.0" font-size="11"
+            text-anchor="middle" fill="#777">10</text><text x="220.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">15</text><text x="300.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">20</text><text x="380.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">25</text><text x="460.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">30</text><text x="540.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">35</text><text x="620.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">40</text><text x="54.0" y="294.0" font-size="11" text-anchor="end" fill="#777">3</text><text
+            x="54.0" y="240.0" font-size="11" text-anchor="end" fill="#777">4.5</text><text x="54.0" y="186.0"
+            font-size="11" text-anchor="end" fill="#777">6</text><text x="54.0" y="132.0" font-size="11"
+            text-anchor="end" fill="#777">7.5</text><text x="54.0" y="78.0" font-size="11" text-anchor="end"
+            fill="#777">9</text><text x="54.0" y="24.0" font-size="11" text-anchor="end" fill="#777">10.5</text>
+          <line x1="243.0" x2="243.0" y1="20" y2="290" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+          <line x1="60" x2="620" y1="134.1" y2="134.1" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+          <circle cx="243.0" cy="134.1" r="4" fill="#E87B00" />
+          <circle cx="172.0" cy="117.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="332.0" cy="200.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="268.0" cy="113.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="140.0" cy="102.8" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="380.0" cy="236.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="220.0" cy="88.4" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="124.0" cy="81.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="284.0" cy="203.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="204.0" cy="77.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="156.0" cy="146.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="300.0" cy="182.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="252.0" cy="95.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="140.0" cy="66.8" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="236.0" cy="153.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="588.0" cy="225.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="92.0" cy="56.0" r="6" fill="#005877" opacity="0.85" /><text x="340.0" y="332.0" font-size="12.5"
+            text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14.0" y="155.0" font-size="12.5"
+            text-anchor="middle" fill="#333" transform="rotate(-90 14 155.0)">Nota examen</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">\(r\approx-0.2\)</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">\(r\approx-0.8\)</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">\(r\approx+0.8\)</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">\(r\approx-1\)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide quiz answer">
+    <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+        &middot; Pregunta 23 / 30 <span class="lvl l1">Fácil</span></span></div>
+    <p class="qtext">Este diagrama de dispersión muestra la Ansiedad y la Nota de los 16 estudiantes. ¿Qué valor de
+      \(r\) es más razonable?</p>
+    <div class="qbody fm stack">
+      <div class="qfig"><svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+          <rect x="60" y="20" width="560" height="270" fill="none" stroke="#ddd" /><text x="60.0" y="306.0"
+            font-size="11" text-anchor="middle" fill="#777">5</text><text x="140.0" y="306.0" font-size="11"
+            text-anchor="middle" fill="#777">10</text><text x="220.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">15</text><text x="300.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">20</text><text x="380.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">25</text><text x="460.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">30</text><text x="540.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">35</text><text x="620.0" y="306.0" font-size="11" text-anchor="middle"
+            fill="#777">40</text><text x="54.0" y="294.0" font-size="11" text-anchor="end" fill="#777">3</text><text
+            x="54.0" y="240.0" font-size="11" text-anchor="end" fill="#777">4.5</text><text x="54.0" y="186.0"
+            font-size="11" text-anchor="end" fill="#777">6</text><text x="54.0" y="132.0" font-size="11"
+            text-anchor="end" fill="#777">7.5</text><text x="54.0" y="78.0" font-size="11" text-anchor="end"
+            fill="#777">9</text><text x="54.0" y="24.0" font-size="11" text-anchor="end" fill="#777">10.5</text>
+          <line x1="243.0" x2="243.0" y1="20" y2="290" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+          <line x1="60" x2="620" y1="134.1" y2="134.1" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+          <circle cx="243.0" cy="134.1" r="4" fill="#E87B00" />
+          <circle cx="172.0" cy="117.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="332.0" cy="200.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="268.0" cy="113.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="140.0" cy="102.8" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="380.0" cy="236.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="220.0" cy="88.4" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="124.0" cy="81.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="284.0" cy="203.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="204.0" cy="77.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="156.0" cy="146.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="300.0" cy="182.0" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="252.0" cy="95.6" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="140.0" cy="66.8" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="236.0" cy="153.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="588.0" cy="225.2" r="6" fill="#005877" opacity="0.85" />
+          <circle cx="92.0" cy="56.0" r="6" fill="#005877" opacity="0.85" /><text x="340.0" y="332.0" font-size="12.5"
+            text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14.0" y="155.0" font-size="12.5"
+            text-anchor="middle" fill="#333" transform="rotate(-90 14 155.0)">Nota examen</text>
+        </svg></div>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">\(r\approx-0.2\)</span></div>
+        <div class="opt correct"><span class="letter">B</span><span class="otxt">\(r\approx-0.8\)</span><span
+            class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">\(r\approx+0.8\)</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">\(r\approx-1\)</span></div>
+      </div>
+    </div>
+    <div class="explain"><strong>Explicación.</strong> La nube desciende y la mayoría de puntos cae en los cuadrantes
+      «−» respecto al centro de gravedad: \(S_{XY}<0\). Está bastante alineada, pero no sobre una recta exacta:
+        \(r=-0.81\) (no \(-1\)).</div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 24
+          / 30 </span></div>
+      <p class="qtext">¿En cuál de estos cuatro diagramas esperarías \(r\approx0\) y, sin embargo, X e Y
+        <strong>no</strong> son independientes?
+      </p>
+      <div class="qbody fm stack">
+        <div class="qfig"><svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+            <g transform="translate(20,28)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="8.0" cy="115.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="109.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="31.8" cy="121.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="43.7" cy="127.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.7" cy="127.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="67.6" cy="108.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="79.5" cy="117.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.4" cy="117.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="103.3" cy="93.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.2" cy="89.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="127.1" cy="80.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="139.0" cy="93.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="151.0" cy="77.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="162.9" cy="74.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="174.8" cy="87.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="186.7" cy="57.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="198.6" cy="55.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="210.5" cy="25.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.4" cy="48.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="234.3" cy="48.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="246.3" cy="26.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="258.2" cy="35.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.1" cy="21.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="282.0" cy="33.1" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="22.0" y="23.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">A</text>
+            <g transform="translate(330,28)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="8.0" cy="25.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="20.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="31.8" cy="28.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="43.7" cy="40.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.7" cy="59.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="67.6" cy="45.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="79.5" cy="54.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.4" cy="51.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="103.3" cy="61.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.2" cy="55.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="127.1" cy="73.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="139.0" cy="75.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="151.0" cy="74.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="162.9" cy="100.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="174.8" cy="96.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="186.7" cy="101.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="198.6" cy="75.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="210.5" cy="105.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.4" cy="101.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="234.3" cy="105.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="246.3" cy="121.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="258.2" cy="141.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.1" cy="115.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="282.0" cy="136.5" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="332.0" y="23.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">B</text>
+            <g transform="translate(20,225)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="235.4" cy="59.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.1" cy="69.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="249.8" cy="38.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="146.4" cy="69.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="17.5" cy="110.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="226.5" cy="90.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.4" cy="74.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="200.6" cy="59.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="110.7" cy="87.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="147.3" cy="46.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="150.7" cy="92.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="142.2" cy="136.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="55.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="277.4" cy="68.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.8" cy="119.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="145.6" cy="22.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="219.1" cy="75.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="243.7" cy="112.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="148.8" cy="25.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="166.3" cy="84.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="81.8" cy="74.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.2" cy="139.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.7" cy="41.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="250.8" cy="51.1" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="22.0" y="220.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">C</text>
+            <g transform="translate(330,225)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="8.0" cy="20.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="52.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="31.8" cy="68.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="43.7" cy="79.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.7" cy="75.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="67.6" cy="96.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="79.5" cy="117.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.4" cy="123.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="103.3" cy="137.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.2" cy="133.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="127.1" cy="141.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="139.0" cy="133.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="151.0" cy="149.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="162.9" cy="139.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="174.8" cy="140.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="186.7" cy="133.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="198.6" cy="115.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="210.5" cy="111.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.4" cy="97.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="234.3" cy="80.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="246.3" cy="67.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="258.2" cy="71.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.1" cy="39.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="282.0" cy="38.2" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="332.0" y="220.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">D</text>
+          </svg></div>
+        <div class="opts">
+          <div class="opt"><span class="letter">A</span><span class="otxt">En los diagramas C y D</span></div>
+          <div class="opt"><span class="letter">B</span><span class="otxt">Solo en el diagrama C</span></div>
+          <div class="opt"><span class="letter">C</span><span class="otxt">En los diagramas A y B</span></div>
+          <div class="opt"><span class="letter">D</span><span class="otxt">Solo en el diagrama D</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 24 / 30 <span class="lvl l2">Media</span></span></div>
+      <p class="qtext">¿En cuál de estos cuatro diagramas esperarías \(r\approx0\) y, sin embargo, X e Y
+        <strong>no</strong> son independientes?
+      </p>
+      <div class="qbody fm stack">
+        <div class="qfig"><svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+            <g transform="translate(20,28)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="8.0" cy="115.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="109.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="31.8" cy="121.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="43.7" cy="127.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.7" cy="127.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="67.6" cy="108.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="79.5" cy="117.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.4" cy="117.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="103.3" cy="93.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.2" cy="89.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="127.1" cy="80.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="139.0" cy="93.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="151.0" cy="77.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="162.9" cy="74.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="174.8" cy="87.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="186.7" cy="57.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="198.6" cy="55.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="210.5" cy="25.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.4" cy="48.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="234.3" cy="48.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="246.3" cy="26.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="258.2" cy="35.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.1" cy="21.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="282.0" cy="33.1" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="22.0" y="23.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">A</text>
+            <g transform="translate(330,28)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="8.0" cy="25.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="20.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="31.8" cy="28.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="43.7" cy="40.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.7" cy="59.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="67.6" cy="45.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="79.5" cy="54.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.4" cy="51.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="103.3" cy="61.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.2" cy="55.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="127.1" cy="73.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="139.0" cy="75.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="151.0" cy="74.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="162.9" cy="100.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="174.8" cy="96.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="186.7" cy="101.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="198.6" cy="75.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="210.5" cy="105.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.4" cy="101.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="234.3" cy="105.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="246.3" cy="121.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="258.2" cy="141.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.1" cy="115.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="282.0" cy="136.5" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="332.0" y="23.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">B</text>
+            <g transform="translate(20,225)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="235.4" cy="59.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.1" cy="69.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="249.8" cy="38.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="146.4" cy="69.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="17.5" cy="110.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="226.5" cy="90.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.4" cy="74.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="200.6" cy="59.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="110.7" cy="87.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="147.3" cy="46.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="150.7" cy="92.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="142.2" cy="136.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="55.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="277.4" cy="68.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.8" cy="119.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="145.6" cy="22.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="219.1" cy="75.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="243.7" cy="112.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="148.8" cy="25.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="166.3" cy="84.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="81.8" cy="74.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.2" cy="139.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.7" cy="41.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="250.8" cy="51.1" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="22.0" y="220.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">C</text>
+            <g transform="translate(330,225)">
+              <rect x="0" y="0" width="290" height="160" fill="none" stroke="#ccc" />
+              <circle cx="8.0" cy="20.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="19.9" cy="52.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="31.8" cy="68.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="43.7" cy="79.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="55.7" cy="75.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="67.6" cy="96.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="79.5" cy="117.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="91.4" cy="123.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="103.3" cy="137.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="115.2" cy="133.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="127.1" cy="141.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="139.0" cy="133.0" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="151.0" cy="149.4" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="162.9" cy="139.6" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="174.8" cy="140.1" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="186.7" cy="133.9" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="198.6" cy="115.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="210.5" cy="111.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="222.4" cy="97.7" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="234.3" cy="80.8" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="246.3" cy="67.3" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="258.2" cy="71.5" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="270.1" cy="39.2" r="4" fill="#005877" opacity="0.85" />
+              <circle cx="282.0" cy="38.2" r="4" fill="#005877" opacity="0.85" />
+            </g><text x="332.0" y="220.0" font-size="16" text-anchor="start" fill="#E87B00" font-weight="bold">D</text>
+          </svg></div>
+        <div class="opts">
+          <div class="opt dim"><span class="letter">A</span><span class="otxt">En los diagramas C y D</span></div>
+          <div class="opt dim"><span class="letter">B</span><span class="otxt">Solo en el diagrama C</span></div>
+          <div class="opt dim"><span class="letter">C</span><span class="otxt">En los diagramas A y B</span></div>
+          <div class="opt correct"><span class="letter">D</span><span class="otxt">Solo en el diagrama D</span><span
+              class="ok">&#10003;</span></div>
+        </div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> En A y B hay tendencia lineal (\(r\) grande en valor absoluto).
+        En C no hay patrón alguno: \(r\approx0\) <em>y</em> aspecto de independencia. En D la relación es una parábola:
+        <mark>incorrelación no implica independencia</mark>.
+      </div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 25
+          / 30 </span></div>
+      <p class="qtext">En el diagrama de la Ansiedad y la Nota eliminamos al estudiante #15 (38 puntos, nota 4.8; punto
+        naranja). ¿Qué ocurre?</p>
+      <div class="qbody fm stack">
+        <div class="qfig"><svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+            <rect x="60" y="20" width="560" height="270" fill="none" stroke="#ddd" /><text x="60.0" y="306.0"
+              font-size="11" text-anchor="middle" fill="#777">5</text><text x="140.0" y="306.0" font-size="11"
+              text-anchor="middle" fill="#777">10</text><text x="220.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">15</text><text x="300.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">20</text><text x="380.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">25</text><text x="460.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">30</text><text x="540.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">35</text><text x="620.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">40</text><text x="54.0" y="294.0" font-size="11" text-anchor="end" fill="#777">3</text><text
+              x="54.0" y="240.0" font-size="11" text-anchor="end" fill="#777">4.5</text><text x="54.0" y="186.0"
+              font-size="11" text-anchor="end" fill="#777">6</text><text x="54.0" y="132.0" font-size="11"
+              text-anchor="end" fill="#777">7.5</text><text x="54.0" y="78.0" font-size="11" text-anchor="end"
+              fill="#777">9</text><text x="54.0" y="24.0" font-size="11" text-anchor="end" fill="#777">10.5</text>
+            <line x1="243.0" x2="243.0" y1="20" y2="290" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+            <line x1="60" x2="620" y1="134.1" y2="134.1" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+            <circle cx="243.0" cy="134.1" r="4" fill="#E87B00" />
+            <circle cx="172.0" cy="117.2" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="332.0" cy="200.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="268.0" cy="113.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="140.0" cy="102.8" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="380.0" cy="236.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="220.0" cy="88.4" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="124.0" cy="81.2" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="284.0" cy="203.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="204.0" cy="77.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="156.0" cy="146.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="300.0" cy="182.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="252.0" cy="95.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="140.0" cy="66.8" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="236.0" cy="153.2" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="588.0" cy="225.2" r="8" fill="#E87B00" opacity="0.85" stroke="#333" />
+            <circle cx="92.0" cy="56.0" r="6" fill="#005877" opacity="0.85" /><text x="340.0" y="332.0" font-size="12.5"
+              text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14.0" y="155.0" font-size="12.5"
+              text-anchor="middle" fill="#333" transform="rotate(-90 14 155.0)">Nota examen</text>
+          </svg></div>
+        <div class="opts">
+          <div class="opt"><span class="letter">A</span><span class="otxt">\(|r|\) disminuye claramente, porque el punto
+              sigue la tendencia y la refuerza</span></div>
+          <div class="opt"><span class="letter">B</span><span class="otxt">\(|r|\) aumenta ligeramente
+              (\(r\approx-0.83\)) mientras que \(S_{XY}\) cambia mucho (\(\approx-6.2\))</span></div>
+          <div class="opt"><span class="letter">C</span><span class="otxt">\(r\) no cambia, porque un solo punto de 16
+              no influye en el coeficiente</span></div>
+          <div class="opt"><span class="letter">D</span><span class="otxt">\(r\) cambia de signo, porque #15 es el punto
+              más extremo de la nube</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 25 / 30 <span class="lvl l3">Difícil</span></span></div>
+      <p class="qtext">En el diagrama de la Ansiedad y la Nota eliminamos al estudiante #15 (38 puntos, nota 4.8; punto
+        naranja). ¿Qué ocurre?</p>
+      <div class="qbody fm stack">
+        <div class="qfig"><svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" class="fig-svg">
+            <rect x="60" y="20" width="560" height="270" fill="none" stroke="#ddd" /><text x="60.0" y="306.0"
+              font-size="11" text-anchor="middle" fill="#777">5</text><text x="140.0" y="306.0" font-size="11"
+              text-anchor="middle" fill="#777">10</text><text x="220.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">15</text><text x="300.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">20</text><text x="380.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">25</text><text x="460.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">30</text><text x="540.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">35</text><text x="620.0" y="306.0" font-size="11" text-anchor="middle"
+              fill="#777">40</text><text x="54.0" y="294.0" font-size="11" text-anchor="end" fill="#777">3</text><text
+              x="54.0" y="240.0" font-size="11" text-anchor="end" fill="#777">4.5</text><text x="54.0" y="186.0"
+              font-size="11" text-anchor="end" fill="#777">6</text><text x="54.0" y="132.0" font-size="11"
+              text-anchor="end" fill="#777">7.5</text><text x="54.0" y="78.0" font-size="11" text-anchor="end"
+              fill="#777">9</text><text x="54.0" y="24.0" font-size="11" text-anchor="end" fill="#777">10.5</text>
+            <line x1="243.0" x2="243.0" y1="20" y2="290" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+            <line x1="60" x2="620" y1="134.1" y2="134.1" stroke="#E87B00" stroke-width="1.5" stroke-dasharray="5,3" />
+            <circle cx="243.0" cy="134.1" r="4" fill="#E87B00" />
+            <circle cx="172.0" cy="117.2" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="332.0" cy="200.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="268.0" cy="113.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="140.0" cy="102.8" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="380.0" cy="236.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="220.0" cy="88.4" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="124.0" cy="81.2" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="284.0" cy="203.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="204.0" cy="77.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="156.0" cy="146.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="300.0" cy="182.0" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="252.0" cy="95.6" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="140.0" cy="66.8" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="236.0" cy="153.2" r="6" fill="#005877" opacity="0.85" />
+            <circle cx="588.0" cy="225.2" r="8" fill="#E87B00" opacity="0.85" stroke="#333" />
+            <circle cx="92.0" cy="56.0" r="6" fill="#005877" opacity="0.85" /><text x="340.0" y="332.0" font-size="12.5"
+              text-anchor="middle" fill="#333">Ansiedad (BAI)</text><text x="14.0" y="155.0" font-size="12.5"
+              text-anchor="middle" fill="#333" transform="rotate(-90 14 155.0)">Nota examen</text>
+          </svg></div>
+        <div class="opts">
+          <div class="opt dim"><span class="letter">A</span><span class="otxt">\(|r|\) disminuye claramente, porque el
+              punto sigue la tendencia y la refuerza</span></div>
+          <div class="opt correct"><span class="letter">B</span><span class="otxt">\(|r|\) aumenta ligeramente
+              (\(r\approx-0.83\)) mientras que \(S_{XY}\) cambia mucho (\(\approx-6.2\))</span><span
+              class="ok">&#10003;</span></div>
+          <div class="opt dim"><span class="letter">C</span><span class="otxt">\(r\) no cambia, porque un solo punto de
+              16 no influye en el coeficiente</span></div>
+          <div class="opt dim"><span class="letter">D</span><span class="otxt">\(r\) cambia de signo, porque #15 es el
+              punto más extremo de la nube</span></div>
+        </div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> Al quitar #15 pasa de \(S_{XY}=-9.49\) a \(-6.25\) y de
+        \(r=-0.806\) a \(-0.828\). Un punto extremo <mark>influye mucho en la covarianza</mark>, pero en \(r\) su efecto
+        se compensa en parte porque también cambian \(S_X\) y \(S_Y\); aquí el punto quedaba algo por encima de la
+        recta.</div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 26
+          / 30 </span></div>
+      <p class="qtext">En la tabla Sexo&ndash;Técnica (n = 150), ¿cuánto vale la frecuencia relativa conjunta
+        \(f(M,\text{Repaso activo})\)?</p>
+      <div class="qbody ">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Técnica de preparación</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Sexo</th>
+                <th>Repaso activo</th>
+                <th>Relectura</th>
+                <th>Ninguna</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>M</th>
+                <td>40</td>
+                <td>20</td>
+                <td>15</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr>
+                <th>H</th>
+                <td>25</td>
+                <td>30</td>
+                <td>20</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">65</td>
+                <td class="tot">50</td>
+                <td class="tot">35</td>
+                <td class="tot">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt"><span class="letter">A</span><span class="otxt">\(40/65\approx0.615\)</span></div>
+          <div class="opt"><span class="letter">B</span><span class="otxt">\(40/75\approx0.533\)</span></div>
+          <div class="opt"><span class="letter">C</span><span class="otxt">\(40/150\approx0.267\)</span></div>
+          <div class="opt"><span class="letter">D</span><span class="otxt">\(65/150\approx0.433\)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 26 / 30 <span class="lvl l1">Fácil</span></span></div>
+      <p class="qtext">En la tabla Sexo&ndash;Técnica (n = 150), ¿cuánto vale la frecuencia relativa conjunta
+        \(f(M,\text{Repaso activo})\)?</p>
+      <div class="qbody ">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Técnica de preparación</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Sexo</th>
+                <th>Repaso activo</th>
+                <th>Relectura</th>
+                <th>Ninguna</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>M</th>
+                <td>40</td>
+                <td>20</td>
+                <td>15</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr>
+                <th>H</th>
+                <td>25</td>
+                <td>30</td>
+                <td>20</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">65</td>
+                <td class="tot">50</td>
+                <td class="tot">35</td>
+                <td class="tot">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt dim"><span class="letter">A</span><span class="otxt">\(40/65\approx0.615\)</span></div>
+          <div class="opt dim"><span class="letter">B</span><span class="otxt">\(40/75\approx0.533\)</span></div>
+          <div class="opt correct"><span class="letter">C</span><span class="otxt">\(40/150\approx0.267\)</span><span
+              class="ok">&#10003;</span></div>
+          <div class="opt dim"><span class="letter">D</span><span class="otxt">\(65/150\approx0.433\)</span></div>
+        </div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> La conjunta divide por el total: \(f_{11}=n_{11}/n=40/150\).
+        Dividir por 65 daría \(f(M/\text{Repaso})\) y por 75 daría \(f(\text{Repaso}/M)\), ambas
+        <mark>condicionadas</mark>; 0.433 es la marginal \(f_{.1}\).
+      </div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 27
+          / 30 </span></div>
+      <p class="qtext">En la misma tabla, ¿cuánto vale la frecuencia condicionada \(f(\text{Ninguna}/M)\)?</p>
+      <div class="qbody ">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Técnica de preparación</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Sexo</th>
+                <th>Repaso activo</th>
+                <th>Relectura</th>
+                <th>Ninguna</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>M</th>
+                <td>40</td>
+                <td>20</td>
+                <td>15</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr>
+                <th>H</th>
+                <td>25</td>
+                <td>30</td>
+                <td>20</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">65</td>
+                <td class="tot">50</td>
+                <td class="tot">35</td>
+                <td class="tot">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt"><span class="letter">A</span><span class="otxt">\(15/75=0.20\)</span></div>
+          <div class="opt"><span class="letter">B</span><span class="otxt">\(15/35\approx0.43\)</span></div>
+          <div class="opt"><span class="letter">C</span><span class="otxt">\(15/150=0.10\)</span></div>
+          <div class="opt"><span class="letter">D</span><span class="otxt">\(35/150\approx0.23\)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 27 / 30 <span class="lvl l1">Fácil</span></span></div>
+      <p class="qtext">En la misma tabla, ¿cuánto vale la frecuencia condicionada \(f(\text{Ninguna}/M)\)?</p>
+      <div class="qbody ">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Técnica de preparación</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Sexo</th>
+                <th>Repaso activo</th>
+                <th>Relectura</th>
+                <th>Ninguna</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>M</th>
+                <td>40</td>
+                <td>20</td>
+                <td>15</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr>
+                <th>H</th>
+                <td>25</td>
+                <td>30</td>
+                <td>20</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">65</td>
+                <td class="tot">50</td>
+                <td class="tot">35</td>
+                <td class="tot">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt correct"><span class="letter">A</span><span class="otxt">\(15/75=0.20\)</span><span
+              class="ok">&#10003;</span></div>
+          <div class="opt dim"><span class="letter">B</span><span class="otxt">\(15/35\approx0.43\)</span></div>
+          <div class="opt dim"><span class="letter">C</span><span class="otxt">\(15/150=0.10\)</span></div>
+          <div class="opt dim"><span class="letter">D</span><span class="otxt">\(35/150\approx0.23\)</span></div>
+        </div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> La barra se lee «sabiendo que»: condicionamos a las
+        <mark>mujeres (M)</mark>, luego el total es \(n_{1.}=75\) y \(f=15/75=0.20\). El 0.43 es
+        \(f(M/\text{Ninguna})\), el condicionamiento contrario.
+      </div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 28
+          / 30 </span></div>
+      <p class="qtext">Con esta tabla, ¿qué afirmación es correcta?</p>
+      <div class="qbody stack">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Aula</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Formato del examen</th>
+                <th>Aula 1</th>
+                <th>Aula 2</th>
+                <th>Aula 3</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Papel</th>
+                <td>12</td>
+                <td>0</td>
+                <td>8</td>
+                <td class="tot">20</td>
+              </tr>
+              <tr>
+                <th>Online</th>
+                <td>0</td>
+                <td>9</td>
+                <td>0</td>
+                <td class="tot">9</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">12</td>
+                <td class="tot">9</td>
+                <td class="tot">8</td>
+                <td class="tot">29</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt"><span class="letter">A</span><span class="otxt">El Aula depende funcionalmente del Formato,
+              pero el Formato no depende funcionalmente del Aula</span></div>
+          <div class="opt"><span class="letter">B</span><span class="otxt">El Formato y el Aula son independientes,
+              porque los totales son distintos</span></div>
+          <div class="opt"><span class="letter">C</span><span class="otxt">Cada factor depende funcionalmente del
+              otro</span></div>
+          <div class="opt"><span class="letter">D</span><span class="otxt">El Formato depende funcionalmente del Aula,
+              pero el Aula no depende funcionalmente del Formato</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 28 / 30 <span class="lvl l2">Media</span></span></div>
+      <p class="qtext">Con esta tabla, ¿qué afirmación es correcta?</p>
+      <div class="qbody stack">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Aula</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Formato del examen</th>
+                <th>Aula 1</th>
+                <th>Aula 2</th>
+                <th>Aula 3</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Papel</th>
+                <td>12</td>
+                <td>0</td>
+                <td>8</td>
+                <td class="tot">20</td>
+              </tr>
+              <tr>
+                <th>Online</th>
+                <td>0</td>
+                <td>9</td>
+                <td>0</td>
+                <td class="tot">9</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">12</td>
+                <td class="tot">9</td>
+                <td class="tot">8</td>
+                <td class="tot">29</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt dim"><span class="letter">A</span><span class="otxt">El Aula depende funcionalmente del
+              Formato, pero el Formato no depende funcionalmente del Aula</span></div>
+          <div class="opt dim"><span class="letter">B</span><span class="otxt">El Formato y el Aula son independientes,
+              porque los totales son distintos</span></div>
+          <div class="opt dim"><span class="letter">C</span><span class="otxt">Cada factor depende funcionalmente del
+              otro</span></div>
+          <div class="opt correct"><span class="letter">D</span><span class="otxt">El Formato depende funcionalmente del
+              Aula, pero el Aula no depende funcionalmente del Formato</span><span class="ok">&#10003;</span></div>
+        </div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> Conocida el Aula, el Formato queda <mark>determinado</mark>
+        (Aula 1 y 3 &rarr; Papel; Aula 2 &rarr; Online). Conocido el Formato Papel, el Aula puede ser la 1 o la 3: no
+        queda determinada. Los factores son claramente dependientes.</div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 29
+          / 30 </span></div>
+      <p class="qtext">Si Sexo y Técnica fueran independientes, ¿cuántos <strong>hombres</strong> esperaríamos con
+        Técnica «Ninguna»? (En la tabla se observan 20.)</p>
+      <div class="qbody ">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Técnica de preparación</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Sexo</th>
+                <th>Repaso activo</th>
+                <th>Relectura</th>
+                <th>Ninguna</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>M</th>
+                <td>40</td>
+                <td>20</td>
+                <td>15</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr>
+                <th>H</th>
+                <td>25</td>
+                <td>30</td>
+                <td>20</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">65</td>
+                <td class="tot">50</td>
+                <td class="tot">35</td>
+                <td class="tot">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt"><span class="letter">A</span><span class="otxt">20</span></div>
+          <div class="opt"><span class="letter">B</span><span class="otxt">25</span></div>
+          <div class="opt"><span class="letter">C</span><span class="otxt">17.5</span></div>
+          <div class="opt"><span class="letter">D</span><span class="otxt">11.7</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 29 / 30 <span class="lvl l2">Media</span></span></div>
+      <p class="qtext">Si Sexo y Técnica fueran independientes, ¿cuántos <strong>hombres</strong> esperaríamos con
+        Técnica «Ninguna»? (En la tabla se observan 20.)</p>
+      <div class="qbody ">
+        <div class="qtable">
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Técnica de preparación</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Sexo</th>
+                <th>Repaso activo</th>
+                <th>Relectura</th>
+                <th>Ninguna</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>M</th>
+                <td>40</td>
+                <td>20</td>
+                <td>15</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr>
+                <th>H</th>
+                <td>25</td>
+                <td>30</td>
+                <td>20</td>
+                <td class="tot">75</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td class="tot">65</td>
+                <td class="tot">50</td>
+                <td class="tot">35</td>
+                <td class="tot">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="opts">
+          <div class="opt dim"><span class="letter">A</span><span class="otxt">20</span></div>
+          <div class="opt dim"><span class="letter">B</span><span class="otxt">25</span></div>
+          <div class="opt correct"><span class="letter">C</span><span class="otxt">17.5</span><span
+              class="ok">&#10003;</span></div>
+          <div class="opt dim"><span class="letter">D</span><span class="otxt">11.7</span></div>
+        </div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> \(E_{ij}=f_{i.}f_{.j}\,n=\frac{75\cdot35}{150}=17.5\). Como
+        \(O\neq E\) (20 frente a 17.5), no hay independencia exacta. El 25 sería repartir el 75 por igual entre las 3
+        técnicas, sin tener en cuenta cuántos las usan.</div>
+    </div>
+
+    <div class="slide quiz">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Pregunta 30
+          / 30 </span></div>
+      <p class="qtext">Tabla X (2×2): \(C=0.40\). Tabla Y (4×5): \(C=0.45\). ¿Qué tabla muestra una relación más intensa
+        entre sus factores?</p>
+      <div class="opts">
+        <div class="opt"><span class="letter">A</span><span class="otxt">La Y, porque tiene mayor coeficiente de
+            contingencia</span></div>
+        <div class="opt"><span class="letter">B</span><span class="otxt">La X:
+            \(C_P=0.40/0.707\approx0.57>C_P(Y)=0.45/0.866\approx0.52\)</span></div>
+        <div class="opt"><span class="letter">C</span><span class="otxt">Las dos por igual, pues ambos coeficientes
+            están entre 0 y 1</span></div>
+        <div class="opt"><span class="letter">D</span><span class="otxt">No se pueden comparar, porque las tablas tienen
+            distinto tamaño</span></div>
+      </div>
+    </div>
+
+    <div class="slide quiz answer">
+      <div class="qhead"><span class="chip t3">Tema 3 · Correlación y contingencia</span><span class="qnum">Respuesta
+          &middot; Pregunta 30 / 30 <span class="lvl l3">Difícil</span></span></div>
+      <p class="qtext">Tabla X (2×2): \(C=0.40\). Tabla Y (4×5): \(C=0.45\). ¿Qué tabla muestra una relación más intensa
+        entre sus factores?</p>
+      <div class="opts">
+        <div class="opt dim"><span class="letter">A</span><span class="otxt">La Y, porque tiene mayor coeficiente de
+            contingencia</span></div>
+        <div class="opt correct"><span class="letter">B</span><span class="otxt">La X:
+            \(C_P=0.40/0.707\approx0.57>C_P(Y)=0.45/0.866\approx0.52\)</span><span class="ok">&#10003;</span></div>
+        <div class="opt dim"><span class="letter">C</span><span class="otxt">Las dos por igual, pues ambos coeficientes
+            están entre 0 y 1</span></div>
+        <div class="opt dim"><span class="letter">D</span><span class="otxt">No se pueden comparar, porque las tablas
+            tienen distinto tamaño</span></div>
+      </div>
+      <div class="explain"><strong>Explicación.</strong> \(C\) tiene cota \(C_{max}=\sqrt{(m-1)/m}\), que depende de
+        \(m=\min(\text{filas},\text{columnas})\): 0.707 para la X y 0.866 para la Y. El <mark>coeficiente de
+          Pawlick</mark> \(C_P=C/C_{max}\) lo normaliza y sí permite comparar tablas de distinto tamaño.</div>
+    </div>
+
+    <!-- <div class="slide">
+      <h1>Hoja de respuestas</h1>
+      <div class="keygrid">
+        <div class="kcell l1"><span>1</span><strong>B</strong></div>
+        <div class="kcell l1"><span>2</span><strong>D</strong></div>
+        <div class="kcell l1"><span>3</span><strong>A</strong></div>
+        <div class="kcell l2"><span>4</span><strong>C</strong></div>
+        <div class="kcell l1"><span>5</span><strong>D</strong></div>
+        <div class="kcell l1"><span>6</span><strong>B</strong></div>
+        <div class="kcell l2"><span>7</span><strong>A</strong></div>
+        <div class="kcell l2"><span>8</span><strong>C</strong></div>
+        <div class="kcell l3"><span>9</span><strong>A</strong></div>
+        <div class="kcell l3"><span>10</span><strong>D</strong></div>
+        <div class="kcell l1"><span>11</span><strong>C</strong></div>
+        <div class="kcell l1"><span>12</span><strong>A</strong></div>
+        <div class="kcell l1"><span>13</span><strong>D</strong></div>
+        <div class="kcell l2"><span>14</span><strong>B</strong></div>
+        <div class="kcell l1"><span>15</span><strong>D</strong></div>
+        <div class="kcell l2"><span>16</span><strong>A</strong></div>
+        <div class="kcell l3"><span>17</span><strong>C</strong></div>
+        <div class="kcell l1"><span>18</span><strong>B</strong></div>
+        <div class="kcell l2"><span>19</span><strong>D</strong></div>
+        <div class="kcell l3"><span>20</span><strong>A</strong></div>
+        <div class="kcell l1"><span>21</span><strong>A</strong></div>
+        <div class="kcell l1"><span>22</span><strong>C</strong></div>
+        <div class="kcell l1"><span>23</span><strong>B</strong></div>
+        <div class="kcell l2"><span>24</span><strong>D</strong></div>
+        <div class="kcell l3"><span>25</span><strong>B</strong></div>
+        <div class="kcell l1"><span>26</span><strong>C</strong></div>
+        <div class="kcell l1"><span>27</span><strong>A</strong></div>
+        <div class="kcell l2"><span>28</span><strong>D</strong></div>
+        <div class="kcell l2"><span>29</span><strong>C</strong></div>
+        <div class="kcell l3"><span>30</span><strong>B</strong></div>
+      </div>
+      <p class="small-note"><span class="lvl l1">Fácil</span> <span class="lvl l2">Media</span> <span
+          class="lvl l3">Difícil</span></p>
+    </div> -->
+
+    <img id="logo" src="LogoUca.png">
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "\\[", right: "\\]", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="estilo.css">
+  <title>Problemas de desarrollo &mdash; Temas 1, 2 y 3</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <style>
+    .lead-note {
+      color: var(--uca-gray);
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    .small-note {
+      font-size: 1.05rem;
+      color: var(--uca-gray);
+      margin-top: .8rem;
+    }
+
+    .fig-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 52vh;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 1rem;
+      margin-top: .6rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #ddd;
+      padding: .25rem .6rem;
+      text-align: center;
+    }
+
+    .data-table thead {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: var(--light-gray);
+    }
+
+    .data-table.compact {
+      font-size: .95rem;
+      margin-top: 0;
+    }
+
+    .data-table td {
+      white-space: nowrap;
+    }
+
+    .data-table.compact td,
+    .data-table.compact th {
+      padding: .12rem .45rem;
+    }
+
+    .data-table tr.ant td {
+      color: var(--uca-gray);
+      font-style: italic;
+    }
+
+    .cont-table {
+      border-collapse: collapse;
+      margin: .4rem auto;
+      font-size: 1rem;
+    }
+
+    .cont-table th,
+    .cont-table td {
+      border: 1px solid #ccc;
+      padding: .3rem .9rem;
+      text-align: center;
+    }
+
+    .cont-table thead tr:first-child th {
+      background: var(--uca-orange);
+      color: white;
+    }
+
+    .cont-table thead tr:nth-child(2) th {
+      background: var(--uca-blue);
+      color: white;
+    }
+
+    .cont-table td.tot,
+    .cont-table .tot-row th,
+    .cont-table .tot-row td {
+      background: var(--light-gray);
+      font-weight: bold;
+    }
+
+    .cont-table td.eq {
+      background: #ffe0b3;
+    }
+
+    .slide h1 {
+      font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+    }
+
+    .slide p,
+    .slide li {
+      font-size: clamp(1.05rem, 1.3vw, 1.4rem);
+    }
+
+    /* ---- Problemas ---- */
+    .prob {
+      padding: 4vh 7vw;
+      justify-content: flex-start;
+    }
+
+    .qhead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2vh;
+    }
+
+    .chip {
+      color: white;
+      font-size: clamp(.85rem, 1.1vw, 1.1rem);
+      padding: .25em .9em;
+      border-radius: 999px;
+      font-weight: bold;
+    }
+
+    .chip.t1 {
+      background: var(--uca-blue);
+    }
+
+    .chip.t2 {
+      background: var(--uca-orange);
+    }
+
+    .chip.t3 {
+      background: var(--uca-gray);
+    }
+
+    .qnum {
+      color: var(--uca-orange);
+      font-family: Georgia, serif;
+      font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+    }
+
+    .qtext {
+      font-weight: bold;
+      color: var(--uca-blue);
+      margin: 0 0 1.2vh 0;
+      font-size: clamp(1.1rem, 1.55vw, 1.6rem);
+      line-height: 1.4;
+    }
+
+    .qbody {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .qbody>.qmain {
+      flex: 1 1 58%;
+      min-width: 0;
+    }
+
+    .qbody>.qside {
+      flex: 1 1 42%;
+      min-width: 0;
+    }
+
+    .qbody.stack {
+      flex-direction: column;
+    }
+
+    .qbody.stack .qtable {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+
+    .qbody.stack .opts {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+
+    .ans {
+      background: var(--light-gray);
+      border-left: 5px solid var(--uca-orange);
+      border-radius: 0 8px 8px 0;
+      padding: .7rem 1.3rem;
+      margin: .6rem 0;
+    }
+
+    .ans p {
+      margin: .35rem 0;
+    }
+
+    .ans .res {
+      color: var(--uca-blue);
+      font-weight: bold;
+    }
+
+    .tag-ans {
+      align-self: flex-start;
+      display: inline-block;
+      background: var(--uca-orange);
+      color: white;
+      font-weight: bold;
+      border-radius: 999px;
+      padding: .1em .8em;
+      font-size: clamp(.8rem, 1vw, 1rem);
+      margin-bottom: .4rem;
+    }
+
+    .facts {
+      margin: .2rem 0;
+    }
+
+    .facts li {
+      margin-bottom: .1rem;
+    }
+
+    .two {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .two>* {
+      flex: 1 1 45%;
+      min-width: 0;
+    }
+
+    .two h3 {
+      margin: .2rem 0;
+      font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+    }
+
+    /* ---- Formato enlistado ---- */
+    .qlist {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .9vh;
+    }
+
+    .qlist>li {
+      font-size: clamp(.95rem, 1.15vw, 1.25rem);
+      line-height: 1.35;
+    }
+
+    .qlist .sec {
+      display: block;
+      color: var(--uca-orange);
+      font-weight: bold;
+      font-family: Georgia, serif;
+      margin-top: .6vh;
+      font-size: clamp(1rem, 1.25vw, 1.35rem);
+    }
+
+    .qlist .lab {
+      display: inline-block;
+      min-width: 2.4em;
+      font-weight: bold;
+      color: var(--uca-blue);
+    }
+
+    .qlist .tt {
+      color: var(--uca-gray);
+      font-size: .85em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      gap: .8rem 1.2rem;
+    }
+
+    .grid .ans {
+      margin: 0;
+    }
+
+    .ans h3 {
+      margin: .1rem 0 .3rem 0;
+      font-size: clamp(1rem, 1.25vw, 1.3rem);
+    }
+
+    .ans p {
+      font-size: clamp(.95rem, 1.15vw, 1.25rem);
+    }
+
+    .lead {
+      font-size: clamp(.95rem, 1.15vw, 1.25rem);
+      margin: 0 0 .8vh 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===================== PORTADA ===================== -->
+  <div class="slide">
+    <h1>Problemas de desarrollo</h1>
+    <h2>Temas 1, 2 y 3 &mdash; Uso del móvil, estrés y sueño en estudiantes de Psicología</h2>
+    <div class="col">
+      <h3>Problema 1: Análisis univariante</h3>
+      <ul>
+        <li>Naturaleza de los datos</li>
+        <li>Dispersión y tipificación</li>
+        <li>Posición: media, mediana y percentiles</li>
+        <li>Recorrido intercuartílico y atípicos</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Problema 2: Análisis bivariante</h3>
+      <ul>
+        <li>Covarianza y diagrama de dispersión</li>
+        <li>Coeficiente de correlación de Pearson</li>
+        <li>Tabla de contingencia y distribuciones condicionadas</li>
+        <li>Independencia e intensidad de la relación</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================== PROBLEMA 1 ===================== -->
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 1 &middot; Análisis univariante</span><span class="chip t2">Temas 1 y
+        2</span></div>
+    <div class="qbody">
+      <div class="qside">
+        <p class="lead">Un grupo de investigación de la Facultad registró, en estudiantes de primer curso, el tiempo
+          medio diario
+          de pantalla del móvil (horas, dato del propio teléfono), la puntuación en la Escala de Estrés Percibido
+          (PSS-10, 0&ndash;40),
+          el sexo y la calidad de sueño autoinformada. Esta es la base de datos tal y como se exportó:</p>
+        <table class="data-table compact">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Sexo</th>
+              <th>Móvil (h)</th>
+              <th>Estrés</th>
+              <th>Sueño</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>E01</td>
+              <td>M</td>
+              <td>4.5</td>
+              <td>24</td>
+              <td>Regular</td>
+            </tr>
+            <tr>
+              <td>E02</td>
+              <td>H</td>
+              <td>2.0</td>
+              <td>17</td>
+              <td>Buena</td>
+            </tr>
+            <tr>
+              <td>E03</td>
+              <td>M</td>
+              <td>6.0</td>
+              <td>26</td>
+              <td>Mala</td>
+            </tr>
+            <tr>
+              <td>E04</td>
+              <td>H</td>
+              <td>3.5</td>
+              <td>12</td>
+              <td>Buena</td>
+            </tr>
+            <tr>
+              <td>E05</td>
+              <td>M</td>
+              <td>9.5</td>
+              <td>28</td>
+              <td>Mala</td>
+            </tr>
+            <tr>
+              <td>E06</td>
+              <td>H</td>
+              <td>5.0</td>
+              <td>16</td>
+              <td>Buena</td>
+            </tr>
+            <tr>
+              <td>E07</td>
+              <td>M</td>
+              <td>3.0</td>
+              <td>21</td>
+              <td>Regular</td>
+            </tr>
+            <tr>
+              <td>E08</td>
+              <td>M</td>
+              <td>7.5</td>
+              <td>23</td>
+              <td>Regular</td>
+            </tr>
+            <tr>
+              <td>E09</td>
+              <td>H</td>
+              <td>3.5</td>
+              <td>19</td>
+              <td>Buena</td>
+            </tr>
+            <tr>
+              <td>E10</td>
+              <td>M</td>
+              <td>5.5</td>
+              <td>14</td>
+              <td>Buena</td>
+            </tr>
+            <tr>
+              <td>E07-ant</td>
+              <td>M</td>
+              <td>16.0</td>
+              <td>20</td>
+              <td>Regular</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="qmain">
+        <ol class="qlist">
+          <li><span class="lab">0.</span> ¿De qué naturaleza es cada columna? ¿Hay alguna que no sea objeto de análisis?
+            <span class="tt">(T1)</span></li>
+          <li><span class="sec">1. Dispersión</span></li>
+          <li><span class="lab">1a.</span> Un alumno afirma: <em>«Las puntuaciones de estrés se apartan más de su
+              promedio que las horas de móvil,
+              así que el estrés es la característica más dispersa del grupo»</em>. ¿Estás de acuerdo? Justifícalo
+            numéricamente.</li>
+          <li><span class="lab">1b.</span> E05 usa el móvil 9.5 h/día y tiene 28 puntos de estrés. Dice: <em>«Lo mío es
+              el móvil, no el estrés»</em>.
+            Respecto a su grupo, ¿en cuál de las dos características destaca más?</li>
+          <li><span class="sec">2. Posición</span></li>
+          <li><span class="lab">2a.</span> Compara media y mediana en cada variable. ¿En cuál están cercanas y en cuál
+            no? ¿Qué nos dice esto?</li>
+          <li><span class="lab">2b.</span> ¿Cuántas horas al día usa, como mínimo, el 15&nbsp;% de estudiantes que más
+            usa el móvil?</li>
+          <li><span class="sec">3. Dispersión y atípicos (uso del móvil)</span></li>
+          <li><span class="lab">3a.</span> Obtén el rango y el recorrido, y el rango y el recorrido intercuartílicos.
+            ¿Qué medida describe mejor
+            cuánto varían las horas de uso? ¿Por qué?</li>
+          <li><span class="lab">3b.</span> ¿Hay datos atípicos? En caso afirmativo, ¿qué harías con ellos? Observa con
+            atención la base de datos.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 1 &middot; Respuestas (1/2)</span><span class="chip t2">Temas 1 y
+        2</span></div>
+    <div class="grid">
+      <div class="ans">
+        <h3>0.</h3>
+        <p>ID: etiqueta (no se analiza) &middot; Sexo: factor no ordenado &middot; Uso del móvil: variable continua
+          &middot;
+          Estrés: variable discreta &middot; Calidad de sueño: factor ordenado</p>
+      </div>
+      <div class="ans">
+        <h3>1a.</h3>
+        <p>\(\bar x = 6.00\) h, \(S_X = 3.76\) h, \(CV_X = 0.63\) &nbsp;|&nbsp; \(\bar y = 20.00\), \(S_Y = 4.79\),
+          \(CV_Y = 0.24\)</p>
+        <p><span class="res">No</span>: \(CV_X &gt; CV_Y\), el más disperso es el <mark>uso del móvil</mark>.</p>
+      </div>
+      <div class="ans">
+        <h3>1b.</h3>
+        <p>\(z_X = 0.93\), \(\;z_Y = 1.67\) &rarr; destaca más en <mark>estrés</mark>.</p>
+      </div>
+      <div class="ans">
+        <h3>2a.</h3>
+        <p>Móvil: \(\bar x = 6.00 &gt; Me = 5.00\) &rarr; cola a la derecha.</p>
+        <p>Estrés: \(\bar y = Me = 20.00\) &rarr; distribución equilibrada.</p>
+      </div>
+      <div class="ans">
+        <h3>2b.</h3>
+        <p>\(P_{85} = \) <span class="res">8.5 h/día</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 1 &middot; Respuestas (2/2)</span><span class="chip t2">Tema 2</span>
+    </div>
+    <div class="grid">
+      <div class="ans">
+        <h3>3a.</h3>
+        <p>\(Ra = [2.0,\ 16.0]\), \(\;Re = 14.0\) h</p>
+        <p>\(Q_1 = 3.50\), \(Q_3 = 6.75\) &rarr; \([3.50,\ 6.75]\), \(\;RI = 3.25\) h</p>
+        <p>Mejor el <mark>recorrido intercuartílico</mark>: \(Re\) está inflado por un valor extremo.</p>
+      </div>
+      <div class="ans">
+        <h3>3b.</h3>
+        <p>Límites \([-1.375,\ 11.625]\) &rarr; <span class="res">atípico: 16.0 h (E07-ant)</span></p>
+        <p>Medición antigua de E07 &rarr; <mark>se omite</mark>. Sin ella: \(\bar x = 5.00\) h, \(Me = 4.75\) h.</p>
+      </div>
+    </div>
+    <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" class="fig-svg" font-family="Arial, sans-serif">
+      <line x1="40.0" y1="165" x2="40.0" y2="171" stroke="#222" />
+      <text x="40.0" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">0</text>
+      <line x1="104.44444444444444" y1="165" x2="104.44444444444444" y2="171" stroke="#222" />
+      <text x="104.44444444444444" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">2</text>
+      <line x1="168.88888888888889" y1="165" x2="168.88888888888889" y2="171" stroke="#222" />
+      <text x="168.88888888888889" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">4</text>
+      <line x1="233.33333333333334" y1="165" x2="233.33333333333334" y2="171" stroke="#222" />
+      <text x="233.33333333333334" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">6</text>
+      <line x1="297.77777777777777" y1="165" x2="297.77777777777777" y2="171" stroke="#222" />
+      <text x="297.77777777777777" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">8</text>
+      <line x1="362.22222222222223" y1="165" x2="362.22222222222223" y2="171" stroke="#222" />
+      <text x="362.22222222222223" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">10</text>
+      <line x1="426.6666666666667" y1="165" x2="426.6666666666667" y2="171" stroke="#222" />
+      <text x="426.6666666666667" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">12</text>
+      <line x1="491.1111111111111" y1="165" x2="491.1111111111111" y2="171" stroke="#222" />
+      <text x="491.1111111111111" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">14</text>
+      <line x1="555.5555555555555" y1="165" x2="555.5555555555555" y2="171" stroke="#222" />
+      <text x="555.5555555555555" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">16</text>
+      <line x1="620.0" y1="165" x2="620.0" y2="171" stroke="#222" />
+      <text x="620.0" y="189" font-size="14" text-anchor="middle" fill="#6B6E6D">18</text>
+      <line x1="40" y1="165" x2="620" y2="165" stroke="#222" stroke-width="1.5" />
+      <text x="330.0" y="212" font-size="14" text-anchor="middle">Uso del móvil (h/día), n = 11</text>
+      <line x1="414.5833333333333" y1="40" x2="414.5833333333333" y2="155" stroke="#c0392b" stroke-dasharray="5 4" />
+      <text x="414.5833333333333" y="32" font-size="13" text-anchor="middle" fill="#c0392b">LS = 11.625</text>
+      <line x1="104.44444444444444" y1="95" x2="152.77777777777777" y2="95" stroke="#005877" stroke-width="2" />
+      <line x1="257.5" y1="95" x2="346.1111111111111" y2="95" stroke="#005877" stroke-width="2" />
+      <line x1="104.44444444444444" y1="81" x2="104.44444444444444" y2="109" stroke="#005877" stroke-width="2" />
+      <line x1="346.1111111111111" y1="81" x2="346.1111111111111" y2="109" stroke="#005877" stroke-width="2" />
+      <rect x="152.77777777777777" y="67" width="104.72222222222223" height="56" fill="#005877" fill-opacity="0.15"
+        stroke="#005877" stroke-width="2" />
+      <line x1="201.11111111111111" y1="67" x2="201.11111111111111" y2="123" stroke="#E87B00" stroke-width="3" />
+      <circle cx="555.5555555555555" cy="95" r="7" fill="none" stroke="#c0392b" stroke-width="2.5" />
+      <text x="555.5555555555555" y="79" font-size="13" text-anchor="middle" fill="#c0392b">16 (E07-ant)</text>
+      <text x="104.44444444444444" y="75" font-size="13" text-anchor="middle" fill="#222">2</text>
+      <text x="152.77777777777777" y="61" font-size="13" text-anchor="middle" fill="#222">Q₁=3.5</text>
+      <text x="201.11111111111111" y="142" font-size="13" text-anchor="middle" fill="#222">Me=5</text>
+      <text x="257.5" y="61" font-size="13" text-anchor="middle" fill="#222">Q₃=6.75</text>
+      <text x="346.1111111111111" y="75" font-size="13" text-anchor="middle" fill="#222">9.5</text>
+    </svg>
+  </div>
+
+  <!-- ===================== PROBLEMA 2 · PARTE A ===================== -->
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 2 &middot; Parte A: correlación</span><span class="chip t3">Tema
+        3</span></div>
+    <div class="qbody">
+      <div class="qside">
+        <p class="lead">Continuamos con el estudio del Problema 1. Una vez depurada la base de datos, trabajamos con los
+          <strong>10 registros válidos</strong>:
+        </p>
+        <table class="data-table compact">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Uso móvil X (h/día)</th>
+              <th>Estrés Y (PSS-10)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>E01</td>
+              <td>4.5</td>
+              <td>24</td>
+            </tr>
+            <tr>
+              <td>E02</td>
+              <td>2.0</td>
+              <td>17</td>
+            </tr>
+            <tr>
+              <td>E03</td>
+              <td>6.0</td>
+              <td>26</td>
+            </tr>
+            <tr>
+              <td>E04</td>
+              <td>3.5</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td>E05</td>
+              <td>9.5</td>
+              <td>28</td>
+            </tr>
+            <tr>
+              <td>E06</td>
+              <td>5.0</td>
+              <td>16</td>
+            </tr>
+            <tr>
+              <td>E07</td>
+              <td>3.0</td>
+              <td>21</td>
+            </tr>
+            <tr>
+              <td>E08</td>
+              <td>7.5</td>
+              <td>23</td>
+            </tr>
+            <tr>
+              <td>E09</td>
+              <td>3.5</td>
+              <td>19</td>
+            </tr>
+            <tr>
+              <td>E10</td>
+              <td>5.5</td>
+              <td>14</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="qmain">
+        <ol class="qlist">
+          <li><span class="lab">A1.</span> Calcula la covarianza entre el uso del móvil y el estrés. ¿Qué indica su
+            signo?</li>
+          <li><span class="lab">A2.</span> Representa el diagrama de dispersión (eje X de 0 a 10 h; eje Y de 10 a 30
+            puntos) y divídelo en los
+            cuadrantes que permiten interpretar el signo de la covarianza. Junto con A1, ¿qué tipo de relación sugiere
+            la nube de puntos?</li>
+          <li><span class="lab">A3.</span> ¿Cómo de intensa es la relación lineal entre ambas variables? Calcula e
+            interpreta el coeficiente de
+            correlación de Pearson.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 2 &middot; Parte A &middot; Respuestas</span><span
+        class="chip t3">Tema 3</span></div>
+    <div class="qbody">
+      <div class="qmain"><svg viewBox="0 0 640 390" xmlns="http://www.w3.org/2000/svg" class="fig-svg"
+          font-family="Arial, sans-serif">
+          <rect x="340.0" y="30" width="270.0" height="155.0" fill="#E87B00" opacity="0.08" />
+          <rect x="70" y="185.0" width="270.0" height="155.0" fill="#E87B00" opacity="0.08" />
+          <line x1="70.0" y1="30" x2="70.0" y2="340" stroke="#e3e6e8" />
+          <text x="70.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">0</text>
+          <line x1="124.0" y1="30" x2="124.0" y2="340" stroke="#e3e6e8" />
+          <text x="124.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">1</text>
+          <line x1="178.0" y1="30" x2="178.0" y2="340" stroke="#e3e6e8" />
+          <text x="178.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">2</text>
+          <line x1="232.0" y1="30" x2="232.0" y2="340" stroke="#e3e6e8" />
+          <text x="232.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">3</text>
+          <line x1="286.0" y1="30" x2="286.0" y2="340" stroke="#e3e6e8" />
+          <text x="286.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">4</text>
+          <line x1="340.0" y1="30" x2="340.0" y2="340" stroke="#e3e6e8" />
+          <text x="340.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">5</text>
+          <line x1="394.0" y1="30" x2="394.0" y2="340" stroke="#e3e6e8" />
+          <text x="394.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">6</text>
+          <line x1="448.0" y1="30" x2="448.0" y2="340" stroke="#e3e6e8" />
+          <text x="448.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">7</text>
+          <line x1="502.0" y1="30" x2="502.0" y2="340" stroke="#e3e6e8" />
+          <text x="502.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">8</text>
+          <line x1="556.0" y1="30" x2="556.0" y2="340" stroke="#e3e6e8" />
+          <text x="556.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">9</text>
+          <line x1="610.0" y1="30" x2="610.0" y2="340" stroke="#e3e6e8" />
+          <text x="610.0" y="360" font-size="14" text-anchor="middle" fill="#6B6E6D">10</text>
+          <line x1="70" y1="340.0" x2="610" y2="340.0" stroke="#e3e6e8" />
+          <text x="60" y="345.0" font-size="14" text-anchor="end" fill="#6B6E6D">10</text>
+          <line x1="70" y1="262.5" x2="610" y2="262.5" stroke="#e3e6e8" />
+          <text x="60" y="267.5" font-size="14" text-anchor="end" fill="#6B6E6D">15</text>
+          <line x1="70" y1="185.0" x2="610" y2="185.0" stroke="#e3e6e8" />
+          <text x="60" y="190.0" font-size="14" text-anchor="end" fill="#6B6E6D">20</text>
+          <line x1="70" y1="107.5" x2="610" y2="107.5" stroke="#e3e6e8" />
+          <text x="60" y="112.5" font-size="14" text-anchor="end" fill="#6B6E6D">25</text>
+          <line x1="70" y1="30.0" x2="610" y2="30.0" stroke="#e3e6e8" />
+          <text x="60" y="35.0" font-size="14" text-anchor="end" fill="#6B6E6D">30</text>
+          <line x1="70" y1="340" x2="610" y2="340" stroke="#222" stroke-width="1.5" />
+          <line x1="70" y1="30" x2="70" y2="340" stroke="#222" stroke-width="1.5" />
+          <line x1="340.0" y1="30" x2="340.0" y2="340" stroke="#005877" stroke-dasharray="6 4" stroke-width="1.5" />
+          <line x1="70" y1="185.0" x2="610" y2="185.0" stroke="#005877" stroke-dasharray="6 4" stroke-width="1.5" />
+          <text x="502.0" y="99.75" font-size="30" font-weight="bold" text-anchor="middle" fill="#E87B00"
+            opacity="0.55">+</text>
+          <text x="178.0" y="270.25" font-size="30" font-weight="bold" text-anchor="middle" fill="#E87B00"
+            opacity="0.55">+</text>
+          <text x="178.0" y="99.75" font-size="30" font-weight="bold" text-anchor="middle" fill="#6B6E6D"
+            opacity="0.55">−</text>
+          <text x="502.0" y="270.25" font-size="30" font-weight="bold" text-anchor="middle" fill="#6B6E6D"
+            opacity="0.55">−</text>
+          <circle cx="313.0" cy="123.0" r="7" fill="#005877" />
+          <text x="322.0" y="114.0" font-size="12" fill="#6B6E6D">E01</text>
+          <circle cx="178.0" cy="231.5" r="7" fill="#005877" />
+          <text x="187.0" y="222.5" font-size="12" fill="#6B6E6D">E02</text>
+          <circle cx="394.0" cy="92.0" r="7" fill="#005877" />
+          <text x="403.0" y="83.0" font-size="12" fill="#6B6E6D">E03</text>
+          <circle cx="259.0" cy="309.0" r="7" fill="#005877" />
+          <text x="268.0" y="300.0" font-size="12" fill="#6B6E6D">E04</text>
+          <circle cx="583.0" cy="61.0" r="7" fill="#005877" />
+          <text x="592.0" y="52.0" font-size="12" fill="#6B6E6D">E05</text>
+          <circle cx="340.0" cy="247.0" r="7" fill="#005877" />
+          <text x="349.0" y="238.0" font-size="12" fill="#6B6E6D">E06</text>
+          <circle cx="232.0" cy="169.5" r="7" fill="#005877" />
+          <text x="241.0" y="160.5" font-size="12" fill="#6B6E6D">E07</text>
+          <circle cx="475.0" cy="138.5" r="7" fill="#005877" />
+          <text x="484.0" y="129.5" font-size="12" fill="#6B6E6D">E08</text>
+          <circle cx="259.0" cy="200.5" r="7" fill="#005877" />
+          <text x="268.0" y="191.5" font-size="12" fill="#6B6E6D">E09</text>
+          <circle cx="367.0" cy="278.0" r="7" fill="#005877" />
+          <text x="376.0" y="269.0" font-size="12" fill="#6B6E6D">E10</text>
+          <rect x="331.0" y="176.0" width="18" height="18" fill="#E87B00" transform="rotate(45 340.0 185.0)" />
+          <text x="354.0" y="209.0" font-size="15" font-weight="bold" fill="#E87B00">(x̄, ȳ) = (5, 20)</text>
+          <text x="340.0" y="384" font-size="15" text-anchor="middle" fill="#222">Uso del móvil (h/día)</text>
+          <text x="18" y="185.0" font-size="15" text-anchor="middle" fill="#222" transform="rotate(-90 18 185.0)">Estrés
+            (PSS-10)</text>
+        </svg></div>
+      <div class="qside">
+        <div class="ans">
+          <h3>A1.</h3>
+          <p>\(S_{XY} = \) <span class="res">6.50 h&middot;puntos</span> \(&gt; 0\) &rarr; tendencia
+            <mark>directa</mark>.</p>
+        </div>
+        <div class="ans">
+          <h3>A2.</h3>
+          <p>\((\bar x,\bar y) = (5,\ 20)\)</p>
+          <p>Cuadrantes «+»: 6 &middot; «&minus;»: 3 &middot; sobre el eje: 1</p>
+          <p>Relación lineal directa, no exacta.</p>
+        </div>
+        <div class="ans">
+          <h3>A3.</h3>
+          <p>\(S_X = 2.13\), \(S_Y = 5.02\) &rarr; \(r = \) <span class="res">0.61</span></p>
+          <p>Correlación <mark>directa y moderada</mark>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PROBLEMA 2 · PARTE B ===================== -->
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 2 &middot; Parte B: contingencia</span><span class="chip t3">Temas 1
+        y 3</span></div>
+    <div class="qbody">
+      <div class="qside">
+        <p class="lead">Se encuestó a los <strong>300 estudiantes</strong> de primer curso. Las horas de móvil se
+          recodificaron en el factor
+          <strong>Uso del móvil</strong>: <em>Bajo</em> (&lt; 3 h/día), <em>Moderado</em> (3&ndash;6 h/día),
+          <em>Alto</em> (&gt; 6 h/día).
+          También se recogió la <strong>Calidad de sueño</strong> (<em>Buena, Regular, Mala</em>). Se sabe que:
+        </p>
+        <ul class="facts">
+          <li>80 estudiantes hacen un uso bajo del móvil y 90, un uso alto.</li>
+          <li>120 estudiantes declaran dormir bien y 70, dormir mal.</li>
+          <li>De los de uso bajo, 48 duermen bien y solo 8 duermen mal.</li>
+          <li>50 estudiantes combinan uso moderado y sueño regular.</li>
+          <li>Entre quienes duermen mal, 34 hacen un uso alto.</li>
+          <li>Únicamente 20 estudiantes con uso alto duermen bien.</li>
+        </ul>
+      </div>
+      <div class="qmain">
+        <ol class="qlist">
+          <li><span class="lab">B1.</span> Construye la tabla de contingencia con las frecuencias absolutas.</li>
+          <li><span class="lab">B2.</span> a) ¿Qué proporción de estudiantes con uso alto duerme mal? ¿Y entre los de
+            uso bajo? ¿Qué sugiere la comparación?<br>
+            b) De quienes duermen bien, ¿qué proporción no hace un uso alto del móvil?</li>
+          <li><span class="lab">B3.</span> Construye las tablas de frecuencias relativas observadas \((O_{ij})\) y
+            esperadas \((E_{ij})\) y compáralas.
+            ¿Son independientes el uso del móvil y la calidad de sueño? En caso negativo, ¿cómo de fuerte es la
+            relación?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 2 &middot; Parte B &middot; Respuestas (1/2)</span><span
+        class="chip t3">Tema 3</span></div>
+    <div class="qbody stack">
+      <div class="qside">
+        <div class="ans">
+          <h3>B1.</h3>
+          <table class="cont-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3">Calidad de sueño</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Uso móvil</th>
+                <th>Buena</th>
+                <th>Regular</th>
+                <th>Mala</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Bajo</th>
+                <td>48</td>
+                <td>24</td>
+                <td>8</td>
+                <td class="tot">80</td>
+              </tr>
+              <tr>
+                <th>Moderado</th>
+                <td>52</td>
+                <td>50</td>
+                <td>28</td>
+                <td class="tot">130</td>
+              </tr>
+              <tr>
+                <th>Alto</th>
+                <td>20</td>
+                <td>36</td>
+                <td>34</td>
+                <td class="tot">90</td>
+              </tr>
+              <tr class="tot-row">
+                <th>Total</th>
+                <td>120</td>
+                <td>110</td>
+                <td>70</td>
+                <td>300</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="qmain">
+        <div class="ans">
+          <h3>B2.</h3>
+          <p>a) \(f(\text{Mala}/\text{Alto}) = 34/90 = 0.378\) &nbsp; vs. &nbsp; \(f(\text{Mala}/\text{Bajo}) = 8/80 =
+            0.100\)</p>
+          <p>El uso del móvil <mark>parece aportar información</mark> sobre la calidad de sueño.</p>
+          <p>b) \(f(\overline{\text{Alto}}/\text{Buena}) = 100/120 = \) <span class="res">0.833</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide prob">
+    <div class="qhead"><span class="qnum">Problema 2 &middot; Parte B &middot; Respuestas (2/2)</span><span
+        class="chip t3">Tema 3</span></div>
+    <div class="two">
+      <div>
+        <h3 style="text-align:center">B3. \(O_{ij}\)</h3>
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th colspan="3">Calidad de sueño</th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>Uso móvil</th>
+              <th>Buena</th>
+              <th>Regular</th>
+              <th>Mala</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Bajo</th>
+              <td>0.1600</td>
+              <td>0.0800</td>
+              <td>0.0267</td>
+              <td class="tot">0.2667</td>
+            </tr>
+            <tr>
+              <th>Moderado</th>
+              <td class="eq">0.1733</td>
+              <td>0.1667</td>
+              <td>0.0933</td>
+              <td class="tot">0.4333</td>
+            </tr>
+            <tr>
+              <th>Alto</th>
+              <td>0.0667</td>
+              <td>0.1200</td>
+              <td>0.1133</td>
+              <td class="tot">0.3000</td>
+            </tr>
+            <tr class="tot-row">
+              <th>Total</th>
+              <td>0.4000</td>
+              <td>0.3667</td>
+              <td>0.2333</td>
+              <td>1.0000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 style="text-align:center">\(E_{ij} = f_{i.}\cdot f_{.j}\)</h3>
+        <table class="cont-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th colspan="3">Calidad de sueño</th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>Uso móvil</th>
+              <th>Buena</th>
+              <th>Regular</th>
+              <th>Mala</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Bajo</th>
+              <td>0.1067</td>
+              <td>0.0978</td>
+              <td>0.0622</td>
+              <td class="tot">0.2667</td>
+            </tr>
+            <tr>
+              <th>Moderado</th>
+              <td class="eq">0.1733</td>
+              <td>0.1589</td>
+              <td>0.1011</td>
+              <td class="tot">0.4333</td>
+            </tr>
+            <tr>
+              <th>Alto</th>
+              <td>0.1200</td>
+              <td>0.1100</td>
+              <td>0.0700</td>
+              <td class="tot">0.3000</td>
+            </tr>
+            <tr class="tot-row">
+              <th>Total</th>
+              <td>0.4000</td>
+              <td>0.3667</td>
+              <td>0.2333</td>
+              <td>1.0000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ans">
+      <p>\(O_{ij} \neq E_{ij}\) (solo coinciden en Moderado&ndash;Buena) &rarr; <mark>no hay independencia</mark>.</p>
+      <p>\(\chi^2 = 30.79\) &nbsp;&middot;&nbsp; \(C = 0.305\) &nbsp;&middot;&nbsp; \(C_{max} = \sqrt{2/3} = 0.816\)
+        &nbsp;&middot;&nbsp;
+        \(C_P = \) <span class="res">0.374</span> &rarr; <mark>37.4&nbsp;% de relación</mark>: moderada.</p>
+    </div>
+  </div>
+
+  <img id="logo" src="LogoUca.png">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+
+</html>
