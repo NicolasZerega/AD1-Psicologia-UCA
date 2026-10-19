@@ -766,6 +766,42 @@
       margin: 0;
     }
 
+    /* Rectas de ajuste que se abren/cierran según r */
+    .rr-fig {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .rr-fig .fig-center {
+      flex: 1 1 auto;
+    }
+
+    .rr-ctrl {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.3rem;
+      font-size: clamp(0.9rem, 1.05vw, 1.2rem);
+      color: var(--uca-gray);
+    }
+
+    .rr-ctrl input[type=range] {
+      width: 45%;
+      accent-color: var(--uca-blue);
+    }
+
+    .rr-ctrl button {
+      font: inherit;
+      color: var(--uca-blue);
+      background: var(--light-gray);
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0.1rem 0.6rem;
+      cursor: pointer;
+    }
+
     .data-table {
       border-collapse: collapse;
       width: 100%;
@@ -1982,14 +2018,48 @@
   <!-- ===================== PROPIEDADES ===================== -->
   <div class="slide">
     <h1>Propiedades de las rectas de ajuste</h1>
-    <ul>
-      <li>Las dos rectas se cortan en el centro de gravedad \((\bar{x},\bar{y})\).</li>
-      <li>\(b\) y \(b'\) tienen siempre el <strong>mismo signo</strong>, el de \(S_{XY}\) (aquí ambos negativos).</li>
-      <li>Solo coinciden si el ajuste es perfecto (\(r=\pm1\)); entonces \(b'=1/b\) y \(a'=-a/b\).</li>
-    </ul>
-    <div class="formula-box large">\[ r = \pm\sqrt{b\,b'} \]</div>
-    <div class="formula-box small">\[ r = -\sqrt{(-0.173)(-3.75)} = -\sqrt{0.650} = -0.806 \]</div>
-    <p class="small-note">El signo de la raíz es el de \(S_{XY}\). Recuperamos el \(r=-0.81\) del Tema 3.</p>
+    <div class="fig-split">
+      <div class="split-text">
+        <ul>
+          <li>Las dos rectas se cortan en el centro de gravedad \((\bar{x},\bar{y})\).</li>
+          <li>\(b\) y \(b'\) tienen siempre el <strong>mismo signo</strong>, el de \(S_{XY}\) (aquí ambos negativos).</li>
+          <li>Solo coinciden si el ajuste es perfecto (\(r=\pm1\)); entonces \(b'=1/b\) y \(a'=-a/b\).</li>
+          <li>Cuanto más se acerca \(r\) a 0, más se <strong>abren</strong>; con \(r=0\) son perpendiculares.</li>
+        </ul>
+        <div class="formula-box large">\[ r = \pm\sqrt{b\,b'} \]</div>
+        <div class="formula-box small">\[ r = -\sqrt{(-0.173)(-3.75)} = -\sqrt{0.650} = -0.806 \]</div>
+        <p class="small-note">El signo de la raíz es el de \(S_{XY}\). Recuperamos el \(r=-0.81\) del Tema 3.</p>
+      </div>
+      <div class="rr-fig">
+        <div class="fig-center"><svg viewBox="0 0 420 395" xmlns="http://www.w3.org/2000/svg" class="fig-svg rr-svg">
+            <defs>
+              <clipPath id="rr-clip">
+                <rect x="50" y="15" width="340" height="340" />
+              </clipPath>
+            </defs>
+            <rect x="50" y="15" width="340" height="340" fill="none" stroke="#ddd" />
+            <line x1="220" y1="15" x2="220" y2="355" stroke="#ccc" stroke-dasharray="3 3" />
+            <line x1="50" y1="185" x2="390" y2="185" stroke="#ccc" stroke-dasharray="3 3" />
+            <text x="220" y="372" font-size="12" text-anchor="middle" fill="#333">X (tipificada)</text>
+            <text x="38" y="185" font-size="12" text-anchor="middle" fill="#333"
+              transform="rotate(-90 38 185)">Y (tipificada)</text>
+            <g class="rr-pts" clip-path="url(#rr-clip)"></g>
+            <g clip-path="url(#rr-clip)">
+              <line class="rr-lx" stroke="#005877" stroke-width="3" />
+              <line class="rr-ly" stroke="#E87B00" stroke-width="3" />
+            </g>
+            <circle cx="220" cy="185" r="5" fill="#333" stroke="white" stroke-width="1.5" />
+            <text x="60" y="36" font-size="13" fill="#E87B00" font-weight="bold"><tspan font-style="italic">y = f(x)</tspan></text>
+            <text x="60" y="54" font-size="13" fill="#005877" font-weight="bold"><tspan font-style="italic">x = g(y)</tspan></text>
+            <text class="rr-val" x="380" y="40" font-size="22" text-anchor="end" fill="#333" font-weight="bold">r = 0.00</text>
+          </svg></div>
+        <div class="rr-ctrl">
+          <button type="button" class="rr-play" title="Reproducir / pausar">❚❚</button>
+          <span>−1</span><input type="range" class="rr-range" min="-1" max="1" step="0.01" value="-1"><span>1</span>
+          <button type="button" class="rr-ours">Nuestros datos</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ===================== y* y e ===================== -->
@@ -2907,10 +2977,6 @@
       </ul>
     </div>
     <p class="lead-note"><strong>Ojo:</strong> antes de ajustar, <strong>dibuja la nube</strong>.</p>
-    <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1rem">
-      <img src="qr_code.png" alt="Código QR del repositorio de presentaciones" style="width:140px;height:140px">
-      <p style="margin:0"><strong>Acceso al repositorio de presentaciones</strong></p>
-    </div>
   </div>
 
   <img id="logo" src="LogoUca.png">
@@ -3003,6 +3069,69 @@
         }
         new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) run(); else stop(); }); }, { threshold: 0.6 }).observe(svg);
         svg.style.cursor = "pointer"; svg.addEventListener("click", run);
+      });
+    })();
+  </script>
+  <script>
+    /* Rectas y = f(x) y x = g(y) en variables tipificadas: pendientes r y 1/r */
+    (function () {
+      document.querySelectorAll(".rr-fig").forEach(function (fig) {
+        var svg = fig.querySelector(".rr-svg"), range = fig.querySelector(".rr-range"),
+          btn = fig.querySelector(".rr-play"), ours = fig.querySelector(".rr-ours"),
+          ly = svg.querySelector(".rr-ly"), lx = svg.querySelector(".rr-lx"), val = svg.querySelector(".rr-val"),
+          gp = svg.querySelector(".rr-pts"), NS = "http://www.w3.org/2000/svg";
+        var CX = 220, CY = 185, S = 340 / 6, N = 30;
+        /* Nube fija: u, v normales, tipificadas y ortogonales -> y = r u + sqrt(1-r^2) v tiene correlación exacta r */
+        var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+        function gauss() { return Math.sqrt(-2 * Math.log(rnd())) * Math.cos(2 * Math.PI * rnd()); }
+        function std(a) {
+          var m = a.reduce(function (s, x) { return s + x; }, 0) / a.length;
+          var sd = Math.sqrt(a.reduce(function (s, x) { return s + (x - m) * (x - m); }, 0) / a.length);
+          return a.map(function (x) { return (x - m) / sd; });
+        }
+        var u = [], v = [], i;
+        for (i = 0; i < N; i++) { u.push(gauss()); v.push(gauss()); }
+        u = std(u); v = std(v);
+        var c = u.reduce(function (s, x, k) { return s + x * v[k]; }, 0) / N;
+        v = std(v.map(function (x, k) { return x - c * u[k]; }));
+        var pts = u.map(function () {
+          var p = document.createElementNS(NS, "circle");
+          p.setAttribute("r", 4); p.setAttribute("fill", "#6B6E6D"); p.setAttribute("opacity", 0.5);
+          gp.appendChild(p); return p;
+        });
+        function X(z) { return CX + z * S; } function Y(z) { return CY - z * S; }
+        function setLine(l, x1, y1, x2, y2) {
+          l.setAttribute("x1", X(x1)); l.setAttribute("y1", Y(y1)); l.setAttribute("x2", X(x2)); l.setAttribute("y2", Y(y2));
+        }
+        function draw(r) {
+          var s = Math.sqrt(Math.max(0, 1 - r * r));
+          pts.forEach(function (p, k) {
+            p.setAttribute("cx", X(u[k])); p.setAttribute("cy", Y(r * u[k] + s * v[k]));
+          });
+          setLine(ly, -4, -4 * r, 4, 4 * r);   /* z_y = r z_x */
+          setLine(lx, -4 * r, -4, 4 * r, 4);   /* z_x = r z_y */
+          val.textContent = "r = " + (r < -0.004 ? "−" : "") + Math.abs(r).toFixed(2);
+          range.value = r;
+        }
+        /* Barrido automático -1 -> 1 -> -1 con pausa en los extremos */
+        var raf = null, t0 = null, T = 5000, H = 700;
+        function frame(ts) {
+          if (t0 === null) t0 = ts;
+          var t = (ts - t0) % (2 * (T + H)), p;
+          if (t < H) p = 0; else if (t < H + T) p = (t - H) / T;
+          else if (t < 2 * H + T) p = 1; else p = 1 - (t - 2 * H - T) / T;
+          p = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+          draw(-1 + 2 * p); raf = requestAnimationFrame(frame);
+        }
+        function play() { stop(); t0 = null; raf = requestAnimationFrame(frame); btn.textContent = "❚❚"; }
+        function stop() { if (raf) cancelAnimationFrame(raf); raf = null; btn.textContent = "▶"; }
+        btn.addEventListener("click", function () { if (raf) stop(); else play(); });
+        range.addEventListener("input", function () { stop(); draw(+range.value); });
+        ours.addEventListener("click", function () { stop(); draw(-0.806); });
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting) play(); else stop(); });
+        }, { threshold: 0.6 }).observe(svg);
+        draw(-1);
       });
     })();
   </script>
