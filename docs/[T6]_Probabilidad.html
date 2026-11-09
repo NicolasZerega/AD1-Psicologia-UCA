@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="estilo.css">
+<title>Tema 6: Nociones de probabilidad</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  .slide{ height: 100vh; padding: 7vh 9vw 12vh; display: flex; flex-direction: column; box-sizing: border-box; position: relative; overflow: hidden; }
+  .slide h1{ font-size: clamp(2.2rem, 3.2vw, 3.4rem); }
+  .slide p, .slide li{ font-size: clamp(1.0rem, 1.25vw, 1.35rem); }
+  .lead-note{ color: var(--uca-gray); font-style: italic; margin-top: 1rem; }
+  .small-note{ font-size: 1.05rem; color: var(--uca-gray); margin-top: 1rem; }
+  .formula-box{ background: var(--light-gray); border-left: 4px solid var(--uca-blue);
+    padding: 0.5rem 1.4rem; margin: 0.6rem 0; font-size: clamp(1.15rem, 1.75vw, 2.4rem); overflow-x: auto; }
+  .formula-box.small{ font-size: clamp(1rem, 1.4vw, 1.9rem); }
+  .formula-box.large{ font-size: clamp(1.4rem, 2.1vw, 2.8rem); }
+  .two-col{ display:flex; gap: 2rem; width:100%; flex-wrap: wrap; align-items:center; }
+  .two-col > *{ flex: 1 1 40%; }
+  .three-col{ display:flex; gap: 1.2rem; width:100%; }
+  .three-col > *{ flex: 1 1 0; }
+  .four-col{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; width: 100%; }
+  .mini-card{ background: var(--light-gray); border-radius: 8px; padding: 0.7rem 1.1rem; }
+  .mini-card.center{ text-align:center; }
+  .mini-card h3{ margin: 0 0 .35rem 0; }
+  .mini-card p{ margin: .3rem 0; }
+  .mini-card.reveal{ border-left: 5px solid #ddd; }
+  .mini-card.ok.on{ border-left-color: #2E9E5B; }
+  .mini-card.ko.on{ border-left-color: var(--uca-orange); }
+  .fig-svg{ width:100%; height:auto; display:block; margin: 0.4rem 0; }
+  .anim-svg, .step-svg{ cursor: pointer; }
+  .fig-center{ flex: 1 1 auto; min-height: 20vh; position: relative; margin-top: .4rem; }
+  .fig-center > svg, .fig-center .view > svg{ position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important;
+                     max-width: none !important; max-height: none !important; margin: 0 !important; }
+  .view{ display:none; position:absolute; inset:0; } .view.on{ display:block; }
+  .slide.cover{ flex-direction: column; flex-wrap: nowrap; }
+  .cover-top{ display: flex; flex-wrap: nowrap; gap: 5%; width: 100%; }
+  .cover-top .col{ flex: 1 1 0; min-width: 0; width: auto; margin-left: 0 !important; }
+  .slide:first-child .col h3{ margin: 0.3rem 0 0.6rem; }
+  .slide:first-child .col ul{ margin: 0; }
+  .qtag{ color: var(--uca-gray); font-size: 0.95rem; margin-top: 0.3rem; }
+  .cont-table{ border-collapse: collapse; margin: 0.5rem auto; font-size: clamp(.9rem,1.2vw,1.35rem); }
+  .cont-table th, .cont-table td{ border: 1px solid #ccc; padding: 0.3rem 0.9rem; text-align:center; transition: background .3s, opacity .3s; }
+  .cont-table thead th{ background: var(--uca-blue); color:white; }
+  .cont-table td.tot, .cont-table th.tot{ font-weight: bold; background: #eef2f4; }
+  .cont-table td.l{ text-align:left; }
+  .cont-table.ptab td.dim, .cont-table.ptab th.dim{ opacity: .25; }
+  .cont-table.ptab td.uni{ background: #e3eef3; }
+  .cont-table.ptab td.hit{ background: #ffe0b3; font-weight: bold; }
+  ul.ticks{ list-style: none; padding-left: 0; }
+  ul.ticks li{ position: relative; padding-left: 1.9em; margin: .5em 0; }
+  ul.ticks li::before{ content: "✔"; position: absolute; left: 0; color: #2E9E5B; font-weight: bold; }
+  .reveal{ cursor: pointer; }
+  .reveal .ans{ visibility: hidden; }
+  .reveal.on .ans{ visibility: visible; }
+  .reveal .hint{ font-size: .85rem; color: #aaa; }
+  .reveal.on .hint{ display:none; }
+  .btnrow{ display:flex; gap:.5rem; justify-content:center; flex-wrap: wrap; margin-top:.4rem; }
+  .btnrow button{ font-size: clamp(.85rem,1.05vw,1.15rem); padding:.3rem .9rem; border:2px solid var(--uca-blue); background:white; color: var(--uca-blue); border-radius:6px; cursor:pointer; }
+  .btnrow button.on{ background: var(--uca-blue); color: white; }
+  .btnrow button.act{ border-color: var(--uca-orange); color: var(--uca-orange); }
+  .btnrow .lbl{ align-self: center; color: var(--uca-gray); font-size: clamp(.85rem,1.05vw,1.15rem); }
+  .outline{ text-align:center; font-size: clamp(1.05rem,1.4vw,1.6rem); min-height: 2.2em; margin-top: .3rem; }
+  .dtab{ border-collapse: collapse; font-size: clamp(.9rem,1.2vw,1.35rem); margin: .3rem auto; }
+  .dtab th, .dtab td{ border: 1px solid #ccc; padding: .25rem .8rem; text-align: center; }
+  .dtab th{ background: var(--uca-blue); color: white; }
+  .dtab td.h{ background: #eef2f4; font-weight: bold; }
+  /* animaciones */
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+  @keyframes fadein{ to{ opacity: 1; } }
+  .cov-svg .cp{ stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .cov-svg .ct, .cov-svg .cl{ opacity: 0; }
+  .cov-svg.play .ct{ animation: fadein .4s ease .2s forwards; }
+  .cov-svg.play .cp{ animation: draw 3.5s ease-in-out .4s forwards; }
+  .cov-svg.play .cl{ animation: fadein .5s ease 3.6s forwards; }
+  .gen-svg .g1, .gen-svg .g2, .gen-svg .g3{ opacity: 0; }
+  .gen-svg.play .g1{ animation: fadein .6s ease .3s forwards; }
+  .gen-svg.play .g2{ animation: fadein .6s ease 1.3s forwards; }
+  .gen-svg.play .g3{ animation: fadein .6s ease 2.3s forwards; }
+  .step-svg .st1, .step-svg .st2, .step-svg .st3{ opacity: 0; transition: opacity .5s; }
+  .step-svg.k1 .st1, .step-svg.k2 .st2, .step-svg.k3 .st3{ opacity: 1; }
+  .step-svg.tpt.k3 .prod:not(.pc){ opacity: .35; }
+  .step-svg.bay.k1 .prod:not(.pc){ opacity: .35; }
+  .step-svg.bay.k1 .pL .ed{ stroke: #E87B00; stroke-width: 4; }
+  .step-svg.bay.k1 .prod.pL{ font-weight: bold; }
+  .step-svg.bay.k1 .prod.pC2{ opacity: .55; }
+  .step-svg.tpt.k3 .pL .ed, .step-svg.tpt.k3 .pC2 .ed{ stroke: #E87B00; stroke-width: 4; }
+  .ops-svg .face rect{ transition: fill .3s, stroke .3s; }
+  .ops-svg .face.hl rect{ fill: #ffe0b3; stroke: #E87B00; stroke-width: 3.5; }
+  .ops-svg .face.hl2 rect{ stroke: #005877; stroke-width: 3.5; stroke-dasharray: 6,4; }
+  .sim-out{ font-size: clamp(.95rem,1.15vw,1.25rem); color: var(--uca-gray); text-align: center; }
+  /* cribado */
+  .calc{ display:flex; gap: 1.6rem; align-items: stretch; width: 100%; flex: 1 1 auto; min-height: 0; }
+  .calc .ctrls{ flex: 0 0 34%; display:flex; flex-direction: column; gap: .5rem; justify-content: center; }
+  .calc label{ display:flex; justify-content: space-between; font-size: clamp(.95rem,1.2vw,1.3rem); }
+  .calc label b{ color: var(--uca-blue); }
+  .calc input[type=range]{ width: 100%; accent-color: var(--uca-orange); }
+  .calc .grid{ flex: 1 1 auto; position: relative; min-height: 0; }
+  .calc .grid svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .calc .res{ background: var(--light-gray); border-radius: 10px; padding: .6rem; text-align: center; }
+  .calc .big{ font-size: clamp(2.4rem, 4.5vw, 5rem); font-weight: bold; color: var(--uca-orange); line-height: 1; font-family: Georgia, serif; }
+  .calc .sub{ font-size: clamp(.85rem,1.05vw,1.15rem); color: var(--uca-gray); }
+  .btn-reset{ align-self:flex-start; font-size: .95rem; padding:.3rem .8rem; border:1px solid #bbb; background:white; border-radius:6px; cursor:pointer; }
+  .legend{ display:flex; gap: 1rem; flex-wrap: wrap; font-size: clamp(.8rem,1vw,1.05rem); color:#333; }
+  .legend span{ display:inline-flex; align-items:center; gap:.35rem; }
+  .legend i{ display:inline-block; width:.9em; height:.9em; border-radius:50%; }
+
+  .step-svg .o1, .step-svg .o2, .step-svg .o3{ opacity: 0; transition: opacity .4s; }
+  .step-svg[data-k="1"] .o1, .step-svg[data-k="2"] .o2, .step-svg[data-k="3"] .o3{ opacity: 1; }
+  .reg-svg .rg{ opacity: 0; transition: opacity .35s; }
+  .reg-svg .rg.on{ opacity: 1; }
+  .reg-svg .cC{ opacity: 0; transition: opacity .35s; }
+  .reg-svg.showC .cC{ opacity: 1; }
+  .reg-svg .face rect{ transition: fill .3s, stroke .3s; }
+  .reg-svg .face.hl rect{ stroke: #E87B00; stroke-width: 3.5; }
+  .urn-svg .us, .urn-svg .ut{ opacity: 0; }
+  .urn-svg .ua{ stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .urn-svg.play .ua{ animation: draw .8s ease .4s forwards; }
+  .urn-svg.play .ut{ animation: fadein .4s ease .6s forwards; }
+  .urn-svg.play .us{ animation: fadein .6s ease 1.3s forwards; }
+  table.d2{ border-collapse: collapse; margin: 0 auto; font-size: clamp(1rem,1.45vw,1.6rem); }
+  table.d2 th, table.d2 td{ width: 2.6em; height: 1.9em; text-align: center; border: 1px solid #ccc; transition: background .25s; }
+  table.d2 th{ background: var(--uca-blue); color: white; }
+  table.d2 td.hit{ background: #ffe0b3; font-weight: bold; color: #E87B00; }
+  .alg{ display:grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin-top:.4rem; }
+  .acard{ position:relative; background: var(--light-gray); border: 3px solid transparent; border-radius: 10px; padding: .4rem .6rem .2rem; cursor:pointer; text-align:center; transition: border-color .25s, background .25s; }
+  .acard svg{ width: 100%; height: auto; max-height: 13vh; display:block; margin: 0 auto; }
+  .acard .aname{ font-size: clamp(1rem,1.3vw,1.5rem); font-weight: bold; color: var(--uca-blue); min-height: 1.4em; font-family: Georgia, serif; }
+  .acard.sa{ border-color: #E87B00; } .acard.sb{ border-color: #005877; }
+  .acard.res{ border-color: #2E9E5B; background: #e3f3ea; }
+  .acard .tag2{ position:absolute; top:.25rem; left:.5rem; font-weight:bold; font-style: italic; font-family: Georgia, serif; font-size: clamp(1rem,1.3vw,1.5rem); }
+  .acard.sa .tag2{ color:#E87B00; } .acard.sb .tag2{ color:#005877; }
+  .bd{ display:inline-block; width:.8em; height:.8em; border-radius:50%; margin: 0 .12em; vertical-align: -.05em; }
+  .bd.b0{ background:#005877; } .bd.b1{ background:#E87B00; } .bd.b2{ background:#6B6E6D; }
+  #prop svg text, #venn svg text, .reg-svg text{ paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+  .step-svg.cri.k3 .prod:not(.pc){ opacity: .35; }
+  .step-svg.cri.k3 .pL .ed{ stroke: #E87B00; stroke-width: 4; }
+  .step-svg.cri.k3 .pC2 .ed{ stroke: #005877; stroke-width: 3; }
+  .step-svg.cri.k3 .prod.pL{ font-weight: bold; }
+  .divider{ justify-content: center; }
+  .divider h1{ font-size: clamp(2.6rem, 4vw, 4.2rem); }
+  .cap{ text-align:center; font-size: clamp(1rem,1.3vw,1.45rem); margin-top:.2rem; min-height: 1.6em; }
+  .tbl2{ border-collapse: collapse; margin: .4rem auto; font-size: clamp(1rem,1.45vw,1.6rem); }
+  .tbl2 th, .tbl2 td{ border: 1px solid #ccc; padding: .3rem 1rem; text-align: center; transition: background .3s, opacity .3s; }
+  .tbl2 thead th{ background: var(--uca-blue); color: white; }
+  .tbl2 .tot{ font-weight: bold; background: #eef2f4; }
+  .tbl2 .dim{ opacity: .25; } .tbl2 td.uni{ background: #e3eef3; } .tbl2 td.hit{ background: #ffe0b3; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="slide cover">
+  <h1>Tema 6: Nociones de probabilidad</h1>
+  <div class="cover-top">
+  <div class="col">
+    <h2>Parte 1 · Inferencia y sucesos</h2>
+    <h3><ul>
+      <li>De la frecuencia relativa a la probabilidad</li>
+      <li>Definición frecuentista</li>
+      <li>Los sucesos y sus operaciones</li>
+    </ul></h3>
+    <h2>Parte 2 · Medir la probabilidad</h2>
+    <h3><ul>
+      <li>Laplace y Kolmogorov</li>
+      <li>Propiedades de la probabilidad</li>
+      <li>Condicionada, independencia, Probabilidad Total y Bayes</li>
+    </ul></h3>
+  </div>
+  <div class="col">
+    <p class="lead-note" style="margin-top:2.2rem">Para generalizar de una muestra a una población, los datos deben salir de un <strong>sorteo</strong>.</p>
+    <p class="lead-note">La probabilidad es el lenguaje para <strong>medir las posibilidades</strong> de ese sorteo, y de cualquier situación de incertidumbre.</p>
+  </div>
+  </div>
+  <div class="fig-center"><svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" class="fig-svg anim-svg cov-svg"><line x1="60" y1="220.0" x2="620" y2="220.0" stroke="#eee"/><text x="54" y="224.0" font-size="11" text-anchor="end" fill="#777">0</text><line x1="60" y1="165.7" x2="620" y2="165.7" stroke="#eee"/><text x="54" y="169.7" font-size="11" text-anchor="end" fill="#777">0.2</text><line x1="60" y1="111.4" x2="620" y2="111.4" stroke="#eee"/><text x="54" y="115.4" font-size="11" text-anchor="end" fill="#777">0.4</text><line x1="60" y1="57.1" x2="620" y2="57.1" stroke="#eee"/><text x="54" y="61.1" font-size="11" text-anchor="end" fill="#777">0.6</text><text x="60.0" y="236" font-size="11" text-anchor="middle" fill="#777">1</text><text x="246.7" y="236" font-size="11" text-anchor="middle" fill="#777">10</text><text x="433.3" y="236" font-size="11" text-anchor="middle" fill="#777">100</text><text x="620.0" y="236" font-size="11" text-anchor="middle" fill="#777">1000</text><line x1="60" y1="220" x2="620" y2="220" stroke="#999"/><text x="340" y="254" font-size="12" text-anchor="middle" fill="#333">número de lanzamientos (escala logarítmica)</text><line x1="60" y1="174.8" x2="620" y2="174.8" stroke="#005877" stroke-width="2" stroke-dasharray="7,4"/><text class="cl" x="620" y="166.8" font-size="13" text-anchor="end" fill="#005877" font-weight="bold">probabilidad = 1/6</text><path class="cp" pathLength="1" d="M60.0,220.0 L116.2,84.3 L149.1,129.5 L172.4,152.1 L190.5,111.4 L205.3,129.5 L217.8,142.4 L228.6,152.1 L238.1,129.5 L246.7,138.6 L254.4,146.0 L261.4,152.1 L267.9,157.4 L273.9,161.8 L279.5,165.7 L284.8,169.1 L289.7,172.1 L294.3,174.8 L298.7,177.1 L302.9,165.7 L306.8,168.3 L310.6,170.6 L314.2,161.0 L317.6,152.1 L320.9,154.9 L324.1,157.4 L327.2,159.7 L330.1,161.8 L333.0,163.8 L335.7,165.7 L338.4,167.5 L341.0,169.1 L343.5,170.6 L345.9,164.1 L348.2,165.7 L350.5,167.2 L352.7,168.6 L354.9,170.0 L357.0,171.3 L359.1,172.5 L361.1,173.7 L363.0,174.8 L364.9,169.5 L366.8,170.6 L368.6,171.7 L370.4,172.8 L372.1,173.8 L373.8,174.8 L375.5,175.7 L377.1,171.1 L378.7,172.1 L380.3,173.0 L381.9,173.9 L383.4,174.8 L384.9,175.6 L386.3,171.5 L387.8,172.4 L389.2,173.2 L390.6,174.0 L391.9,170.2 L393.3,171.1 L394.6,171.8 L395.9,172.6 L397.2,173.3 L398.4,174.1 L399.6,174.8 L400.9,175.4 L402.1,176.1 L403.3,176.7 L404.4,173.5 L405.6,174.1 L406.7,174.8 L407.8,175.4 L408.9,176.0 L410.0,176.6 L411.1,177.1 L412.1,177.7 L413.2,178.2 L414.2,178.8 L415.2,175.9 L416.3,176.4 L417.2,177.0 L418.2,177.5 L419.2,174.8 L420.2,175.3 L421.1,172.7 L422.0,173.2 L423.0,173.7 L423.9,174.3 L424.8,174.8 L425.7,175.3 L426.6,175.7 L427.5,176.2 L428.3,176.7 L429.2,177.1 L430.0,177.6 L430.9,178.0 L431.7,178.5 L432.5,178.9 L433.3,176.6 L434.1,177.0 L434.9,177.4 L435.7,177.8 L436.5,178.2 L437.3,176.1 L438.1,173.9 L438.8,174.3 L439.6,172.2 L440.3,172.7 L441.1,170.6 L441.8,171.1 L442.5,171.5 L443.2,172.0 L444.0,172.4 L444.7,172.8 L445.4,173.2 L446.1,173.6 L446.8,174.0 L447.4,174.4 L448.1,172.5 L448.8,170.6 L449.5,168.8 L450.1,169.2 L450.8,169.7 L451.4,170.1 L452.1,170.5 L452.7,170.8 L453.3,171.2 L454.0,169.5 L454.6,167.8 L455.2,168.2 L455.8,168.6 L456.5,169.0 L457.1,169.4 L457.7,167.7 L458.3,168.1 L458.9,168.5 L459.4,168.9 L460.0,167.3 L460.6,167.7 L461.2,168.0 L461.8,168.4 L462.3,168.8 L462.9,169.1 L463.5,169.5 L464.0,169.8 L464.6,170.1 L465.1,170.5 L465.7,170.8 L466.2,171.1 L466.7,171.5 L467.3,170.0 L467.8,170.3 L468.3,170.6 L468.9,171.0 L469.4,171.3 L469.9,171.6 L470.4,171.9 L470.9,172.2 L471.4,172.5 L471.9,171.1 L472.4,169.7 L472.9,170.0 L473.4,170.3 L473.9,170.6 L474.4,170.9 L474.9,171.2 L475.4,171.5 L475.9,171.8 L476.4,172.1 L476.8,172.4 L477.3,172.7 L477.8,172.9 L478.2,173.2 L478.7,173.5 L479.2,173.7 L479.6,174.0 L480.1,172.7 L480.5,171.5 L481.0,171.7 L481.4,172.0 L481.9,172.3 L482.3,172.5 L482.8,172.8 L483.2,173.1 L483.6,171.8 L484.1,172.1 L484.5,172.4 L484.9,172.6 L485.4,172.9 L485.8,173.1 L486.2,173.3 L486.6,173.6 L487.1,172.4 L487.5,172.7 L487.9,172.9 L488.3,171.8 L488.7,172.0 L489.1,172.3 L489.5,172.5 L489.9,172.7 L490.3,173.0 L490.7,173.2 L491.1,172.1 L491.5,172.3 L491.9,172.6 L492.3,172.8 L492.7,173.0 L493.1,171.9 L493.5,172.2 L493.9,172.4 L494.2,171.3 L494.6,171.6 L495.0,171.8 L495.4,172.0 L495.8,172.2 L496.1,172.5 L496.5,172.7 L496.9,172.9 L497.3,173.1 L497.6,172.1 L498.0,172.3 L498.4,172.5 L498.7,171.5 L499.1,171.7 L499.4,172.0 L499.8,172.2 L500.1,172.4 L500.5,172.6 L500.9,172.8 L501.2,173.0 L501.6,173.2 L501.9,173.4 L502.3,173.6 L502.6,173.8 L502.9,174.0 L503.3,174.2 L503.6,174.4 L504.0,174.6 L504.3,174.8 L504.6,174.9 L505.0,175.1 L505.3,175.3 L505.6,175.5 L506.0,175.7 L506.3,175.9 L506.6,174.9 L507.0,175.1 L507.3,175.3 L507.6,175.5 L507.9,175.7 L508.3,175.8 L508.6,176.0 L508.9,176.2 L509.2,176.4 L509.5,176.5 L509.9,176.7 L510.2,176.9 L510.5,177.0 L510.8,177.2 L511.1,177.4 L511.4,177.5 L511.7,177.7 L512.0,177.8 L512.3,178.0 L512.6,177.1 L512.9,176.3 L513.3,176.4 L513.6,176.6 L513.9,176.8 L514.2,176.9 L514.5,177.1 L514.8,177.2 L515.0,177.4 L515.3,177.6 L515.6,177.7 L515.9,177.9 L516.2,178.0 L516.5,178.2 L516.8,178.3 L517.1,177.5 L517.4,177.6 L517.7,177.8 L518.0,177.9 L518.2,178.1 L518.5,178.2 L518.8,177.4 L519.1,177.6 L519.4,176.8 L519.6,176.9 L519.9,176.2 L520.2,176.3 L520.5,176.5 L520.8,175.7 L521.0,175.8 L521.3,176.0 L521.6,176.1 L521.9,176.3 L522.1,176.4 L522.4,176.6 L522.7,176.7 L522.9,176.9 L523.2,176.1 L523.5,176.2 L523.7,176.4 L524.0,175.6 L524.3,175.8 L524.5,175.9 L524.8,176.1 L525.1,175.3 L525.3,175.5 L525.6,174.8 L525.8,174.9 L526.1,175.1 L526.4,175.2 L526.6,175.3 L526.9,175.5 L527.1,175.6 L527.4,175.8 L527.6,175.9 L527.9,176.0 L528.1,176.2 L528.4,175.5 L528.6,175.6 L528.9,175.7 L529.1,175.9 L529.4,176.0 L529.6,176.1 L529.9,176.3 L530.1,176.4 L530.4,176.5 L530.6,176.7 L530.9,176.8 L531.1,176.9 L531.3,177.1 L531.6,177.2 L531.8,177.3 L532.1,177.4 L532.3,176.8 L532.5,176.9 L532.8,176.2 L533.0,175.6 L533.3,174.9 L533.5,175.0 L533.7,175.2 L534.0,175.3 L534.2,175.4 L534.4,175.5 L534.7,175.7 L534.9,175.8 L535.1,175.9 L535.4,176.0 L535.6,176.2 L535.8,176.3 L536.0,176.4 L536.3,176.5 L536.5,175.9 L536.7,176.0 L537.0,176.1 L537.2,176.3 L537.4,176.4 L537.6,176.5 L537.8,176.6 L538.1,176.0 L538.3,176.1 L538.5,176.2 L538.7,176.4 L539.0,175.7 L539.2,175.1 L539.4,175.3 L539.6,175.4 L539.8,175.5 L540.1,175.6 L540.3,175.7 L540.5,175.8 L540.7,175.2 L540.9,175.4 L541.1,175.5 L541.3,175.6 L541.6,175.7 L541.8,175.8 L542.0,175.9 L542.2,176.1 L542.4,176.2 L542.6,176.3 L542.8,176.4 L543.0,176.5 L543.2,176.6 L543.5,176.7 L543.7,176.2 L543.9,176.3 L544.1,176.4 L544.3,175.8 L544.5,175.9 L544.7,176.0 L544.9,176.1 L545.1,175.6 L545.3,175.7 L545.5,175.8 L545.7,175.9 L545.9,176.0 L546.1,176.1 L546.3,176.2 L546.5,176.3 L546.7,176.4 L546.9,176.5 L547.1,176.7 L547.3,176.8 L547.5,176.2 L547.7,176.3 L547.9,175.8 L548.1,175.9 L548.3,176.0 L548.5,176.1 L548.7,176.2 L548.9,176.3 L549.1,176.4 L549.3,176.5 L549.5,176.6 L549.7,176.7 L549.9,176.8 L550.1,176.9 L550.3,177.0 L550.4,177.1 L550.6,177.2 L550.8,176.7 L551.0,176.8 L551.2,176.9 L551.4,177.0 L551.6,177.1 L551.8,176.5 L552.0,176.6 L552.1,176.7 L552.3,176.2 L552.5,176.3 L552.7,176.4 L552.9,176.5 L553.1,176.0 L553.3,175.5 L553.4,175.6 L553.6,175.7 L553.8,175.8 L554.0,175.9 L554.2,176.0 L554.4,176.1 L554.5,176.2 L554.7,176.3 L554.9,175.8 L555.1,175.3 L555.3,175.4 L555.4,175.5 L555.6,175.6 L555.8,175.7 L556.0,175.8 L556.2,175.9 L556.3,175.4 L556.5,175.5 L556.7,175.6 L556.9,175.6 L557.0,175.7 L557.2,175.8 L557.4,175.9 L557.6,176.0 L557.8,176.1 L557.9,176.2 L558.1,176.3 L558.3,176.4 L558.4,175.9 L558.6,176.0 L558.8,175.5 L559.0,175.6 L559.1,175.7 L559.3,175.2 L559.5,174.8 L559.6,174.9 L559.8,175.0 L560.0,175.0 L560.2,175.1 L560.3,175.2 L560.5,175.3 L560.7,175.4 L560.8,175.5 L561.0,175.6 L561.2,175.7 L561.3,175.8 L561.5,175.3 L561.7,175.4 L561.8,174.9 L562.0,174.5 L562.2,174.6 L562.3,174.7 L562.5,174.2 L562.7,174.3 L562.8,174.4 L563.0,174.5 L563.2,174.6 L563.3,174.7 L563.5,174.8 L563.6,174.9 L563.8,174.4 L564.0,174.5 L564.1,174.0 L564.3,174.1 L564.5,174.2 L564.6,174.3 L564.8,174.4 L564.9,174.5 L565.1,174.6 L565.3,174.7 L565.4,174.8 L565.6,174.3 L565.7,174.4 L565.9,174.5 L566.0,174.6 L566.2,174.1 L566.4,174.2 L566.5,174.3 L566.7,174.4 L566.8,174.5 L567.0,174.1 L567.1,173.6 L567.3,173.2 L567.5,173.3 L567.6,173.4 L567.8,173.5 L567.9,173.6 L568.1,173.6 L568.2,173.7 L568.4,173.8 L568.5,173.4 L568.7,173.0 L568.8,173.1 L569.0,173.1 L569.1,173.2 L569.3,173.3 L569.4,173.4 L569.6,173.0 L569.7,173.1 L569.9,173.2 L570.0,173.3 L570.2,173.3 L570.3,173.4 L570.5,173.5 L570.6,173.6 L570.8,173.7 L570.9,173.8 L571.1,173.9 L571.2,173.9 L571.4,174.0 L571.5,174.1 L571.7,173.7 L571.8,173.8 L572.0,173.4 L572.1,173.5 L572.3,173.5 L572.4,173.1 L572.6,173.2 L572.7,173.3 L572.9,173.4 L573.0,173.0 L573.1,173.1 L573.3,172.7 L573.4,172.8 L573.6,172.8 L573.7,172.9 L573.9,173.0 L574.0,172.6 L574.1,172.7 L574.3,172.3 L574.4,172.4 L574.6,172.5 L574.7,172.1 L574.9,172.2 L575.0,172.2 L575.1,171.9 L575.3,171.5 L575.4,171.5 L575.6,171.6 L575.7,171.7 L575.8,171.8 L576.0,171.9 L576.1,172.0 L576.3,172.0 L576.4,172.1 L576.5,172.2 L576.7,172.3 L576.8,172.4 L577.0,172.5 L577.1,172.5 L577.2,172.6 L577.4,172.7 L577.5,172.8 L577.6,172.9 L577.8,172.9 L577.9,173.0 L578.0,173.1 L578.2,173.2 L578.3,173.2 L578.5,173.3 L578.6,173.4 L578.7,173.5 L578.9,173.6 L579.0,173.2 L579.1,173.3 L579.3,173.3 L579.4,173.4 L579.5,173.5 L579.7,173.6 L579.8,173.6 L579.9,173.7 L580.1,173.8 L580.2,173.9 L580.3,174.0 L580.5,174.0 L580.6,174.1 L580.7,173.7 L580.9,173.8 L581.0,173.9 L581.1,173.5 L581.2,173.6 L581.4,173.7 L581.5,173.3 L581.6,173.4 L581.8,173.5 L581.9,173.5 L582.0,173.6 L582.2,173.7 L582.3,173.8 L582.4,173.8 L582.5,173.9 L582.7,174.0 L582.8,174.0 L582.9,174.1 L583.1,174.2 L583.2,174.3 L583.3,174.3 L583.4,174.4 L583.6,174.5 L583.7,174.5 L583.8,174.6 L583.9,174.7 L584.1,174.8 L584.2,174.8 L584.3,174.9 L584.5,175.0 L584.6,175.0 L584.7,175.1 L584.8,175.2 L585.0,175.2 L585.1,175.3 L585.2,175.0 L585.3,175.0 L585.5,175.1 L585.6,175.2 L585.7,175.2 L585.8,175.3 L585.9,175.4 L586.1,175.4 L586.2,175.5 L586.3,175.6 L586.4,175.7 L586.6,175.7 L586.7,175.8 L586.8,175.9 L586.9,175.9 L587.0,176.0 L587.2,176.1 L587.3,176.1 L587.4,176.2 L587.5,176.2 L587.7,176.3 L587.8,176.4 L587.9,176.4 L588.0,176.1 L588.1,176.2 L588.3,176.2 L588.4,176.3 L588.5,176.4 L588.6,176.4 L588.7,176.5 L588.9,176.6 L589.0,176.2 L589.1,176.3 L589.2,176.3 L589.3,176.0 L589.4,176.1 L589.6,176.1 L589.7,176.2 L589.8,176.3 L589.9,175.9 L590.0,176.0 L590.2,176.1 L590.3,176.1 L590.4,176.2 L590.5,176.3 L590.6,176.3 L590.7,176.4 L590.9,176.1 L591.0,175.7 L591.1,175.8 L591.2,175.5 L591.3,175.5 L591.4,175.6 L591.5,175.7 L591.7,175.7 L591.8,175.8 L591.9,175.8 L592.0,175.9 L592.1,175.6 L592.2,175.7 L592.3,175.7 L592.5,175.8 L592.6,175.8 L592.7,175.9 L592.8,176.0 L592.9,176.0 L593.0,176.1 L593.1,176.1 L593.3,176.2 L593.4,176.3 L593.5,176.3 L593.6,176.4 L593.7,176.5 L593.8,176.5 L593.9,176.6 L594.0,176.6 L594.2,176.7 L594.3,176.8 L594.4,176.8 L594.5,176.9 L594.6,176.6 L594.7,176.6 L594.8,176.3 L594.9,176.0 L595.0,176.1 L595.2,176.1 L595.3,176.2 L595.4,175.9 L595.5,175.9 L595.6,175.6 L595.7,175.7 L595.8,175.7 L595.9,175.4 L596.0,175.1 L596.1,175.2 L596.2,175.2 L596.4,175.3 L596.5,175.4 L596.6,175.4 L596.7,175.1 L596.8,174.8 L596.9,174.9 L597.0,174.6 L597.1,174.6 L597.2,174.7 L597.3,174.8 L597.4,174.8 L597.5,174.5 L597.6,174.6 L597.8,174.6 L597.9,174.7 L598.0,174.8 L598.1,174.8 L598.2,174.5 L598.3,174.6 L598.4,174.6 L598.5,174.7 L598.6,174.8 L598.7,174.8 L598.8,174.9 L598.9,174.9 L599.0,175.0 L599.1,175.1 L599.2,175.1 L599.3,175.2 L599.4,174.9 L599.5,174.9 L599.6,175.0 L599.8,174.7 L599.9,174.8 L600.0,174.8 L600.1,174.9 L600.2,174.9 L600.3,175.0 L600.4,175.1 L600.5,174.8 L600.6,174.8 L600.7,174.9 L600.8,174.9 L600.9,175.0 L601.0,175.0 L601.1,175.1 L601.2,175.2 L601.3,175.2 L601.4,175.3 L601.5,175.3 L601.6,175.4 L601.7,175.4 L601.8,175.5 L601.9,175.2 L602.0,174.9 L602.1,175.0 L602.2,175.0 L602.3,175.1 L602.4,175.2 L602.5,175.2 L602.6,175.3 L602.7,175.3 L602.8,175.4 L602.9,175.4 L603.0,175.5 L603.1,175.5 L603.2,175.6 L603.3,175.7 L603.4,175.7 L603.5,175.8 L603.6,175.8 L603.7,175.9 L603.8,175.9 L603.9,176.0 L604.0,176.0 L604.1,176.1 L604.2,176.1 L604.3,175.9 L604.4,175.9 L604.5,176.0 L604.6,176.0 L604.7,176.1 L604.8,176.1 L604.9,176.2 L605.0,176.2 L605.1,176.3 L605.2,176.3 L605.3,176.4 L605.4,176.4 L605.5,176.5 L605.6,176.5 L605.7,176.6 L605.8,176.6 L605.9,176.7 L606.0,176.8 L606.1,176.5 L606.2,176.5 L606.3,176.6 L606.3,176.6 L606.4,176.7 L606.5,176.7 L606.6,176.5 L606.7,176.5 L606.8,176.6 L606.9,176.6 L607.0,176.7 L607.1,176.7 L607.2,176.8 L607.3,176.5 L607.4,176.6 L607.5,176.6 L607.6,176.7 L607.7,176.7 L607.8,176.8 L607.9,176.5 L608.0,176.5 L608.1,176.6 L608.1,176.6 L608.2,176.4 L608.3,176.4 L608.4,176.2 L608.5,176.2 L608.6,176.3 L608.7,176.3 L608.8,176.1 L608.9,176.1 L609.0,176.2 L609.1,176.2 L609.2,176.3 L609.3,176.3 L609.4,176.4 L609.5,176.4 L609.5,176.5 L609.6,176.5 L609.7,176.6 L609.8,176.6 L609.9,176.7 L610.0,176.7 L610.1,176.8 L610.2,176.8 L610.3,176.9 L610.4,176.6 L610.5,176.6 L610.6,176.7 L610.6,176.4 L610.7,176.2 L610.8,176.2 L610.9,176.0 L611.0,176.0 L611.1,176.1 L611.2,176.1 L611.3,175.9 L611.4,175.9 L611.5,176.0 L611.5,176.0 L611.6,176.1 L611.7,176.1 L611.8,176.2 L611.9,176.2 L612.0,176.0 L612.1,176.0 L612.2,175.8 L612.3,175.8 L612.4,175.9 L612.4,175.6 L612.5,175.7 L612.6,175.4 L612.7,175.5 L612.8,175.5 L612.9,175.3 L613.0,175.3 L613.1,175.1 L613.2,175.1 L613.2,175.2 L613.3,175.2 L613.4,175.3 L613.5,175.3 L613.6,175.3 L613.7,175.4 L613.8,175.4 L613.9,175.5 L613.9,175.5 L614.0,175.6 L614.1,175.6 L614.2,175.7 L614.3,175.7 L614.4,175.8 L614.5,175.5 L614.6,175.6 L614.6,175.6 L614.7,175.7 L614.8,175.4 L614.9,175.5 L615.0,175.5 L615.1,175.3 L615.2,175.1 L615.2,175.1 L615.3,175.1 L615.4,175.2 L615.5,175.2 L615.6,175.0 L615.7,175.0 L615.8,175.1 L615.8,175.1 L615.9,175.2 L616.0,175.2 L616.1,175.3 L616.2,175.3 L616.3,175.4 L616.4,175.4 L616.4,175.2 L616.5,175.2 L616.6,175.3 L616.7,175.3 L616.8,175.1 L616.9,175.1 L616.9,175.2 L617.0,175.2 L617.1,175.3 L617.2,175.3 L617.3,175.1 L617.4,175.1 L617.4,175.2 L617.5,175.2 L617.6,175.3 L617.7,175.3 L617.8,175.1 L617.9,175.1 L617.9,174.9 L618.0,174.9 L618.1,174.7 L618.2,174.5 L618.3,174.5 L618.4,174.6 L618.4,174.6 L618.5,174.7 L618.6,174.7 L618.7,174.8 L618.8,174.8 L618.9,174.9 L618.9,174.9 L619.0,174.7 L619.1,174.7 L619.2,174.8 L619.3,174.5 L619.3,174.6 L619.4,174.6 L619.5,174.7 L619.6,174.7 L619.7,174.8 L619.8,174.8 L619.8,174.9 L619.9,174.6 L620.0,174.7" fill="none" stroke="#E87B00" stroke-width="2.2"/><text class="ct" x="210" y="36" font-size="13" fill="#E87B00" font-weight="bold">frecuencia relativa de «sacar un 6»</text></svg></div>
+</div>
+
+<div class="slide">
+  <h1>¿Por qué probabilidad?</h1>
+
+  <p>La Psicología trabaja casi siempre con <strong>incertidumbre</strong>:</p>
+  <div class="three-col" style="align-items:stretch; margin-top:.4rem">
+    <div class="mini-card"><h3>Muestras</h3><p>¿Cuánto se parecerá lo que vemos en 200 personas a lo que pasa en la población?</p></div>
+    <div class="mini-card"><h3>Diagnóstico</h3><p>Un test da positivo: ¿qué probabilidad hay de que la persona tenga el trastorno?</p></div>
+    <div class="mini-card"><h3>Azar o efecto</h3><p>El grupo tratado mejoró más: ¿es el tratamiento o ha sido casualidad?</p></div>
+  </div>
+  <p style="margin-top:1.2rem"><mark>Para responder necesitamos medir lo incierto: la probabilidad.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>De la frecuencia relativa a la probabilidad</h1>
+
+  <p>Inferencia: estudiar grandes poblaciones a partir de <strong>muestras</strong> extraídas de ellas.</p>
+  <div class="three-col" style="align-items:stretch; margin-top:.6rem">
+    <div class="mini-card center"><h3>Muestra</h3><p>Medidas <strong>descriptivas</strong></p><p>\(f_i,\ \bar x,\ S^2\)</p><p class="qtag">Temas 1–4</p></div>
+    <div class="mini-card center"><h3>Proyección</h3><p>Generalizar la <strong>frecuencia relativa</strong></p><p style="font-size:2rem;color:var(--uca-orange)">→</p></div>
+    <div class="mini-card center"><h3>Población</h3><p><strong>Probabilidades</strong> y parámetros</p><p>\(\pi_i,\ \mu,\ \sigma^2\)</p><p class="qtag">Temas 6–7</p></div>
+  </div>
+  <p style="margin-top:1.2rem"><mark>La probabilidad es la frecuencia relativa llevada a la población.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Los promedios en formato de frecuencia relativa</h1>
+
+  <p>Con una tabla de frecuencias de \(G\) valores distintos, \(x_1 \lt x_2 \lt \dots \lt x_G\):</p>
+  <div class="two-col" style="align-items:stretch">
+    <div class="formula-box small">\[ a_k=\sum_{i=1}^{G} x_i^k\,\frac{n_i}{n}=\sum_{i=1}^{G} x_i^k f_i \]\[ m_k=\sum_{i=1}^{G}(x_i-\bar x)^k f_i \]</div>
+    <div class="formula-box small">\[ \bar x=\sum_{i=1}^{G} x_i f_i \]\[ S^2=\sum_{i=1}^{G}(x_i-\bar x)^2 f_i \]</div>
+  </div>
+  <p>\(f_i\) es el <strong>peso</strong> o importancia del valor \(x_i\) en el promedio.</p>
+  <p><mark>Los promedios solo dependen de las \(f_i\), no de \(n\).</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Promedios: un ejemplo con un dado</h1>
+
+  <p>Lanzamos un dado 60 veces:</p>
+  <table class="dtab">
+    <tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td class="h">Total</td></tr>
+    <tr><th>\(n_i\)</th><td>8</td><td>11</td><td>9</td><td>12</td><td>10</td><td>10</td><td class="h">60</td></tr>
+    <tr><th>\(f_i\)</th><td>0.133</td><td>0.183</td><td>0.150</td><td>0.200</td><td>0.167</td><td>0.167</td><td class="h">1</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:.8rem; align-items:stretch">
+    <div class="mini-card center"><h3>Con las frecuencias</h3><p>\(\bar x = 1(0.133)+2(0.183)+\dots+6(0.167) = 3.583\)</p></div>
+    <div class="mini-card center reveal ok"><h3>¿Y si cada \(f_i\) fuera 1/6?</h3><p class="ans">\(\sum x_i\cdot\tfrac16 = 3.5\)</p></div>
+  </div>
+  <p style="margin-top:.8rem">Si sustituimos las \(f_i\) por las <strong>probabilidades</strong>, obtenemos la media «de la población».</p>
+</div>
+
+<div class="slide">
+  <h1>Estudiar un factor con una muestra</h1>
+
+  <p>Un factor \(A\) con tres niveles \(A_1,A_2,A_3\) en una población demasiado grande para un <strong>censo</strong>.</p>
+  <div class="fig-center"><svg viewBox="0 0 680 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg anim-svg urn-svg"><path d="M60,40 Q40,40 40,70 L40,220 Q40,250 70,250 L290,250 Q320,250 320,220 L320,70 Q320,40 300,40" fill="#f5f7f8" stroke="#6B6E6D" stroke-width="2.5"/><text x="180" y="28" font-size="15" text-anchor="middle" fill="#6B6E6D" font-weight="bold">POBLACIÓN: proporciones π desconocidas</text><circle cx="62.0" cy="66.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="81.5" cy="66.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="101.0" cy="66.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="120.5" cy="66.0" r="8" fill="#005877" opacity=".9"/><circle cx="140.0" cy="66.0" r="8" fill="#005877" opacity=".9"/><circle cx="159.5" cy="66.0" r="8" fill="#005877" opacity=".9"/><circle cx="179.0" cy="66.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="198.5" cy="66.0" r="8" fill="#005877" opacity=".9"/><circle cx="218.0" cy="66.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="237.5" cy="66.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="257.0" cy="66.0" r="8" fill="#005877" opacity=".9"/><circle cx="276.5" cy="66.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="296.0" cy="66.0" r="8" fill="#005877" opacity=".9"/><circle cx="71.0" cy="89.0" r="8" fill="#005877" opacity=".9"/><circle cx="90.5" cy="89.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="110.0" cy="89.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="129.5" cy="89.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="149.0" cy="89.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="168.5" cy="89.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="188.0" cy="89.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="207.5" cy="89.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="227.0" cy="89.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="246.5" cy="89.0" r="8" fill="#005877" opacity=".9"/><circle cx="266.0" cy="89.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="285.5" cy="89.0" r="8" fill="#005877" opacity=".9"/><circle cx="305.0" cy="89.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="62.0" cy="112.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="81.5" cy="112.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="101.0" cy="112.0" r="8" fill="#005877" opacity=".9"/><circle cx="120.5" cy="112.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="140.0" cy="112.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="159.5" cy="112.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="179.0" cy="112.0" r="8" fill="#005877" opacity=".9"/><circle cx="198.5" cy="112.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="218.0" cy="112.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="237.5" cy="112.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="257.0" cy="112.0" r="8" fill="#005877" opacity=".9"/><circle cx="276.5" cy="112.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="296.0" cy="112.0" r="8" fill="#005877" opacity=".9"/><circle cx="71.0" cy="135.0" r="8" fill="#005877" opacity=".9"/><circle cx="90.5" cy="135.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="110.0" cy="135.0" r="8" fill="#005877" opacity=".9"/><circle cx="129.5" cy="135.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="149.0" cy="135.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="168.5" cy="135.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="188.0" cy="135.0" r="8" fill="#005877" opacity=".9"/><circle cx="207.5" cy="135.0" r="8" fill="#005877" opacity=".9"/><circle cx="227.0" cy="135.0" r="8" fill="#005877" opacity=".9"/><circle cx="246.5" cy="135.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="266.0" cy="135.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="285.5" cy="135.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="305.0" cy="135.0" r="8" fill="#005877" opacity=".9"/><circle cx="62.0" cy="158.0" r="8" fill="#005877" opacity=".9"/><circle cx="81.5" cy="158.0" r="8" fill="#005877" opacity=".9"/><circle cx="101.0" cy="158.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="120.5" cy="158.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="140.0" cy="158.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="159.5" cy="158.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="179.0" cy="158.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="198.5" cy="158.0" r="8" fill="#005877" opacity=".9"/><circle cx="218.0" cy="158.0" r="8" fill="#005877" opacity=".9"/><circle cx="237.5" cy="158.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="257.0" cy="158.0" r="8" fill="#005877" opacity=".9"/><circle cx="276.5" cy="158.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="296.0" cy="158.0" r="8" fill="#005877" opacity=".9"/><circle cx="71.0" cy="181.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="90.5" cy="181.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="110.0" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="129.5" cy="181.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="149.0" cy="181.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="168.5" cy="181.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="188.0" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="207.5" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="227.0" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="246.5" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="266.0" cy="181.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="285.5" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="305.0" cy="181.0" r="8" fill="#005877" opacity=".9"/><circle cx="62.0" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="81.5" cy="204.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="101.0" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="120.5" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="140.0" cy="204.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="159.5" cy="204.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="179.0" cy="204.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="198.5" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="218.0" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="237.5" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="257.0" cy="204.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="276.5" cy="204.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="296.0" cy="204.0" r="8" fill="#005877" opacity=".9"/><circle cx="71.0" cy="227.0" r="8" fill="#005877" opacity=".9"/><circle cx="90.5" cy="227.0" r="8" fill="#005877" opacity=".9"/><circle cx="110.0" cy="227.0" r="8" fill="#005877" opacity=".9"/><circle cx="129.5" cy="227.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="149.0" cy="227.0" r="8" fill="#E87B00" opacity=".9"/><circle cx="168.5" cy="227.0" r="8" fill="#6B6E6D" opacity=".9"/><circle cx="188.0" cy="227.0" r="8" fill="#005877" opacity=".9"/><circle cx="207.5" cy="227.0" r="8" fill="#005877" opacity=".9"/><circle cx="227.0" cy="227.0" r="8" fill="#005877" opacity=".9"/><path class="ua" pathLength="1" d="M330,140 C380,100 420,100 450,130" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#uah)"/><defs><marker id="uah" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs><text class="ut" x="390" y="92" font-size="13" text-anchor="middle" fill="#333">m.a.s. de n = 20</text><rect class="us" x="465" y="80" width="200" height="110" rx="10" fill="none" stroke="#005877" stroke-width="2"/><circle class="us" cx="490" cy="100" r="9" fill="#005877"/><circle class="us" cx="528" cy="100" r="9" fill="#6B6E6D"/><circle class="us" cx="566" cy="100" r="9" fill="#6B6E6D"/><circle class="us" cx="604" cy="100" r="9" fill="#6B6E6D"/><circle class="us" cx="642" cy="100" r="9" fill="#005877"/><circle class="us" cx="490" cy="124" r="9" fill="#005877"/><circle class="us" cx="528" cy="124" r="9" fill="#005877"/><circle class="us" cx="566" cy="124" r="9" fill="#E87B00"/><circle class="us" cx="604" cy="124" r="9" fill="#E87B00"/><circle class="us" cx="642" cy="124" r="9" fill="#005877"/><circle class="us" cx="490" cy="148" r="9" fill="#005877"/><circle class="us" cx="528" cy="148" r="9" fill="#E87B00"/><circle class="us" cx="566" cy="148" r="9" fill="#6B6E6D"/><circle class="us" cx="604" cy="148" r="9" fill="#E87B00"/><circle class="us" cx="642" cy="148" r="9" fill="#005877"/><circle class="us" cx="490" cy="172" r="9" fill="#E87B00"/><circle class="us" cx="528" cy="172" r="9" fill="#005877"/><circle class="us" cx="566" cy="172" r="9" fill="#005877"/><circle class="us" cx="604" cy="172" r="9" fill="#E87B00"/><circle class="us" cx="642" cy="172" r="9" fill="#005877"/><text class="us" x="565" y="214" font-size="14" text-anchor="middle" fill="#333">f = 10/20, 6/20, 4/20</text><text class="us" x="565" y="234" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">= 0.50, 0.30, 0.20</text><text class="us" x="565" y="70" font-size="15" text-anchor="middle" fill="#005877" font-weight="bold">MUESTRA 1</text></svg></div>
+  <p>Si la muestra es <strong>representativa</strong>, sus frecuencias \(f_i^{1)}=n_i^{1)}/n\) se parecen a las de la población. <mark>¿Y si sacamos otra?</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Otra muestra, otras frecuencias</h1>
+
+  <p class="small-note" style="margin-top:0">Población simulada con \(\pi_1=0.45,\ \pi_2=0.35,\ \pi_3=0.20\) (en la realidad, desconocidas)</p>
+  <div class="fig-center" id="sim1"><svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" class="fig-svg" data-nofit="1"></svg></div>
+  <div class="btnrow" id="sim1c"><span class="lbl">Tamaño:</span><button data-n="20" class="on">n = 20</button><button data-n="150">n = 150</button><button data-n="1000">n = 1000</button>
+    <span class="lbl">&nbsp;</span><button class="act" data-a="1">Otra muestra</button><button class="act" data-a="10">10 muestras</button></div>
+  <p style="margin-top:.4rem; text-align:center"><mark>Cada muestra da una solución distinta, y solo aproximada.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Definición frecuentista de probabilidad</h1>
+
+  <div class="formula-box">\[ P[A_i]=\pi_i=\lim_{n\to\infty} f_i=\lim_{n\to\infty}\frac{n_i}{n} \]</div>
+  <p class="small-note" style="margin-top:0">Si la muestra crece hasta ser la población, las \(f_i\) se convierten en las \(\pi_i\). Letras griegas: <strong>parámetros</strong>.</p>
+  <div class="fig-center" id="sim2"><svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" class="fig-svg" data-nofit="1"></svg></div>
+  <div class="btnrow" id="sim2c"><button class="act" data-k="10">+10</button><button class="act" data-k="100">+100</button><button class="act" data-k="1000">+1000</button><button data-k="0">Reiniciar</button><span class="lbl" id="sim2n">n = 0</span></div>
+</div>
+
+<div class="slide">
+  <h1>Problemas de la definición frecuentista</h1>
+
+  <p>Conceptualmente correcta, pero en la práctica:</p>
+  <div class="two-col" style="align-items:stretch">
+    <div class="mini-card"><h3>1. ¿Cuándo paramos?</h3><p>No hay un \(n\) exacto para el límite.</p></div>
+    <div class="mini-card"><h3>2. Población poco conocida</h3><p>Condiciona los criterios de inclusión.</p></div>
+    <div class="mini-card"><h3>3. Condiciones adversas</h3><p>Experimentos difíciles o imposibles de repetir.</p></div>
+    <div class="mini-card"><h3>4. Recursos limitados</h3><p>El tamaño muestral depende del presupuesto.</p></div>
+  </div>
+  <p style="margin-top:1rem"><mark>Nunca tendremos los \(\pi_i\) exactos: gestionar el error es parte de la Inferencia.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Experimentos aleatorios y sucesos</h1>
+
+  <div class="two-col" style="align-items:stretch">
+    <div class="mini-card"><h3>Determinista</h3><p>Mismas condiciones → <strong>mismo</strong> resultado.</p><p class="qtag">Soltar una piedra: cae.</p></div>
+    <div class="mini-card"><h3>Aleatorio</h3><p>Mismas condiciones → resultados <strong>distintos</strong>.</p><p class="qtag">Lanzar un dado, sortear a una persona, pasar un test.</p></div>
+  </div>
+  <p style="margin-top:.8rem">Elegir a alguien al azar y anotar su nivel del factor da tres <strong>sucesos elementales excluyentes</strong>:</p>
+  <div class="formula-box small" style="text-align:center">\(A_i\equiv\) {el elegido presenta \(A_i\)}, &nbsp; \(P[A_i]=\pi_i\), &nbsp; \(\pi_1+\pi_2+\pi_3=1\)</div>
+  <p><mark>Las \(\pi_i\) forman la <strong>distribución de probabilidad</strong> del factor: su «tabla de frecuencias» en la población.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>El espacio muestral</h1>
+
+  <p><strong>Espacio muestral</strong> \(\Omega\): conjunto de <strong>todos</strong> los resultados posibles de un experimento aleatorio.</p>
+  <div class="three-col" style="align-items:stretch; margin-top:.4rem">
+    <div class="mini-card"><h3>Finito</h3><p>Lanzar un dado</p><p>\(\Omega=\{1,2,3,4,5,6\}\)</p><svg viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><g class="face" data-v="1"><rect x="12.0" y="17.0" width="36.0" height="36.0" rx="5.8" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="30.0" cy="35.0" r="3.2" fill="#333"/></g><g class="face" data-v="2"><rect x="60.0" y="17.0" width="36.0" height="36.0" rx="5.8" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="68.6" cy="25.6" r="3.2" fill="#333"/><circle cx="87.4" cy="44.4" r="3.2" fill="#333"/></g><g class="face" data-v="3"><rect x="108.0" y="17.0" width="36.0" height="36.0" rx="5.8" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="116.6" cy="25.6" r="3.2" fill="#333"/><circle cx="126.0" cy="35.0" r="3.2" fill="#333"/><circle cx="135.4" cy="44.4" r="3.2" fill="#333"/></g><g class="face" data-v="4"><rect x="156.0" y="17.0" width="36.0" height="36.0" rx="5.8" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="164.6" cy="25.6" r="3.2" fill="#333"/><circle cx="183.4" cy="25.6" r="3.2" fill="#333"/><circle cx="164.6" cy="44.4" r="3.2" fill="#333"/><circle cx="183.4" cy="44.4" r="3.2" fill="#333"/></g><g class="face" data-v="5"><rect x="204.0" y="17.0" width="36.0" height="36.0" rx="5.8" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="212.6" cy="25.6" r="3.2" fill="#333"/><circle cx="231.4" cy="25.6" r="3.2" fill="#333"/><circle cx="222.0" cy="35.0" r="3.2" fill="#333"/><circle cx="212.6" cy="44.4" r="3.2" fill="#333"/><circle cx="231.4" cy="44.4" r="3.2" fill="#333"/></g><g class="face" data-v="6"><rect x="252.0" y="17.0" width="36.0" height="36.0" rx="5.8" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="260.6" cy="25.6" r="3.2" fill="#333"/><circle cx="279.4" cy="25.6" r="3.2" fill="#333"/><circle cx="260.6" cy="35.0" r="3.2" fill="#333"/><circle cx="279.4" cy="35.0" r="3.2" fill="#333"/><circle cx="260.6" cy="44.4" r="3.2" fill="#333"/><circle cx="279.4" cy="44.4" r="3.2" fill="#333"/></g></svg></div>
+    <div class="mini-card"><h3>Infinito numerable</h3><p>Lanzamientos de una moneda hasta la primera cara</p><p>\(\Omega=\{1,2,3,\dots\}\)</p><svg viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><circle cx="19" cy="35" r="11" fill="#E87B00"/><text x="19" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">C</text><circle cx="49" cy="35" r="11" fill="#6B6E6D"/><text x="49" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">X</text><circle cx="69" cy="35" r="11" fill="#E87B00"/><text x="69" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">C</text><circle cx="99" cy="35" r="11" fill="#6B6E6D"/><text x="99" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">X</text><circle cx="119" cy="35" r="11" fill="#6B6E6D"/><text x="119" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">X</text><circle cx="139" cy="35" r="11" fill="#E87B00"/><text x="139" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">C</text><circle cx="169" cy="35" r="11" fill="#6B6E6D"/><text x="169" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">X</text><circle cx="189" cy="35" r="11" fill="#6B6E6D"/><text x="189" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">X</text><circle cx="209" cy="35" r="11" fill="#6B6E6D"/><text x="209" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">X</text><circle cx="229" cy="35" r="11" fill="#E87B00"/><text x="229" y="40" font-size="11" text-anchor="middle" fill="white" font-weight="bold">C</text><text x="292" y="40" font-size="16" text-anchor="end" fill="#333">…</text></svg></div>
+    <div class="mini-card"><h3>Continuo</h3><p>Tiempo de reacción en ms</p><p>\(\Omega=(0,\infty)\)</p><svg viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="20" y1="35" x2="285" y2="35" stroke="#333" stroke-width="2.5" marker-end="url(#axh)"/><defs><marker id="axh" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs><circle cx="20" cy="35" r="5" fill="white" stroke="#333" stroke-width="2"/><text x="20" y="60" font-size="12" text-anchor="middle" fill="#777">0</text><text x="110" y="60" font-size="12" text-anchor="middle" fill="#777">300</text><text x="200" y="60" font-size="12" text-anchor="middle" fill="#777">600</text><circle cx="152" cy="35" r="6" fill="#E87B00"/><text x="152" y="22" font-size="12" text-anchor="middle" fill="#E87B00">437.2 ms</text></svg></div>
+  </div>
+  <p style="margin-top:1rem">Un <strong>suceso</strong> es cualquier subconjunto de \(\Omega\). Se <strong>verifica</strong> si el resultado obtenido pertenece a él.</p>
+  <p style="margin-top:.3rem">Con el dado: <span style="color:#2E9E5B;font-weight:bold">✔</span> \(\{2,4,6\}\) es un suceso. &nbsp; <span style="color:#E87B00;font-weight:bold">✘</span> \(\{4,\ \text{cara}\}\) no lo es: «cara» no es un resultado del dado, no está en \(\Omega\).</p>
+</div>
+
+<div class="slide">
+  <h1>Sucesos elementales y compuestos</h1>
+
+  <p>Experimento: lanzar un dado y ver la cara superior.</p>
+  <div class="fig-center" style="flex:0 0 22vh"><svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="20" y="20" width="600" height="130" rx="12" fill="none" stroke="#6B6E6D" stroke-width="1.5"/><text x="604" y="44" font-size="20" text-anchor="end" fill="#6B6E6D" font-weight="bold">Ω</text><g class="face" data-v="1"><rect x="59.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="90.0" cy="88.0" r="5.6" fill="#333"/></g><g class="face" data-v="2"><rect x="151.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="165.9" cy="71.9" r="5.6" fill="#333"/><circle cx="198.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="3"><rect x="243.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="257.9" cy="71.9" r="5.6" fill="#333"/><circle cx="274.0" cy="88.0" r="5.6" fill="#333"/><circle cx="290.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="4"><rect x="335.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="349.9" cy="71.9" r="5.6" fill="#333"/><circle cx="382.1" cy="71.9" r="5.6" fill="#333"/><circle cx="349.9" cy="104.1" r="5.6" fill="#333"/><circle cx="382.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="5"><rect x="427.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="441.9" cy="71.9" r="5.6" fill="#333"/><circle cx="474.1" cy="71.9" r="5.6" fill="#333"/><circle cx="458.0" cy="88.0" r="5.6" fill="#333"/><circle cx="441.9" cy="104.1" r="5.6" fill="#333"/><circle cx="474.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="6"><rect x="519.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="533.9" cy="71.9" r="5.6" fill="#333"/><circle cx="566.1" cy="71.9" r="5.6" fill="#333"/><circle cx="533.9" cy="88.0" r="5.6" fill="#333"/><circle cx="566.1" cy="88.0" r="5.6" fill="#333"/><circle cx="533.9" cy="104.1" r="5.6" fill="#333"/><circle cx="566.1" cy="104.1" r="5.6" fill="#333"/></g></svg></div>
+  <div class="two-col" style="align-items:stretch">
+    <div class="mini-card"><h3>Elemental</h3><p>Un resultado del experimento.</p><p>\(A\equiv\) {obtener un 4}</p></div>
+    <div class="mini-card"><h3>Compuesto</h3><p>Combinación de elementales.</p><p>\(A\equiv\) {múltiplo de 2} \(=\{2,4,6\}\)</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Operaciones con sucesos</h1>
+
+  <p>\(A\equiv\) {puntuación \(\le 3\)} \(=\{1,2,3\}\) &nbsp;·&nbsp; \(B\equiv\) {par} \(=\{2,4,6\}\) &nbsp;·&nbsp; \(C\equiv\) {obtener un 4}</p>
+  <div class="fig-center" id="ops"><svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" class="fig-svg reg-svg" data-nofit="1"><defs><clipPath id="cAops"><ellipse cx="230" cy="150" rx="150" ry="110"/></clipPath><mask id="mnBops"><rect x="10" y="10" width="620" height="280" fill="white"/><ellipse cx="410" cy="150" rx="150" ry="110" fill="black"/></mask><mask id="mnAops"><rect x="10" y="10" width="620" height="280" fill="white"/><ellipse cx="230" cy="150" rx="150" ry="110" fill="black"/></mask><mask id="mOops"><rect x="10" y="10" width="620" height="280" fill="white"/><ellipse cx="230" cy="150" rx="150" ry="110" fill="black"/><ellipse cx="410" cy="150" rx="150" ry="110" fill="black"/></mask><pattern id="hpops" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern></defs><rect x="10" y="10" width="620" height="280" fill="white" stroke="#333" stroke-width="2"/><g class="rg" data-r="o"><rect x="10" y="10" width="620" height="280" fill="url(#hpops)" mask="url(#mOops)"/></g><g class="rg" data-r="a"><ellipse cx="230" cy="150" rx="150" ry="110" fill="url(#hpops)" mask="url(#mnBops)"/></g><g class="rg" data-r="b"><ellipse cx="410" cy="150" rx="150" ry="110" fill="url(#hpops)" mask="url(#mnAops)"/></g><g class="rg" data-r="ab"><ellipse cx="410" cy="150" rx="150" ry="110" fill="url(#hpops)" clip-path="url(#cAops)"/></g><ellipse cx="230" cy="150" rx="150" ry="110" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="410" cy="150" rx="150" ry="110" fill="none" stroke="#005877" stroke-width="2.5"/><text x="620" y="36" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="98" y="52" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="542" y="52" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">B</text><circle class="cC" cx="490" cy="100" r="40" fill="none" stroke="#E87B00" stroke-width="2.5" stroke-dasharray="6,4"/><text class="cC" x="432" y="92" font-size="20" fill="#E87B00" font-weight="bold" font-style="italic">C</text><g class="face of" data-v="1"><rect x="126.0" y="76.0" width="48.0" height="48.0" rx="7.7" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="150.0" cy="100.0" r="4.3" fill="#333"/></g><g class="face of" data-v="3"><rect x="126.0" y="176.0" width="48.0" height="48.0" rx="7.7" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="137.5" cy="187.5" r="4.3" fill="#333"/><circle cx="150.0" cy="200.0" r="4.3" fill="#333"/><circle cx="162.5" cy="212.5" r="4.3" fill="#333"/></g><g class="face of" data-v="2"><rect x="296.0" y="126.0" width="48.0" height="48.0" rx="7.7" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="307.5" cy="137.5" r="4.3" fill="#333"/><circle cx="332.5" cy="162.5" r="4.3" fill="#333"/></g><g class="face of" data-v="4"><rect x="466.0" y="76.0" width="48.0" height="48.0" rx="7.7" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="477.5" cy="87.5" r="4.3" fill="#333"/><circle cx="502.5" cy="87.5" r="4.3" fill="#333"/><circle cx="477.5" cy="112.5" r="4.3" fill="#333"/><circle cx="502.5" cy="112.5" r="4.3" fill="#333"/></g><g class="face of" data-v="6"><rect x="466.0" y="176.0" width="48.0" height="48.0" rx="7.7" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="477.5" cy="187.5" r="4.3" fill="#333"/><circle cx="502.5" cy="187.5" r="4.3" fill="#333"/><circle cx="477.5" cy="200.0" r="4.3" fill="#333"/><circle cx="502.5" cy="200.0" r="4.3" fill="#333"/><circle cx="477.5" cy="212.5" r="4.3" fill="#333"/><circle cx="502.5" cy="212.5" r="4.3" fill="#333"/></g><g class="face of" data-v="5"><rect x="561.0" y="226.0" width="48.0" height="48.0" rx="7.7" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="572.5" cy="237.5" r="4.3" fill="#333"/><circle cx="597.5" cy="237.5" r="4.3" fill="#333"/><circle cx="585.0" cy="250.0" r="4.3" fill="#333"/><circle cx="572.5" cy="262.5" r="4.3" fill="#333"/><circle cx="597.5" cy="262.5" r="4.3" fill="#333"/></g></svg></div>
+  <div class="btnrow" id="opsc"><button data-o="imp">R1 · Implicación</button><button data-o="con">R2 · Contrario</button><button data-o="uni">R3 · Unión</button><button data-o="int">R4 · Intersección</button></div>
+  <div class="cap" id="opsout"></div>
+</div>
+
+<div class="slide">
+  <h1>Sucesos singulares y relaciones</h1>
+
+  <div class="two-col" style="align-items:stretch">
+    <div class="mini-card"><h3>R5 · Seguro \(\Omega\)</h3><p>Siempre se verifica. \(\Omega=A\cup\bar A\)</p><svg viewBox="0 0 330 110" xmlns="http://www.w3.org/2000/svg" class="fig-svg" style="max-height:15vh"><rect x="4" y="4" width="322" height="80" rx="8" fill="none" stroke="#6B6E6D" stroke-width="1.5"/><g class="face" data-v="1"><rect x="16.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="35.0" cy="44.0" r="3.4" fill="#333"/></g><g class="face" data-v="2"><rect x="68.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="77.1" cy="34.1" r="3.4" fill="#333"/><circle cx="96.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="3"><rect x="120.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="129.1" cy="34.1" r="3.4" fill="#333"/><circle cx="139.0" cy="44.0" r="3.4" fill="#333"/><circle cx="148.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="4"><rect x="172.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="181.1" cy="34.1" r="3.4" fill="#333"/><circle cx="200.9" cy="34.1" r="3.4" fill="#333"/><circle cx="181.1" cy="53.9" r="3.4" fill="#333"/><circle cx="200.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="5"><rect x="224.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="233.1" cy="34.1" r="3.4" fill="#333"/><circle cx="252.9" cy="34.1" r="3.4" fill="#333"/><circle cx="243.0" cy="44.0" r="3.4" fill="#333"/><circle cx="233.1" cy="53.9" r="3.4" fill="#333"/><circle cx="252.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="6"><rect x="276.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="285.1" cy="34.1" r="3.4" fill="#333"/><circle cx="304.9" cy="34.1" r="3.4" fill="#333"/><circle cx="285.1" cy="44.0" r="3.4" fill="#333"/><circle cx="304.9" cy="44.0" r="3.4" fill="#333"/><circle cx="285.1" cy="53.9" r="3.4" fill="#333"/><circle cx="304.9" cy="53.9" r="3.4" fill="#333"/></g><text x="165" y="104" font-size="13" text-anchor="middle" fill="#333">todas las caras</text></svg></div>
+    <div class="mini-card"><h3>R6 · Imposible \(\emptyset\)</h3><p>Nunca se verifica: {puntuación \(\ge 7\)}</p><svg viewBox="0 0 330 110" xmlns="http://www.w3.org/2000/svg" class="fig-svg" style="max-height:15vh"><rect x="4" y="4" width="322" height="80" rx="8" fill="none" stroke="#6B6E6D" stroke-width="1.5"/><g class="face" opacity=".35" data-v="1"><rect x="16.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="35.0" cy="44.0" r="3.4" fill="#333"/></g><g class="face" opacity=".35" data-v="2"><rect x="68.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="77.1" cy="34.1" r="3.4" fill="#333"/><circle cx="96.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" opacity=".35" data-v="3"><rect x="120.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="129.1" cy="34.1" r="3.4" fill="#333"/><circle cx="139.0" cy="44.0" r="3.4" fill="#333"/><circle cx="148.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" opacity=".35" data-v="4"><rect x="172.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="181.1" cy="34.1" r="3.4" fill="#333"/><circle cx="200.9" cy="34.1" r="3.4" fill="#333"/><circle cx="181.1" cy="53.9" r="3.4" fill="#333"/><circle cx="200.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" opacity=".35" data-v="5"><rect x="224.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="233.1" cy="34.1" r="3.4" fill="#333"/><circle cx="252.9" cy="34.1" r="3.4" fill="#333"/><circle cx="243.0" cy="44.0" r="3.4" fill="#333"/><circle cx="233.1" cy="53.9" r="3.4" fill="#333"/><circle cx="252.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" opacity=".35" data-v="6"><rect x="276.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="285.1" cy="34.1" r="3.4" fill="#333"/><circle cx="304.9" cy="34.1" r="3.4" fill="#333"/><circle cx="285.1" cy="44.0" r="3.4" fill="#333"/><circle cx="304.9" cy="44.0" r="3.4" fill="#333"/><circle cx="285.1" cy="53.9" r="3.4" fill="#333"/><circle cx="304.9" cy="53.9" r="3.4" fill="#333"/></g><text x="165" y="104" font-size="13" text-anchor="middle" fill="#333">ninguna cara</text></svg></div>
+    <div class="mini-card"><h3>R7 · Incompatibles</h3><p>\(A\cap B=\emptyset\). \(A\) y \(\bar A\) siempre lo son</p><svg viewBox="0 0 330 110" xmlns="http://www.w3.org/2000/svg" class="fig-svg" style="max-height:15vh"><rect x="4" y="4" width="322" height="80" rx="8" fill="none" stroke="#6B6E6D" stroke-width="1.5"/><g class="face" data-v="1"><rect x="16.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#cfe3ea" stroke="#005877" stroke-width="3"/><circle cx="35.0" cy="44.0" r="3.4" fill="#333"/></g><g class="face" data-v="2"><rect x="68.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="77.1" cy="34.1" r="3.4" fill="#333"/><circle cx="96.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="3"><rect x="120.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#cfe3ea" stroke="#005877" stroke-width="3"/><circle cx="129.1" cy="34.1" r="3.4" fill="#333"/><circle cx="139.0" cy="44.0" r="3.4" fill="#333"/><circle cx="148.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="4"><rect x="172.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="181.1" cy="34.1" r="3.4" fill="#333"/><circle cx="200.9" cy="34.1" r="3.4" fill="#333"/><circle cx="181.1" cy="53.9" r="3.4" fill="#333"/><circle cx="200.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="5"><rect x="224.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#cfe3ea" stroke="#005877" stroke-width="3"/><circle cx="233.1" cy="34.1" r="3.4" fill="#333"/><circle cx="252.9" cy="34.1" r="3.4" fill="#333"/><circle cx="243.0" cy="44.0" r="3.4" fill="#333"/><circle cx="233.1" cy="53.9" r="3.4" fill="#333"/><circle cx="252.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="6"><rect x="276.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="285.1" cy="34.1" r="3.4" fill="#333"/><circle cx="304.9" cy="34.1" r="3.4" fill="#333"/><circle cx="285.1" cy="44.0" r="3.4" fill="#333"/><circle cx="304.9" cy="44.0" r="3.4" fill="#333"/><circle cx="285.1" cy="53.9" r="3.4" fill="#333"/><circle cx="304.9" cy="53.9" r="3.4" fill="#333"/></g><text x="165" y="104" font-size="13" text-anchor="middle" fill="#333">impar · par: no comparten cara</text></svg></div>
+    <div class="mini-card"><h3>R8 · Sistema completo</h3><p>Incompatibles dos a dos y su unión es \(\Omega\)</p><svg viewBox="0 0 330 110" xmlns="http://www.w3.org/2000/svg" class="fig-svg" style="max-height:15vh"><rect x="4" y="4" width="322" height="80" rx="8" fill="none" stroke="#6B6E6D" stroke-width="1.5"/><g class="face" data-v="1"><rect x="16.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#cfe3ea" stroke="#005877" stroke-width="3"/><circle cx="35.0" cy="44.0" r="3.4" fill="#333"/></g><g class="face" data-v="2"><rect x="68.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#cfe3ea" stroke="#005877" stroke-width="3"/><circle cx="77.1" cy="34.1" r="3.4" fill="#333"/><circle cx="96.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="3"><rect x="120.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#d5ecdf" stroke="#2E9E5B" stroke-width="3"/><circle cx="129.1" cy="34.1" r="3.4" fill="#333"/><circle cx="139.0" cy="44.0" r="3.4" fill="#333"/><circle cx="148.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="4"><rect x="172.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="181.1" cy="34.1" r="3.4" fill="#333"/><circle cx="200.9" cy="34.1" r="3.4" fill="#333"/><circle cx="181.1" cy="53.9" r="3.4" fill="#333"/><circle cx="200.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="5"><rect x="224.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="233.1" cy="34.1" r="3.4" fill="#333"/><circle cx="252.9" cy="34.1" r="3.4" fill="#333"/><circle cx="243.0" cy="44.0" r="3.4" fill="#333"/><circle cx="233.1" cy="53.9" r="3.4" fill="#333"/><circle cx="252.9" cy="53.9" r="3.4" fill="#333"/></g><g class="face" data-v="6"><rect x="276.0" y="25.0" width="38.0" height="38.0" rx="6.1" fill="#ffe0b3" stroke="#E87B00" stroke-width="3"/><circle cx="285.1" cy="34.1" r="3.4" fill="#333"/><circle cx="304.9" cy="34.1" r="3.4" fill="#333"/><circle cx="285.1" cy="44.0" r="3.4" fill="#333"/><circle cx="304.9" cy="44.0" r="3.4" fill="#333"/><circle cx="285.1" cy="53.9" r="3.4" fill="#333"/><circle cx="304.9" cy="53.9" r="3.4" fill="#333"/></g><text x="165" y="104" font-size="13" text-anchor="middle" fill="#333">{&lt;3} · {3} · {≥4}: cada cara en un grupo</text></svg></div>
+  </div>
+  
+</div>
+
+<div class="slide">
+  <h1>Sucesos y conjuntos</h1>
+
+  <p>Equivalencia absoluta: podemos usar la <strong>teoría de conjuntos</strong> para estudiar sucesos.</p>
+  <table class="cont-table" style="font-size:clamp(1rem,1.45vw,1.65rem)">
+    <thead><tr><th>Cálculo de Probabilidades</th><th>Teoría de Conjuntos</th></tr></thead>
+    <tbody>
+      <tr><td class="l">Suceso seguro (espacio muestral)</td><td class="l">Conjunto universal</td></tr>
+      <tr><td class="l">Suceso elemental</td><td class="l">Punto del conjunto universal</td></tr>
+      <tr><td class="l">Suceso</td><td class="l">Subconjunto</td></tr>
+      <tr><td class="l">Sucesos incompatibles</td><td class="l">Conjuntos disjuntos</td></tr>
+      <tr><td class="l">Unión / Intersección de sucesos</td><td class="l">Unión / Intersección de conjuntos</td></tr>
+      <tr><td class="l">Suceso imposible</td><td class="l">Conjunto vacío</td></tr>
+      <tr><td class="l">Suceso contrario</td><td class="l">Conjunto complementario</td></tr>
+      <tr><td class="l">Sistema completo</td><td class="l">Partición</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="slide">
+  <h1>Diagramas de Venn</h1>
+
+  <p class="small-note" style="margin-top:0">Rectángulo: \(\Omega\) · Elipses: sucesos · Rayado: el suceso que se describe</p>
+  <div class="fig-center" id="venn"><div class="view on" data-v="1"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h1" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA1"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="230" cy="115" rx="160" ry="80" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="200" cy="120" rx="75" ry="45" fill="url(#h1)" stroke="#005877" stroke-width="2.5"/><text x="200" y="128" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="345" y="80" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">B</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">A ⇒ B &nbsp;·&nbsp; A ⊂ B</text></svg></div><div class="view" data-v="2"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h2" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA2"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><path d="M20,20 H440 V210 H20 Z M300,115 a90,55 0 1,0 -180,0 a90,55 0 1,0 180,0 Z" fill="url(#h2)" fill-rule="evenodd" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="210" cy="115" rx="90" ry="55" fill="white" stroke="#005877" stroke-width="2.5"/><text x="210" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="380" y="180" font-size="22" text-anchor="middle" fill="#E87B00" font-weight="bold" font-style="italic">Ā</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">A ∪ Ā = Ω &nbsp;·&nbsp; A ∩ Ā = ∅</text></svg></div><div class="view" data-v="3"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h3" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA3"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="175" cy="115" rx="95" ry="65" fill="url(#h3)" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="url(#h3)" stroke="#005877" stroke-width="2.5"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><text x="140" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="320" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">B</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">A ∪ B: se verifica A <tspan font-weight="bold">o</tspan> B</text></svg></div><div class="view" data-v="4"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h4" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA4"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="175" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="url(#h4)" clip-path="url(#cA4)" stroke="none"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><text x="130" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="330" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">B</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">A ∩ B: se verifica A <tspan font-weight="bold">y</tspan> B</text></svg></div><div class="view" data-v="5"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h5" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA5"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="url(#h5)" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">Suceso seguro Ω: siempre se verifica</text></svg></div><div class="view" data-v="6"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h6" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA6"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">Suceso imposible: ∅ = { }</text></svg></div><div class="view" data-v="7"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h7" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA7"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="130" cy="115" rx="80" ry="55" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="330" cy="115" rx="80" ry="55" fill="none" stroke="#005877" stroke-width="2.5"/><text x="130" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="330" y="123" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">B</text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">Incompatibles: A ∩ B = ∅</text></svg></div><div class="view" data-v="8"><svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="h8" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern><clipPath id="cA8"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="44" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><path d="M250,20 C240,70 260,90 250,125 M20,125 H440 M150,125 V210 M300,125 C290,160 310,180 300,210" fill="none" stroke="#005877" stroke-width="2.5"/><text x="130" y="80" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A<tspan font-size="14" dy="5">1</tspan></text><text x="340" y="80" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A<tspan font-size="14" dy="5">2</tspan></text><text x="85" y="175" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A<tspan font-size="14" dy="5">3</tspan></text><text x="225" y="175" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A<tspan font-size="14" dy="5">4</tspan></text><text x="370" y="175" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A<tspan font-size="14" dy="5">5</tspan></text><text x="230" y="250" font-size="19" text-anchor="middle" fill="#333">Aᵢ ∩ Aⱼ = ∅ (i ≠ j) &nbsp;·&nbsp; A₁ ∪ … ∪ A₅ = Ω</text></svg></div></div>
+  <div class="btnrow" id="vennc"><button data-v="1" class="on">1. Implicación</button><button data-v="2">2. Contrario</button><button data-v="3">3. Unión</button><button data-v="4">4. Intersección</button><button data-v="5">5. Seguro</button><button data-v="6">6. Imposible</button><button data-v="7">7. Incompatibles</button><button data-v="8">8. Sistema completo</button></div>
+</div>
+
+<div class="slide">
+  <h1>Traducir frases a sucesos</h1>
+
+  <p>¿Qué zona del diagrama corresponde a cada frase?</p>
+  <div class="fig-center" id="expr"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" class="fig-svg reg-svg" data-nofit="1"><defs><clipPath id="cAex"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath><mask id="mnBex"><rect x="20" y="20" width="420" height="190" fill="white"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="black"/></mask><mask id="mnAex"><rect x="20" y="20" width="420" height="190" fill="white"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="black"/></mask><mask id="mOex"><rect x="20" y="20" width="420" height="190" fill="white"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="black"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="black"/></mask><pattern id="hpex" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><g class="rg" data-r="o"><rect x="20" y="20" width="420" height="190" fill="url(#hpex)" mask="url(#mOex)"/></g><g class="rg" data-r="a"><ellipse cx="175" cy="115" rx="95" ry="65" fill="url(#hpex)" mask="url(#mnBex)"/></g><g class="rg" data-r="b"><ellipse cx="285" cy="115" rx="95" ry="65" fill="url(#hpex)" mask="url(#mnAex)"/></g><g class="rg" data-r="ab"><ellipse cx="285" cy="115" rx="95" ry="65" fill="url(#hpex)" clip-path="url(#cAex)"/></g><ellipse cx="175" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><text x="430" y="46" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="98" y="62" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="362" y="62" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">B</text></svg></div>
+  <div class="btnrow" id="exprc"><button data-e="anb">Ocurre A pero no B</button><button data-e="uno">Exactamente uno</button><button data-e="alm">Al menos uno</button><button data-e="nin">Ninguno</button><button data-e="nam">No ocurren ambos</button></div>
+  <div class="cap" id="exprout"></div>
+</div>
+
+<div class="slide divider">
+  <h2>Tema 6 · Parte 2</h2>
+  <h1>Medir la probabilidad</h1>
+  <div class="three-col" style="align-items:stretch; margin-top:1rem">
+    <div class="mini-card"><h3>Ya sabemos</h3><p>Qué es un suceso y cómo se combinan: contrario, unión, intersección, sistema completo.</p></div>
+    <div class="mini-card"><h3>Ahora</h3><p>Cómo se le asigna un <strong>número</strong> a cada suceso y qué reglas cumple.</p></div>
+    <div class="mini-card"><h3>Y además</h3><p>Cómo cambia la probabilidad cuando recibimos <strong>información</strong>.</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Definición clásica de Laplace</h1>
+
+  <div class="formula-box large">\[ P[A]=\frac{\text{casos favorables a } A}{\text{casos posibles}} \]</div>
+  <p>Dado: \(A\equiv\) {puntuación \(\le 2\)} &nbsp;→&nbsp; \(P[A]=2/6=1/3\)</p>
+  <div class="fig-center" style="flex:0 0 17vh; min-height:0"><svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="20" y="20" width="600" height="130" rx="12" fill="none" stroke="#6B6E6D" stroke-width="1.5"/><text x="604" y="44" font-size="20" text-anchor="end" fill="#6B6E6D" font-weight="bold">Ω</text><g class="face" data-v="1"><rect x="59.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="#ffe0b3" stroke="#E87B00" stroke-width="3.5"/><circle cx="90.0" cy="88.0" r="5.6" fill="#333"/></g><g class="face" data-v="2"><rect x="151.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="#ffe0b3" stroke="#E87B00" stroke-width="3.5"/><circle cx="165.9" cy="71.9" r="5.6" fill="#333"/><circle cx="198.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="3"><rect x="243.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="257.9" cy="71.9" r="5.6" fill="#333"/><circle cx="274.0" cy="88.0" r="5.6" fill="#333"/><circle cx="290.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="4"><rect x="335.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="349.9" cy="71.9" r="5.6" fill="#333"/><circle cx="382.1" cy="71.9" r="5.6" fill="#333"/><circle cx="349.9" cy="104.1" r="5.6" fill="#333"/><circle cx="382.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="5"><rect x="427.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="441.9" cy="71.9" r="5.6" fill="#333"/><circle cx="474.1" cy="71.9" r="5.6" fill="#333"/><circle cx="458.0" cy="88.0" r="5.6" fill="#333"/><circle cx="441.9" cy="104.1" r="5.6" fill="#333"/><circle cx="474.1" cy="104.1" r="5.6" fill="#333"/></g><g class="face" data-v="6"><rect x="519.0" y="57.0" width="62.0" height="62.0" rx="9.9" fill="white" stroke="#6B6E6D" stroke-width="2"/><circle cx="533.9" cy="71.9" r="5.6" fill="#333"/><circle cx="566.1" cy="71.9" r="5.6" fill="#333"/><circle cx="533.9" cy="88.0" r="5.6" fill="#333"/><circle cx="566.1" cy="88.0" r="5.6" fill="#333"/><circle cx="533.9" cy="104.1" r="5.6" fill="#333"/><circle cx="566.1" cy="104.1" r="5.6" fill="#333"/></g><text x="320" y="166" font-size="14" text-anchor="middle" fill="#E87B00" font-weight="bold">2 casos favorables de 6 posibles</text></svg></div>
+  <div class="two-col" style="align-items:stretch">
+    <div class="mini-card"><h3>Inconveniente 1</h3><p>Solo vale si los elementales son <strong>equiprobables</strong>. Un dado real nunca es perfecto.</p></div>
+    <div class="mini-card"><h3>Inconveniente 2</h3><p>No siempre es posible <strong>contar</strong>.</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Laplace: contar casos equiprobables</h1>
+
+  <p>Lanzamos <strong>dos dados</strong>. Los casos equiprobables son las 36 parejas, no las 11 sumas.</p>
+  <div class="two-col" style="align-items:center">
+    <div><table class="d2" id="d2"><tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr><tr><th>1</th><td data-s="2">2</td><td data-s="3">3</td><td data-s="4">4</td><td data-s="5">5</td><td data-s="6">6</td><td data-s="7">7</td></tr><tr><th>2</th><td data-s="3">3</td><td data-s="4">4</td><td data-s="5">5</td><td data-s="6">6</td><td data-s="7">7</td><td data-s="8">8</td></tr><tr><th>3</th><td data-s="4">4</td><td data-s="5">5</td><td data-s="6">6</td><td data-s="7">7</td><td data-s="8">8</td><td data-s="9">9</td></tr><tr><th>4</th><td data-s="5">5</td><td data-s="6">6</td><td data-s="7">7</td><td data-s="8">8</td><td data-s="9">9</td><td data-s="10">10</td></tr><tr><th>5</th><td data-s="6">6</td><td data-s="7">7</td><td data-s="8">8</td><td data-s="9">9</td><td data-s="10">10</td><td data-s="11">11</td></tr><tr><th>6</th><td data-s="7">7</td><td data-s="8">8</td><td data-s="9">9</td><td data-s="10">10</td><td data-s="11">11</td><td data-s="12">12</td></tr></table></div>
+    <div>
+      <div class="btnrow" id="d2c" style="justify-content:flex-start"><button data-s="2">2</button><button data-s="3">3</button><button data-s="4">4</button><button data-s="5">5</button><button data-s="6">6</button><button data-s="7">7</button><button data-s="8">8</button><button data-s="9">9</button><button data-s="10">10</button><button data-s="11">11</button><button data-s="12">12</button></div>
+      <p class="cap" id="d2out" style="text-align:left"></p>
+      <p class="small-note">Filas: primer dado · columnas: segundo dado</p>
+    </div>
+  </div>
+  <p style="margin-top:.6rem"><mark>En un m.a.s. todas las personas (y submuestras) son equiprobables: por eso el sorteo permite usar Laplace.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Medida de probabilidad: el álgebra de sucesos</h1>
+
+  <p>Queremos poner probabilidad a <strong>cualquier</strong> suceso. Ejemplo con tres resultados: \(\Omega=\{\)<span class="bd b0"></span><span class="bd b1"></span><span class="bd b2"></span>\(\}\). La lista de <strong>todos</strong> sus sucesos es \(\mathcal A\):</p>
+  <div class="alg" id="alg"><div class="acard" data-m=""><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="60" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="96" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/></svg><div class="aname">∅</div></div><div class="acard" data-m="0"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="14" fill="#005877"/><circle cx="60" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="96" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/></svg><div class="aname"></div></div><div class="acard" data-m="1"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="60" cy="22" r="14" fill="#E87B00"/><circle cx="96" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/></svg><div class="aname"></div></div><div class="acard" data-m="2"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="60" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="96" cy="22" r="14" fill="#6B6E6D"/></svg><div class="aname"></div></div><div class="acard" data-m="01"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="14" fill="#005877"/><circle cx="60" cy="22" r="14" fill="#E87B00"/><circle cx="96" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/></svg><div class="aname"></div></div><div class="acard" data-m="02"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="14" fill="#005877"/><circle cx="60" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="96" cy="22" r="14" fill="#6B6E6D"/></svg><div class="aname"></div></div><div class="acard" data-m="12"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="13" fill="none" stroke="#c9cdcc" stroke-width="2" stroke-dasharray="4,3"/><circle cx="60" cy="22" r="14" fill="#E87B00"/><circle cx="96" cy="22" r="14" fill="#6B6E6D"/></svg><div class="aname"></div></div><div class="acard" data-m="012"><span class="tag2"></span><svg viewBox="0 0 120 44" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="22" r="14" fill="#005877"/><circle cx="60" cy="22" r="14" fill="#E87B00"/><circle cx="96" cy="22" r="14" fill="#6B6E6D"/></svg><div class="aname">Ω</div></div></div>
+  <div class="btnrow" id="algc"><button data-o="u">\(A\cup B\)</button><button data-o="c">\(\bar A\)</button></div>
+  <div class="cap" id="algout"></div>
+  <p class="small-note" style="margin:.3rem 0 0; text-align:center">\(\mathcal A\): la lista entera (las 8 tarjetas) · \(A,\ B\): un suceso concreto (una tarjeta) · \(\in\mathcal A\): «está en la lista»</p>
+  <div class="formula-box small" style="margin-top:.3rem"><strong>Álgebra de Boole</strong> \(\mathcal A\): &nbsp;[1] \(\Omega\in\mathcal A\) &nbsp;·&nbsp; [2] \(A,B\in\mathcal A\Rightarrow A\cup B\in\mathcal A\) &nbsp;·&nbsp; [3] \(A\in\mathcal A\Rightarrow\bar A\in\mathcal A\)</div>
+  <p style="margin:.2rem 0 0"><mark>\((\Omega,\mathcal A)\) es un espacio medible: cada suceso de la lista tendrá su probabilidad.</mark> <span class="qtag">Con 3 resultados, \(2^3=8\) sucesos; con un dado, \(2^6=64\).</span></p>
+</div>
+
+<div class="slide">
+  <h1>Definición axiomática de Kolmogorov</h1>
+
+  <p>Frecuentista y clásica no son <strong>universales</strong>. Kolmogorov (1933): la probabilidad es una <strong>medida de la incertidumbre</strong>, como la longitud o el área.</p>
+  <div class="formula-box small" style="text-align:center">\(P:\mathcal A\longrightarrow[0,1]\) es una probabilidad si cumple:</div>
+  <div class="three-col" style="align-items:stretch">
+    <div class="mini-card center"><h3>A1</h3><p>\(P[A]\ge 0\)</p><svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="10" y="10" width="200" height="110" fill="white" stroke="#333" stroke-width="1.8"/><text x="200" y="30" font-size="15" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="100" cy="68" rx="55" ry="35" fill="#005877" fill-opacity=".45" stroke="#005877" stroke-width="2"/><text x="100" y="74" font-size="15" text-anchor="middle" fill="#333" font-weight="bold">área ≥ 0</text></svg></div>
+    <div class="mini-card center"><h3>A2</h3><p>\(P[\Omega]=1\)</p><svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="10" y="10" width="200" height="110" fill="#ffe0b3" stroke="#333" stroke-width="1.8"/><text x="200" y="30" font-size="15" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="110" y="72" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">área total = 1</text></svg></div>
+    <div class="mini-card center"><h3>A3</h3><p>\(A\cap B=\emptyset\Rightarrow P[A\cup B]=P[A]+P[B]\)</p><svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="10" y="10" width="200" height="110" fill="white" stroke="#333" stroke-width="1.8"/><text x="200" y="30" font-size="15" text-anchor="end" fill="#333" font-weight="bold">Ω</text><ellipse cx="65" cy="68" rx="40" ry="30" fill="#005877" fill-opacity=".45" stroke="#005877" stroke-width="2"/><ellipse cx="155" cy="68" rx="40" ry="30" fill="#E87B00" fill-opacity=".45" stroke="#E87B00" stroke-width="2"/><text x="65" y="74" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">A</text><text x="155" y="74" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">B</text></svg></div>
+  </div>
+  <p class="small-note">Los axiomas no dicen cómo calcular: en la práctica, frecuencias o Laplace.</p>
+</div>
+
+<div class="slide">
+  <h1>Propiedades derivadas de los axiomas</h1>
+
+  <div class="btnrow" id="propc" style="margin-top:0"><button data-v="1" data-f="\(P[\bar A]=1-P[A]\)" data-c="Ω vale 1; quitamos A y queda Ā" class="on">P1 · Contrario</button><button data-v="2" data-f="\(P[\emptyset]=0\)" data-c="Ω = Ω ∪ ∅ y son incompatibles: 1 = 1 + P[∅]">P2 · Imposible</button><button data-v="3" data-f="\(P[A\cup B]=P[A]+P[B]-P[A\cap B]\)" data-c="">P3 · Unión</button><button data-v="4" data-f="\(P[A\cup B\cup C]=P[A]+P[B]+P[C]-P[A\cap B]-P[A\cap C]-P[B\cap C]+P[A\cap B\cap C]\)" data-c="">P3' · Unión de tres</button><button data-v="5" data-f="\(A\subseteq B\Rightarrow P[A]\le P[B]\)" data-c="Si A está dentro de B, A no puede ocupar más que B">P4 · Inclusión</button></div>
+  <div class="cap" id="propf" style="font-size:clamp(1.1rem,1.6vw,1.9rem)"></div>
+  <div class="fig-center" id="prop"><div class="view on" data-v="1"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="hpp1" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern></defs><path d="M20,20 H440 V210 H20 Z M270,115 a95,65 0 1,0 -190,0 a95,65 0 1,0 190,0 Z" fill="url(#hpp1)" fill-rule="evenodd" stroke="#333" stroke-width="2"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="#cfe3ea" stroke="#005877" stroke-width="2.5"/><text x="112" y="92" font-size="22" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="430" y="46" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="175" y="123" font-size="16" text-anchor="middle" fill="#333">P[A]</text><text x="380" y="185" font-size="24" text-anchor="middle" fill="#E87B00" font-weight="bold" font-style="italic">Ā</text></svg></div><div class="view" data-v="2"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><defs><pattern id="hpp2" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><text x="430" y="46" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="230" y="123" font-size="18" text-anchor="middle" fill="#6B6E6D">∅ no ocupa área</text></svg></div><div class="view" data-v="3"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg" data-steps="3" data-nofit="1"><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><ellipse class="st1" cx="175" cy="115" rx="95" ry="65" fill="#005877" fill-opacity=".55"/><ellipse class="st2" cx="285" cy="115" rx="95" ry="65" fill="#E87B00" fill-opacity=".45"/><defs><clipPath id="clp3"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath></defs><g class="st3" clip-path="url(#clp3)"><ellipse cx="285" cy="115" rx="95" ry="65" fill="white"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="#2E9E5B" fill-opacity=".45"/></g><ellipse cx="175" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><text x="100" y="70" font-size="22" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="345" y="70" font-size="22" fill="#005877" font-weight="bold" font-style="italic">B</text><text x="430" y="46" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><g class="o1"><text x="130" y="123" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="230" y="123" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">1</text></g><g class="o2"><text x="130" y="123" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="230" y="123" font-size="22" text-anchor="middle" fill="#E87B00" font-weight="bold">2</text><text x="330" y="123" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">1</text></g><g class="o3"><text x="130" y="123" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="230" y="123" font-size="15" text-anchor="middle" fill="#333" font-weight="bold">2 − 1 = 1</text><text x="330" y="123" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">1</text></g><text class="o2" x="230" y="200" font-size="14" text-anchor="middle" fill="#E87B00">A ∩ B se ha contado dos veces</text><text class="o3" x="230" y="200" font-size="14" text-anchor="middle" fill="#2E9E5B">cada zona, una sola vez</text></svg></div><div class="view" data-v="4"><svg viewBox="0 0 460 290" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg" data-steps="3" data-nofit="1"><rect x="20" y="10" width="420" height="260" fill="white" stroke="#333" stroke-width="2"/><circle class="st1" cx="180" cy="105" r="80" fill="#005877" fill-opacity=".22"/><circle class="st1" cx="260" cy="105" r="80" fill="#E87B00" fill-opacity=".22"/><circle class="st1" cx="220" cy="172" r="80" fill="#2E9E5B" fill-opacity=".22"/><circle cx="180" cy="105" r="80" fill="none" stroke="#005877" stroke-width="2.5"/><text x="100" y="40" font-size="22" fill="#005877" font-weight="bold" font-style="italic">A</text><circle cx="260" cy="105" r="80" fill="none" stroke="#E87B00" stroke-width="2.5"/><text x="345" y="40" font-size="22" fill="#E87B00" font-weight="bold" font-style="italic">B</text><circle cx="220" cy="172" r="80" fill="none" stroke="#2E9E5B" stroke-width="2.5"/><text x="112" y="240" font-size="22" fill="#2E9E5B" font-weight="bold" font-style="italic">C</text><text x="430" y="36" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><g class="o1"><text x="130" y="97" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="310" y="97" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="235" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="79" font-size="20" text-anchor="middle" fill="#E87B00" font-weight="bold">2</text><text x="168" y="167" font-size="20" text-anchor="middle" fill="#E87B00" font-weight="bold">2</text><text x="272" y="167" font-size="20" text-anchor="middle" fill="#E87B00" font-weight="bold">2</text><text x="220" y="137" font-size="20" text-anchor="middle" fill="#E87B00" font-weight="bold">3</text></g><g class="o2"><text x="130" y="97" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="310" y="97" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="235" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="79" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="168" y="167" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="272" y="167" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="137" font-size="20" text-anchor="middle" fill="#E87B00" font-weight="bold">0</text></g><g class="o3"><text x="130" y="97" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="310" y="97" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="235" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="79" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="168" y="167" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="272" y="167" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text><text x="220" y="137" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1</text></g><text class="o1" x="230" y="286" font-size="13" text-anchor="middle" fill="#E87B00">veces que se ha contado cada zona</text><text class="o2" x="230" y="286" font-size="13" text-anchor="middle" fill="#E87B00">la zona central se ha quedado sin contar</text><text class="o3" x="230" y="286" font-size="13" text-anchor="middle" fill="#2E9E5B">cada zona, una sola vez</text></svg></div><div class="view" data-v="5"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><ellipse cx="230" cy="115" rx="165" ry="80" fill="#E87B00" fill-opacity=".35" stroke="#E87B00" stroke-width="2.5"/><ellipse cx="190" cy="120" rx="75" ry="45" fill="#005877" fill-opacity=".55" stroke="#005877" stroke-width="2.5"/><text x="190" y="128" font-size="22" text-anchor="middle" fill="#222" font-weight="bold" font-style="italic">A</text><text x="345" y="80" font-size="22" fill="#E87B00" font-weight="bold" font-style="italic">B</text><text x="430" y="46" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text></svg></div></div>
+  <div class="cap qtag" id="propcap"></div>
+</div>
+
+<div class="slide">
+  <h1>Propiedades: un ejemplo</h1>
+
+  <p>En una población (datos ficticios): un 30 % tiene insomnio (\(I\)), un 20 % ansiedad (\(A\)) y un 10 % ambas cosas.</p>
+  <div class="two-col" style="align-items:center; flex:1 1 auto; flex-wrap:nowrap">
+    <div class="fig-center" style="min-height:40vh; flex:1 1 58%"><svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" class="fig-svg reg-svg" data-nofit="1"><defs><clipPath id="cApe"><ellipse cx="175" cy="115" rx="95" ry="65"/></clipPath><mask id="mnBpe"><rect x="20" y="20" width="420" height="190" fill="white"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="black"/></mask><mask id="mnApe"><rect x="20" y="20" width="420" height="190" fill="white"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="black"/></mask><mask id="mOpe"><rect x="20" y="20" width="420" height="190" fill="white"/><ellipse cx="175" cy="115" rx="95" ry="65" fill="black"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="black"/></mask><pattern id="hppe" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#ffe0b3"/><line x1="0" y1="0" x2="0" y2="9" stroke="#E87B00" stroke-width="3"/></pattern></defs><rect x="20" y="20" width="420" height="190" fill="white" stroke="#333" stroke-width="2"/><g class="rg" data-r="o"><rect x="20" y="20" width="420" height="190" fill="url(#hppe)" mask="url(#mOpe)"/></g><g class="rg" data-r="a"><ellipse cx="175" cy="115" rx="95" ry="65" fill="url(#hppe)" mask="url(#mnBpe)"/></g><g class="rg" data-r="b"><ellipse cx="285" cy="115" rx="95" ry="65" fill="url(#hppe)" mask="url(#mnApe)"/></g><g class="rg" data-r="ab"><ellipse cx="285" cy="115" rx="95" ry="65" fill="url(#hppe)" clip-path="url(#cApe)"/></g><ellipse cx="175" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><ellipse cx="285" cy="115" rx="95" ry="65" fill="none" stroke="#005877" stroke-width="2.5"/><text x="430" y="46" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><text x="98" y="62" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">I</text><text x="362" y="62" font-size="22" text-anchor="middle" fill="#005877" font-weight="bold" font-style="italic">A</text><text x="125" y="123" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">0.20</text><text x="230" y="123" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">0.10</text><text x="335" y="123" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">0.10</text><text x="400" y="200" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">0.60</text></svg></div>
+    <div>
+      <div class="mini-card reveal ok" style="margin-bottom:.5rem"><p>\(P[I\cup A]\)</p><p class="ans">\(0.30+0.20-0.10=0.40\)</p></div>
+      <div class="mini-card reveal ok" style="margin-bottom:.5rem"><p>\(P[\text{ninguna}]\)</p><p class="ans">\(1-0.40=0.60\)</p></div>
+      <div class="mini-card reveal ok"><p>\(P[\text{solo insomnio}]\)</p><p class="ans">\(0.30-0.10=0.20\)</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Probabilidad condicionada</h1>
+
+  <div class="formula-box">\[ P[A/B]=\frac{P[A\cap B]}{P[B]},\qquad P[B]>0 \]</div>
+  <p>«Probabilidad de \(A\) <strong>sabiendo que</strong> ha ocurrido \(B\)»: \(B\) pasa a ser el <strong>nuevo universo</strong>.</p>
+  <div class="fig-center"><svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg" data-steps="2" data-nofit="1"><defs><mask id="mI"><rect x="0" y="0" width="640" height="300" fill="white"/><ellipse cx="250" cy="130" rx="140" ry="90" fill="black"/></mask><clipPath id="cI"><ellipse cx="250" cy="130" rx="140" ry="90"/></clipPath></defs><rect x="20" y="20" width="600" height="220" fill="white" stroke="#333" stroke-width="2"/><ellipse cx="410" cy="130" rx="120" ry="80" class="st2" fill="#E87B00" fill-opacity=".55" clip-path="url(#cI)"/><ellipse cx="250" cy="130" rx="140" ry="90" fill="none" stroke="#005877" stroke-width="3"/><ellipse cx="410" cy="130" rx="120" ry="80" fill="none" stroke="#E87B00" stroke-width="3"/><text x="32" y="46" font-size="18" fill="#005877" font-weight="bold">I (insomnio)</text><text x="560" y="46" font-size="18" text-anchor="end" fill="#E87B00" font-weight="bold">A (ansiedad)</text><text x="190" y="138" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">0.20</text><text x="335" y="138" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">0.10</text><text x="470" y="138" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">0.10</text><text x="575" y="228" font-size="22" text-anchor="middle" fill="#333" font-weight="bold">0.60</text><text x="610" y="45" font-size="22" text-anchor="end" fill="#333" font-weight="bold">Ω</text><rect class="st1" x="20" y="20" width="600" height="220" fill="white" fill-opacity=".82" mask="url(#mI)"/><text class="st1" x="320" y="264" font-size="16" text-anchor="middle" fill="#005877" font-weight="bold">nuevo universo: I, con P[I] = 0.30</text><text class="st2" x="320" y="292" font-size="18" text-anchor="middle" fill="#333" font-weight="bold">P[A/I] = 0.10 / 0.30 = 0.33 &#160;(antes: P[A] = 0.20)</text></svg></div>
+</div>
+
+<div class="slide">
+  <h1>Condicionada en una tabla de contingencia</h1>
+
+  <p>Las mismas 1000 personas en una tabla (generaliza la frecuencia condicionada del Tema 3):</p>
+  <table class="tbl2" id="ptab">
+    <thead><tr><th></th><th>Ansiedad (A)</th><th>Sin ansiedad</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><th data-r="I">Insomnio (I)</th><td data-r="I" data-c="A">100</td><td data-r="I" data-c="N">200</td><td class="tot" data-r="I" data-c="T">300</td></tr>
+      <tr><th data-r="J">Sin insomnio</th><td data-r="J" data-c="A">100</td><td data-r="J" data-c="N">600</td><td class="tot" data-r="J" data-c="T">700</td></tr>
+      <tr><th data-r="T">Total</th><td class="tot" data-r="T" data-c="A">200</td><td class="tot" data-r="T" data-c="N">800</td><td class="tot" data-r="T" data-c="T">1000</td></tr>
+    </tbody>
+  </table>
+  <div class="btnrow" id="ptabc"><button data-q="a">\(P[A]\)</button><button data-q="ai">\(P[A/I]\)</button><button data-q="ia">\(P[I/A]\)</button></div>
+  <div class="cap" id="ptabout"></div>
+  <p style="margin-top:.4rem; text-align:center"><mark>\(P[A/I]\ne P[I/A]\): el numerador es el mismo, el universo no.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>La regla del producto</h1>
+
+  <div class="formula-box">\[ P[A\cap B]=P[A/B]\,P[B]=P[B/A]\,P[A] \]</div>
+  <p>Despejando la definición de condicionada. Sirve para calcular la probabilidad de que ocurran <strong>las dos cosas</strong>.</p>
+  <div class="two-col" style="align-items:stretch">
+    <div class="mini-card"><h3>Ejemplo</h3><p>El 60 % de una clase son chicas y el 30 % de las chicas son rubias.</p>
+      <p class="reveal ok">\(P[\text{chica y rubia}]\) <span class="ans">\(=0.3\cdot0.6=0.18\)</span></p></div>
+    <div class="mini-card"><h3>En un árbol</h3><p>Cada camino vale el <strong>producto</strong> de sus ramas; la segunda es una condicionada.</p><svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" class="fig-svg"><line x1="50" y1="100" x2="160" y2="50" stroke="#E87B00" stroke-width="4"/><rect x="86" y="64" width="38" height="20" rx="4" fill="white"/><text x="105" y="79" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">0.6</text><line x1="50" y1="100" x2="160" y2="150" stroke="#888" stroke-width="2"/><rect x="86" y="114" width="38" height="20" rx="4" fill="white"/><text x="105" y="129" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">0.4</text><line x1="190" y1="50" x2="270" y2="25" stroke="#E87B00" stroke-width="4"/><rect x="211" y="26" width="38" height="20" rx="4" fill="white"/><text x="230" y="42" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">0.3</text><line x1="190" y1="50" x2="270" y2="80" stroke="#888" stroke-width="2"/><rect x="211" y="54" width="38" height="20" rx="4" fill="white"/><text x="230" y="69" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">0.7</text><circle cx="40" cy="100" r="20" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="40" y="105" font-size="13" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Ω</text><circle cx="170" cy="50" r="20" fill="white" stroke="#005877" stroke-width="2.5"/><text x="170" y="55" font-size="13" text-anchor="middle" fill="#005877" font-weight="bold">chica</text><circle cx="170" cy="150" r="20" fill="white" stroke="#005877" stroke-width="2.5"/><text x="170" y="155" font-size="13" text-anchor="middle" fill="#005877" font-weight="bold">chico</text><circle cx="290" cy="25" r="20" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="290" y="30" font-size="13" text-anchor="middle" fill="#E87B00" font-weight="bold">rubia</text><circle cx="290" cy="80" r="20" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="290" y="85" font-size="13" text-anchor="middle" fill="#6B6E6D" font-weight="bold">no</text><text x="318" y="30" font-size="14" fill="#E87B00" font-weight="bold">0.6 · 0.3 = 0.18</text><text x="170" y="190" font-size="12" text-anchor="middle" fill="#6B6E6D">P[chica]</text><text x="290" y="120" font-size="12" text-anchor="middle" fill="#6B6E6D">P[rubia/chica]</text></svg></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Sucesos independientes</h1>
+
+  <div class="formula-box small">\[ A \text{ y } B \text{ independientes} \iff P[A/B]=P[A] \iff P[A\cap B]=P[A]\,P[B] \]</div>
+  <div class="btnrow" id="indc" style="margin-top:0"><button data-s="ins" class="on">Insomnio y ansiedad</button><button data-s="zur">Zurdos y ansiedad</button></div>
+  <div class="fig-center" id="ind"><svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg" data-nofit="1"></svg></div>
+  <div class="cap" id="indout"></div>
+  <div class="two-col" style="align-items:stretch; margin-top:.2rem">
+    <div class="mini-card center reveal ko"><p>Insomnio y ansiedad</p><p class="ans">\(P[I\cap A]=0.10\ne P[I]\,P[A]=0.30\cdot0.20=0.06\)</p></div>
+    <div class="mini-card center reveal ok"><p>Zurdos y ansiedad</p><p class="ans">\(P[Z\cap A]=0.02=P[Z]\,P[A]=0.10\cdot0.20\)</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>¿Son independientes?</h1>
+
+  <p>En cada caso: ¿coincide \(P[A/B]\) con \(P[A]\)? ¿Y \(P[A\cap B]\) con \(P[A]\,P[B]\)?</p>
+  <div class="three-col" style="align-items:stretch">
+    <div class="mini-card reveal ko"><h3>Insomnio y ansiedad</h3><p>Las 1000 personas</p>
+      <p class="ans">\(P[A/I]=0.33\ne P[A]=0.20\)<br>\(0.10\ne0.30\cdot0.20=0.06\)<br><strong>Dependientes</strong>: saber uno cambia el otro</p></div>
+    <div class="mini-card reveal ok"><h3>{par} y {1, 2}</h3><p>Un solo lanzamiento</p>
+      <p class="ans">\(P[\{1,2\}/\text{par}]=\tfrac13=P[\{1,2\}]\)<br>\(\tfrac16=\tfrac12\cdot\tfrac13\)<br><strong>Independientes</strong>: saber uno no cambia el otro</p></div>
+    <div class="mini-card reveal ko"><h3>{par} e {impar}</h3><p>Un solo lanzamiento</p>
+      <p class="ans">\(P[\text{impar}/\text{par}]=0\ne\tfrac12\)<br>\(0\ne\tfrac12\cdot\tfrac12\)<br><strong>Dependientes</strong> (incompatibles)</p></div>
+  </div>
+  <div class="two-col" style="margin-top:.8rem; align-items:stretch">
+    <div class="mini-card"><h3>Incompatibles</h3><p>No se solapan. Se ve en el <strong>Venn</strong>.</p></div>
+    <div class="mini-card"><h3>Independientes</h3><p>La información no cambia nada. Hay que <strong>calcular</strong>.</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Teorema de la Probabilidad Total (TPT)</h1>
+
+  <div class="formula-box">\[ P[A]=P[A/B_1]P[B_1]+P[A/B_2]P[B_2]+\dots+P[A/B_G]P[B_G] \]</div>
+  <p>\(B_1,\dots,B_G\): <strong>sistema completo</strong> de escenarios, con \(P[B_i]\) conocidas. \(A\) ocurre después y depende del escenario.</p>
+  <div class="fig-center"><svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" class="fig-svg anim-svg gen-svg"><circle cx="40" cy="150" r="22" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="40" y="157" font-size="18" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Ω</text><g class="g1"><line x1="62" y1="150" x2="208" y2="50" stroke="#888" stroke-width="2.2"/><text x="125" y="92" font-size="14" text-anchor="middle" fill="#333">P[B<tspan font-size='11' dy='3'>1</tspan><tspan dy='-3'>]</tspan></text><circle cx="230" cy="50" r="22" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="56" font-size="18" text-anchor="middle" fill="#005877" font-weight="bold">B<tspan font-size='13' dy='4'>1</tspan></text></g><g class="g2"><line x1="252" y1="50" x2="398" y2="50" stroke="#888" stroke-width="2.2"/><text x="325" y="42" font-size="14" text-anchor="middle" fill="#333">P[A/B<tspan font-size='11' dy='3'>1</tspan><tspan dy='-3'>]</tspan></text><circle cx="420" cy="50" r="22" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="56" font-size="18" text-anchor="middle" fill="#E87B00" font-weight="bold">A</text></g><g class="g1"><line x1="62" y1="150" x2="208" y2="130" stroke="#888" stroke-width="2.2"/><text x="125" y="132" font-size="14" text-anchor="middle" fill="#333">P[B<tspan font-size='11' dy='3'>2</tspan><tspan dy='-3'>]</tspan></text><circle cx="230" cy="130" r="22" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="136" font-size="18" text-anchor="middle" fill="#005877" font-weight="bold">B<tspan font-size='13' dy='4'>2</tspan></text></g><g class="g2"><line x1="252" y1="130" x2="398" y2="130" stroke="#888" stroke-width="2.2"/><text x="325" y="122" font-size="14" text-anchor="middle" fill="#333">P[A/B<tspan font-size='11' dy='3'>2</tspan><tspan dy='-3'>]</tspan></text><circle cx="420" cy="130" r="22" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="136" font-size="18" text-anchor="middle" fill="#E87B00" font-weight="bold">A</text></g><g class="g1"><line x1="62" y1="150" x2="208" y2="250" stroke="#888" stroke-width="2.2"/><text x="125" y="192" font-size="14" text-anchor="middle" fill="#333">P[B<tspan font-size='11' dy='3'>G</tspan><tspan dy='-3'>]</tspan></text><circle cx="230" cy="250" r="22" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="256" font-size="18" text-anchor="middle" fill="#005877" font-weight="bold">B<tspan font-size='13' dy='4'>G</tspan></text></g><g class="g2"><line x1="252" y1="250" x2="398" y2="250" stroke="#888" stroke-width="2.2"/><text x="325" y="242" font-size="14" text-anchor="middle" fill="#333">P[A/B<tspan font-size='11' dy='3'>G</tspan><tspan dy='-3'>]</tspan></text><circle cx="420" cy="250" r="22" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="256" font-size="18" text-anchor="middle" fill="#E87B00" font-weight="bold">A</text></g><text class="g1" x="230" y="196" font-size="22" text-anchor="middle" fill="#999">⋮</text><text class="g3" x="455" y="140" font-size="15" fill="#333">P[A] = suma de los</text><text class="g3" x="455" y="160" font-size="15" fill="#333">caminos que acaban en A</text><text class="g3" x="455" y="190" font-size="13" fill="#6B6E6D">(cada camino: producto</text><text class="g3" x="455" y="207" font-size="13" fill="#6B6E6D">de sus probabilidades)</text><text x="230" y="294" font-size="13" text-anchor="middle" fill="#6B6E6D">escenarios (sistema completo)</text><text x="420" y="294" font-size="13" text-anchor="middle" fill="#6B6E6D">desenlace</text></svg></div>
+</div>
+
+<div class="slide">
+  <h1>¿Por qué funciona el TPT?</h1>
+
+  <p>Los escenarios parten \(\Omega\) sin solaparse, así que también parten a \(A\) en trozos incompatibles.</p>
+  <div class="fig-center"><svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg" data-steps="2" data-nofit="1"><defs><clipPath id="cAt"><ellipse cx="320" cy="140" rx="250" ry="72"/></clipPath></defs><rect x="20" y="20" width="150" height="240" fill="#005877" fill-opacity=".06"/><rect class="st1" x="20" y="20" width="150" height="240" fill="#005877" fill-opacity=".55" clip-path="url(#cAt)"/><text x="95" y="48" font-size="20" text-anchor="middle" fill="#005877" font-weight="bold">B<tspan font-size="14" dy="5">1</tspan></text><text class="st1" x="95" y="146" font-size="15" text-anchor="middle" fill="white" font-weight="bold">A∩B<tspan font-size="11" dy="4">1</tspan></text><rect x="170" y="20" width="150" height="240" fill="#E87B00" fill-opacity=".06"/><rect class="st1" x="170" y="20" width="150" height="240" fill="#E87B00" fill-opacity=".55" clip-path="url(#cAt)"/><text x="245" y="48" font-size="20" text-anchor="middle" fill="#E87B00" font-weight="bold">B<tspan font-size="14" dy="5">2</tspan></text><text class="st1" x="245" y="146" font-size="15" text-anchor="middle" fill="white" font-weight="bold">A∩B<tspan font-size="11" dy="4">2</tspan></text><rect x="320" y="20" width="150" height="240" fill="#2E9E5B" fill-opacity=".06"/><rect class="st1" x="320" y="20" width="150" height="240" fill="#2E9E5B" fill-opacity=".55" clip-path="url(#cAt)"/><text x="395" y="48" font-size="20" text-anchor="middle" fill="#2E9E5B" font-weight="bold">B<tspan font-size="14" dy="5">3</tspan></text><text class="st1" x="395" y="146" font-size="15" text-anchor="middle" fill="white" font-weight="bold">A∩B<tspan font-size="11" dy="4">3</tspan></text><rect x="470" y="20" width="150" height="240" fill="#7a3e9d" fill-opacity=".06"/><rect class="st1" x="470" y="20" width="150" height="240" fill="#7a3e9d" fill-opacity=".55" clip-path="url(#cAt)"/><text x="545" y="48" font-size="20" text-anchor="middle" fill="#7a3e9d" font-weight="bold">B<tspan font-size="14" dy="5">4</tspan></text><text class="st1" x="545" y="146" font-size="15" text-anchor="middle" fill="white" font-weight="bold">A∩B<tspan font-size="11" dy="4">4</tspan></text><rect x="20" y="20" width="600" height="240" fill="none" stroke="#333" stroke-width="2"/><line x1="170" y1="20" x2="170" y2="260" stroke="#333" stroke-width="2"/><line x1="320" y1="20" x2="320" y2="260" stroke="#333" stroke-width="2"/><line x1="470" y1="20" x2="470" y2="260" stroke="#333" stroke-width="2"/><ellipse cx="320" cy="140" rx="250" ry="72" fill="none" stroke="#222" stroke-width="3"/><text x="585" y="100" font-size="22" text-anchor="middle" fill="#222" font-weight="bold" font-style="italic">A</text><text class="st2" x="320" y="290" font-size="17" text-anchor="middle" fill="#333" font-weight="bold">P[A] = P[A∩B₁] + P[A∩B₂] + P[A∩B₃] + P[A∩B₄]</text></svg></div>
+  <p style="text-align:center">Cada trozo, por la regla del producto: \(P[A\cap B_i]=P[A/B_i]\,P[B_i]\)</p>
+</div>
+
+<div class="slide">
+  <h1>TPT: ¿irá al cine el sábado?</h1>
+
+  <p>Hoy es lunes. La probabilidad de que llueva el sábado es 0.7. Si llueve, la probabilidad de ir al cine es 0.8; si no llueve, solo 0.3. ¿Cuál es la probabilidad de ir al cine el sábado?</p>
+  <p class="small-note" style="margin-top:0">\(L\equiv\) {el sábado llueve} · \(C\equiv\) {va al cine el sábado}</p>
+  <div class="fig-center"><svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg tpt" data-steps="3" data-nofit="1"><g class=""><circle cx="50" cy="165" r="24" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="50" y="172" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Ω</text></g><g class="st1 pL"><line class="ed" x1="74" y1="155" x2="206" y2="85" stroke="#888" stroke-width="2.4"/><rect x="117" y="107" width="46" height="24" rx="5" fill="white"/><text x="140" y="125" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.7</text></g><g class="st1 pC2"><line class="ed" x1="74" y1="175" x2="206" y2="245" stroke="#888" stroke-width="2.4"/><rect x="117" y="197" width="46" height="24" rx="5" fill="white"/><text x="140" y="215" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.3</text></g><g class="st1"><circle cx="230" cy="75" r="24" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="82" font-size="19" text-anchor="middle" fill="#005877" font-weight="bold">L</text></g><g class="st1"><circle cx="230" cy="255" r="24" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="262" font-size="19" text-anchor="middle" fill="#005877" font-weight="bold">L̄</text></g><g class="st2 pL"><line class="ed" x1="254" y1="65" x2="396" y2="35" stroke="#888" stroke-width="2.4"/><rect x="302" y="37" width="46" height="24" rx="5" fill="white"/><text x="325" y="55" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.8</text></g><g class="st2 "><line class="ed" x1="254" y1="85" x2="396" y2="125" stroke="#888" stroke-width="2.4"/><rect x="302" y="92" width="46" height="24" rx="5" fill="white"/><text x="325" y="110" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.2</text></g><g class="st2 pC2"><line class="ed" x1="254" y1="245" x2="396" y2="205" stroke="#888" stroke-width="2.4"/><rect x="302" y="212" width="46" height="24" rx="5" fill="white"/><text x="325" y="230" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.3</text></g><g class="st2 "><line class="ed" x1="254" y1="265" x2="396" y2="295" stroke="#888" stroke-width="2.4"/><rect x="302" y="267" width="46" height="24" rx="5" fill="white"/><text x="325" y="285" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.7</text></g><g class="st2"><circle cx="420" cy="35" r="24" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="42" font-size="19" text-anchor="middle" fill="#E87B00" font-weight="bold">C</text></g><g class="st2"><circle cx="420" cy="125" r="24" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="420" y="132" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">C̄</text></g><g class="st2"><circle cx="420" cy="205" r="24" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="212" font-size="19" text-anchor="middle" fill="#E87B00" font-weight="bold">C</text></g><g class="st2"><circle cx="420" cy="295" r="24" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="420" y="302" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">C̄</text></g><text class="st2 prod pc pL" x="465" y="41" font-size="17" fill="#E87B00">0.7 · 0.8 = 0.56</text><text class="st2 prod  " x="465" y="131" font-size="17" fill="#999">0.7 · 0.2 = 0.14</text><text class="st2 prod pc pC2" x="465" y="211" font-size="17" fill="#E87B00">0.3 · 0.3 = 0.09</text><text class="st2 prod  " x="465" y="301" font-size="17" fill="#999">0.3 · 0.7 = 0.21</text><g class="st3"><rect x="455" y="148" width="255" height="38" rx="8" fill="#ffe0b3"/><text x="582" y="174" font-size="18" text-anchor="middle" fill="#333" font-weight="bold">P[C] = 0.56 + 0.09 = 0.65</text></g></svg></div>
+  <div class="formula-box small reveal" style="text-align:center">\(P[C]=P[C/L]P[L]+P[C/\bar L]P[\bar L]\)<span class="ans">\(\;=0.8\cdot0.7+0.3\cdot0.3=0.65\)</span></div>
+</div>
+
+<div class="slide">
+  <h1>Teorema de Bayes (TB)</h1>
+
+  <div class="formula-box">\[ P[B_i/A]=\frac{P[A/B_i]\,P[B_i]}{P[A]}=\frac{P[A/B_i]\,P[B_i]}{\sum_{j=1}^{G}P[A/B_j]\,P[B_j]} \]</div>
+  <p>Se conoce el <strong>desenlace</strong> \(A\); ¿qué escenario \(B_i\) se dio?</p>
+  <div class="three-col" style="align-items:stretch">
+    <div class="mini-card center"><h3>A priori</h3><p>\(P[B_i]\)</p><p class="qtag">antes de saber \(A\)</p></div>
+    <div class="mini-card center"><h3>Verosimilitudes</h3><p>\(P[A/B_i]\)</p><p class="qtag">escenario → desenlace</p></div>
+    <div class="mini-card center"><h3>A posteriori</h3><p>\(P[B_i/A]\)</p><p class="qtag">después de saber \(A\)</p></div>
+  </div>
+  <p style="margin-top:1rem"><mark>Bayes da la vuelta a la condicionada: del efecto a la causa.</mark></p>
+</div>
+
+<div class="slide">
+  <h1>Bayes: ¿llovió el sábado?</h1>
+
+  <p>Ya es domingo. Sabemos que el sábado fue al cine, pero no si llovió. ¿Cuál es la probabilidad de que lloviera?</p>
+  <div class="fig-center"><svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg bay" data-steps="1" data-nofit="1"><g class=""><circle cx="50" cy="165" r="24" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="50" y="172" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Ω</text></g><g class="st0 pL"><line class="ed" x1="74" y1="155" x2="206" y2="85" stroke="#888" stroke-width="2.4"/><rect x="117" y="107" width="46" height="24" rx="5" fill="white"/><text x="140" y="125" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.7</text></g><g class="st0 pC2"><line class="ed" x1="74" y1="175" x2="206" y2="245" stroke="#888" stroke-width="2.4"/><rect x="117" y="197" width="46" height="24" rx="5" fill="white"/><text x="140" y="215" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.3</text></g><g class="st0"><circle cx="230" cy="75" r="24" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="82" font-size="19" text-anchor="middle" fill="#005877" font-weight="bold">L</text></g><g class="st0"><circle cx="230" cy="255" r="24" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="262" font-size="19" text-anchor="middle" fill="#005877" font-weight="bold">L̄</text></g><g class="st0 pL"><line class="ed" x1="254" y1="65" x2="396" y2="35" stroke="#888" stroke-width="2.4"/><rect x="302" y="37" width="46" height="24" rx="5" fill="white"/><text x="325" y="55" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.8</text></g><g class="st0 "><line class="ed" x1="254" y1="85" x2="396" y2="125" stroke="#888" stroke-width="2.4"/><rect x="302" y="92" width="46" height="24" rx="5" fill="white"/><text x="325" y="110" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.2</text></g><g class="st0 pC2"><line class="ed" x1="254" y1="245" x2="396" y2="205" stroke="#888" stroke-width="2.4"/><rect x="302" y="212" width="46" height="24" rx="5" fill="white"/><text x="325" y="230" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.3</text></g><g class="st0 "><line class="ed" x1="254" y1="265" x2="396" y2="295" stroke="#888" stroke-width="2.4"/><rect x="302" y="267" width="46" height="24" rx="5" fill="white"/><text x="325" y="285" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.7</text></g><g class="st0"><circle cx="420" cy="35" r="24" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="42" font-size="19" text-anchor="middle" fill="#E87B00" font-weight="bold">C</text></g><g class="st0"><circle cx="420" cy="125" r="24" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="420" y="132" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">C̄</text></g><g class="st0"><circle cx="420" cy="205" r="24" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="212" font-size="19" text-anchor="middle" fill="#E87B00" font-weight="bold">C</text></g><g class="st0"><circle cx="420" cy="295" r="24" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="420" y="302" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">C̄</text></g><text class="st0 prod pc pL" x="465" y="41" font-size="17" fill="#E87B00">0.7 · 0.8 = 0.56</text><text class="st0 prod  " x="465" y="131" font-size="17" fill="#999">0.7 · 0.2 = 0.14</text><text class="st0 prod pc pC2" x="465" y="211" font-size="17" fill="#E87B00">0.3 · 0.3 = 0.09</text><text class="st0 prod  " x="465" y="301" font-size="17" fill="#999">0.3 · 0.7 = 0.21</text><g class="st1"><rect x="455" y="148" width="255" height="38" rx="8" fill="#ffe0b3"/><text x="582" y="174" font-size="18" text-anchor="middle" fill="#333" font-weight="bold">P[L/C] = 0.56 / 0.65 = 0.86</text></g></svg></div>
+  <div class="two-col" style="align-items:stretch">
+    <div class="formula-box small reveal" style="margin:0; text-align:center">\(P[L/C]=\dfrac{P[C/L]P[L]}{P[C]}\)<span class="ans">\(=\dfrac{0.8\cdot0.7}{0.65}=0.86\)</span></div>
+    <div class="mini-card center reveal ok"><p>A priori \(P[L]=0.70\) &nbsp;→&nbsp; a posteriori <span class="ans">\(P[L/C]=0.86\) · \(P[\bar L/C]=0.14\)</span></p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Bayes en Psicología: un cuestionario de cribado</h1>
+
+  <p>En una población, el 5 % tiene depresión. Un cuestionario detecta al 90 % de quienes la tienen, pero también da positivo al 10 % de quienes no. Si una persona da positivo, ¿qué probabilidad hay de que tenga depresión?</p>
+  <p class="small-note" style="margin-top:0">\(D\equiv\) {tiene depresión} · Pos \(\equiv\) {da positivo} · Neg \(\equiv\) {da negativo}</p>
+  <div class="two-col" style="align-items:stretch; flex:1 1 auto; flex-wrap:nowrap; min-height:0">
+    <div class="fig-center" style="flex:1 1 56%"><svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" class="fig-svg step-svg cri" data-steps="3" data-nofit="1"><g class=""><circle cx="50" cy="165" r="26" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="50" y="171" font-size="19" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Ω</text></g><g class="st1 pL"><line class="ed" x1="76" y1="155" x2="204" y2="85" stroke="#888" stroke-width="2.4"/><rect x="115" y="107" width="50" height="24" rx="5" fill="white"/><text x="140" y="125" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.05</text></g><g class="st1 pC2"><line class="ed" x1="76" y1="175" x2="204" y2="245" stroke="#888" stroke-width="2.4"/><rect x="115" y="197" width="50" height="24" rx="5" fill="white"/><text x="140" y="215" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.95</text></g><g class="st1"><circle cx="230" cy="75" r="26" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="81" font-size="19" text-anchor="middle" fill="#005877" font-weight="bold">D</text></g><g class="st1"><circle cx="230" cy="255" r="26" fill="white" stroke="#005877" stroke-width="2.5"/><text x="230" y="261" font-size="19" text-anchor="middle" fill="#005877" font-weight="bold">D̄</text></g><g class="st2 pL"><line class="ed" x1="256" y1="65" x2="394" y2="35" stroke="#888" stroke-width="2.4"/><rect x="300" y="37" width="50" height="24" rx="5" fill="white"/><text x="325" y="55" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.90</text></g><g class="st2 "><line class="ed" x1="256" y1="85" x2="394" y2="125" stroke="#888" stroke-width="2.4"/><rect x="300" y="92" width="50" height="24" rx="5" fill="white"/><text x="325" y="110" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.10</text></g><g class="st2 pC2"><line class="ed" x1="256" y1="245" x2="394" y2="205" stroke="#888" stroke-width="2.4"/><rect x="300" y="212" width="50" height="24" rx="5" fill="white"/><text x="325" y="230" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.10</text></g><g class="st2 "><line class="ed" x1="256" y1="265" x2="394" y2="295" stroke="#888" stroke-width="2.4"/><rect x="300" y="267" width="50" height="24" rx="5" fill="white"/><text x="325" y="285" font-size="16" text-anchor="middle" fill="#333" font-weight="bold">0.90</text></g><g class="st2"><circle cx="420" cy="35" r="26" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="41" font-size="15" text-anchor="middle" fill="#E87B00" font-weight="bold">Pos</text></g><g class="st2"><circle cx="420" cy="125" r="26" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="420" y="131" font-size="15" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Neg</text></g><g class="st2"><circle cx="420" cy="205" r="26" fill="white" stroke="#E87B00" stroke-width="2.5"/><text x="420" y="211" font-size="15" text-anchor="middle" fill="#E87B00" font-weight="bold">Pos</text></g><g class="st2"><circle cx="420" cy="295" r="26" fill="white" stroke="#6B6E6D" stroke-width="2.5"/><text x="420" y="301" font-size="15" text-anchor="middle" fill="#6B6E6D" font-weight="bold">Neg</text></g><text class="st2 prod pc pL" x="462" y="41" font-size="16" fill="#E87B00">0.05 · 0.90 = 0.045</text><text class="st2 prod  " x="462" y="131" font-size="16" fill="#999">0.05 · 0.10 = 0.005</text><text class="st2 prod pc pC2" x="462" y="211" font-size="16" fill="#E87B00">0.95 · 0.10 = 0.095</text><text class="st2 prod  " x="462" y="301" font-size="16" fill="#999">0.95 · 0.90 = 0.855</text><g class="st3"><rect x="452" y="146" width="262" height="40" rx="8" fill="#ffe0b3"/><text x="583" y="172" font-size="16.5" text-anchor="middle" fill="#333" font-weight="bold">P[D/Pos] = 0.045 / 0.140 = 0.32</text></g></svg></div>
+    <div style="flex:1 1 40%; display:flex; flex-direction:column; justify-content:center; gap:.8rem">
+      <div class="mini-card center"><p style="font-size:clamp(1.2rem,1.7vw,2rem); margin:.2rem 0">\(P[\text{Pos}/D]=0.90\)</p>
+        <p class="qtag">Si alguien tiene depresión, ¿qué probabilidad hay de que dé positivo?</p></div>
+      <div class="mini-card center reveal ko"><p style="font-size:clamp(1.2rem,1.7vw,2rem); margin:.2rem 0">\(P[D/\text{Pos}]=\,?\)</p>
+        <p class="qtag">Si alguien da positivo, ¿qué probabilidad hay de que tenga depresión?</p>
+        <p class="ans">\(\dfrac{0.90\cdot0.05}{0.90\cdot0.05+0.10\cdot0.95}=\dfrac{0.045}{0.140}=0.32\)</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Para terminar: nuestros 16 estudiantes</h1>
+
+  <p>Elegimos al azar a uno de los 16 de los Temas 1–4. \(F\) = mujer · \(S\) = ansiedad moderada o grave (BAI \(\ge16\))</p>
+  <table class="tbl2">
+    <thead><tr><th></th><th>BAI \(\ge16\)</th><th>BAI \(<16\)</th><th>Total</th></tr></thead>
+    <tbody><tr><th>Mujer</th><td>5</td><td>3</td><td class="tot">8</td></tr>
+      <tr><th>Hombre</th><td>3</td><td>5</td><td class="tot">8</td></tr>
+      <tr><th>Total</th><td class="tot">8</td><td class="tot">8</td><td class="tot">16</td></tr></tbody>
+  </table>
+  <div class="three-col" style="align-items:stretch">
+    <div class="mini-card center reveal ok"><p>\(P[S]\) y \(P[S/F]\)</p><p class="ans">\(8/16=0.5\) · \(5/8=0.625\)</p></div>
+    <div class="mini-card center reveal ok"><p>¿Independientes?</p><p class="ans">\(5/16=0.31\ne0.5\cdot0.5\): <strong>no</strong>, en estos 16</p></div>
+    <div class="mini-card center reveal ko"><p>¿Y en la población?</p><p class="ans">Con \(n=16\), no se puede saber (Tema 5)</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <h1>Resumen</h1>
+
+  <div class="two-col" style="align-items:flex-start">
+    <ul class="ticks">
+      <li>Probabilidad: la frecuencia relativa llevada a la población.</li>
+      <li>Cada muestra da frecuencias distintas: soluciones <strong>aproximadas</strong>.</li>
+      <li>Sucesos = conjuntos: contrario, unión, intersección, incompatibles, sistema completo.</li>
+      <li>Laplace (equiprobables) · frecuentista (repetición) · Kolmogorov (axiomas).</li>
+    </ul>
+    <ul class="ticks">
+      <li>\(P[\bar A]=1-P[A]\) · \(P[A\cup B]=P[A]+P[B]-P[A\cap B]\)</li>
+      <li>\(P[A/B]=P[A\cap B]/P[B]\): cambiar de universo.</li>
+      <li>Independencia: \(P[A\cap B]=P[A]P[B]\). Incompatible ≠ independiente.</li>
+      <li>TPT: de los escenarios al desenlace. Bayes: del desenlace al escenario.</li>
+    </ul>
+  </div>
+  <div class="mini-card" style="margin-top:.6rem">
+    <h3>¿Y ahora?</h3>
+    <p>Tema 7: a cada resultado de un experimento le asignamos un <strong>número</strong> (variable aleatoria), y su distribución de probabilidad es la «tabla de frecuencias» de la población.</p>
+  </div>
+</div>
+
+    <img id="logo" src="LogoUca.png">
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [ {left: "\\[", right: "\\]", display: true}, {left: "\\(", right: "\\)", display: false} ],
+      throwOnError: false });
+  });
+  function K(el, tex){ try{ katex.render(tex, el, {throwOnError:false, displayMode:false}); }catch(e){ el.textContent = tex; } }
+  function KH(el, html){ el.innerHTML = html; renderMathInElement(el, {delimiters:[{left:"\\(",right:"\\)",display:false}], throwOnError:false}); }
+  var NS = "http://www.w3.org/2000/svg";
+  function mk(tag, at, txt){ var e=document.createElementNS(NS, tag); for(var k in at) e.setAttribute(k, at[k]); if(txt!==undefined) e.textContent=txt; return e; }
+</script>
+<script>
+  (function(){
+    document.querySelectorAll(".anim-svg").forEach(function(svg){
+      function play(){ svg.classList.remove("play"); void svg.getBoundingClientRect(); svg.classList.add("play"); }
+      new IntersectionObserver(function(es){ es.forEach(function(e){
+        if(e.isIntersecting) play(); else svg.classList.remove("play"); }); },{threshold:0.5}).observe(svg);
+      svg.addEventListener("click",play);
+    });
+    document.querySelectorAll(".reveal").forEach(function(el){
+      el.addEventListener("click",function(){ el.classList.toggle("on"); });
+    });
+    /* figuras por pasos */
+    document.querySelectorAll(".step-svg").forEach(function(svg){
+      var n=+svg.dataset.steps, k=0, h=svg.querySelector(".shint");
+      function set(j){ k=j; svg.setAttribute("data-k", k); for(var i=1;i<=n;i++) svg.classList.toggle("k"+i, i<=k);
+        if(h) h.textContent = k<n ? "clic para avanzar ("+k+"/"+n+")" : "clic para empezar de nuevo"; }
+      svg.addEventListener("click", function(){ set((k+1)%(n+1)); });
+      new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) set(0); }); },{threshold:0.1}).observe(svg);
+      set(0);
+    });
+    /* visor de Venn */
+    var vc=document.getElementById("vennc");
+    if(vc){ var vv=document.querySelectorAll("#venn .view"), vb=vc.querySelectorAll("button");
+      function sv(v){ vv.forEach(function(x){ x.classList.toggle("on", x.dataset.v===v); }); vb.forEach(function(b){ b.classList.toggle("on", b.dataset.v===v); }); }
+      vb.forEach(function(b){ b.addEventListener("click", function(){ sv(b.dataset.v); }); });
+      new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) sv("1"); }); },{threshold:0.1}).observe(vc);
+    }
+  })();
+</script>
+<script>
+  /* ajuste del viewBox al contenido (figuras estáticas) */
+  (function(){
+    function fit(svg){
+      if(svg.dataset.fit || svg.dataset.nofit) return;
+      try{ var b=svg.getBBox(); if(!b || b.width<=0 || b.height<=0) return;
+        var p=Math.max(b.width,b.height)*0.015;
+        svg.setAttribute("viewBox",(b.x-p)+" "+(b.y-p)+" "+(b.width+2*p)+" "+(b.height+2*p));
+        svg.dataset.fit="1"; }catch(e){}
+    }
+    function fitAll(){ document.querySelectorAll(".fig-center svg").forEach(fit); }
+    window.addEventListener("load", fitAll);
+    document.addEventListener("click", function(){ setTimeout(fitAll, 30); });
+  })();
+</script>
+<script>
+  /* (sustituido) */
+</script>
+<script>
+  /* simulador de muestras de un factor */
+  (function(){
+    var box=document.getElementById("sim1"); if(!box) return;
+    var svg=box.querySelector("svg"), ctrl=document.getElementById("sim1c");
+    var PI=[0.45,0.35,0.20], NAMES=["A₁","A₂","A₃"], COL=["#005877","#E87B00","#6B6E6D"];
+    var n=20, hist=[], cur=null;
+    var bx0=60, by0=40, by1=250, bw=70, gap=40;
+    function Y(f){ return by1-(by1-by0)*f/0.8; }
+    var hx0=430, hx1=700;
+    function HY(f){ return Y(Math.max(0,Math.min(0.8,f))); }
+    function sample(){ var c=[0,0,0]; for(var i=0;i<n;i++){ var u=Math.random(); c[u<PI[0]?0:(u<PI[0]+PI[1]?1:2)]++; } return c.map(function(x){return x/n;}); }
+    function draw(){
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      [0,0.2,0.4,0.6,0.8].forEach(function(f){ svg.appendChild(mk("line",{x1:bx0-10,x2:bx0+3*bw+2*gap+10,y1:Y(f),y2:Y(f),stroke:"#eee"}));
+        svg.appendChild(mk("text",{x:bx0-16,y:Y(f)+4,"font-size":11,"text-anchor":"end",fill:"#777"},f.toFixed(1))); });
+      svg.appendChild(mk("text",{x:bx0+1.5*bw+gap,y:22,"font-size":14,"text-anchor":"middle",fill:"#333","font-weight":"bold"},"Muestra actual (n = "+n+")"));
+      for(var i=0;i<3;i++){ var x=bx0+i*(bw+gap);
+        if(cur){ svg.appendChild(mk("rect",{x:x,y:Y(cur[i]),width:bw,height:by1-Y(cur[i]),fill:COL[i],opacity:.85}));
+          svg.appendChild(mk("text",{x:x+bw/2,y:Math.min(Y(cur[i]),Y(PI[i]))-8,"font-size":14,"text-anchor":"middle",fill:COL[i],"font-weight":"bold"},cur[i].toFixed(2))); }
+        svg.appendChild(mk("line",{x1:x-8,x2:x+bw+8,y1:Y(PI[i]),y2:Y(PI[i]),stroke:"#222","stroke-width":2,"stroke-dasharray":"6,4"}));
+        svg.appendChild(mk("text",{x:x+bw/2,y:by1+18,"font-size":12.5,"text-anchor":"middle",fill:"#333"},NAMES[i])); }
+      svg.appendChild(mk("line",{x1:bx0-10,x2:bx0+3*bw+2*gap+10,y1:by1,y2:by1,stroke:"#999"}));
+      svg.appendChild(mk("text",{x:bx0+1.5*bw+gap,y:by1+38,"font-size":11.5,"text-anchor":"middle",fill:"#6B6E6D"},"– – –  π (población)"));
+      /* historial de f1 */
+      svg.appendChild(mk("text",{x:(hx0+hx1)/2,y:22,"font-size":14,"text-anchor":"middle",fill:"#333","font-weight":"bold"},"f₁ de las últimas 20 muestras"));
+      [0,0.2,0.4,0.6,0.8].forEach(function(f){ svg.appendChild(mk("line",{x1:hx0,x2:hx1,y1:HY(f),y2:HY(f),stroke:"#eee"}));
+        svg.appendChild(mk("text",{x:hx0-6,y:HY(f)+4,"font-size":11,"text-anchor":"end",fill:"#777"},f.toFixed(1))); });
+      svg.appendChild(mk("line",{x1:hx0,x2:hx1,y1:HY(PI[0]),y2:HY(PI[0]),stroke:"#005877","stroke-width":2,"stroke-dasharray":"6,4"}));
+      svg.appendChild(mk("text",{x:hx1,y:HY(PI[0])-6,"font-size":11.5,"text-anchor":"end",fill:"#005877"},"π₁ = 0.45"));
+      svg.appendChild(mk("line",{x1:hx0,x2:hx1,y1:by1,y2:by1,stroke:"#999"}));
+      hist.forEach(function(f,j){ var x=hx0+10+j*((hx1-hx0-20)/19), y=HY(f);
+        svg.appendChild(mk("circle",{cx:x,cy:y,r:j===hist.length-1?6:4.5,fill:j===hist.length-1?"#E87B00":"#005877",opacity:j===hist.length-1?1:.6})); });
+      if(hist.length>1){ var mn=Math.min.apply(null,hist), mx=Math.max.apply(null,hist);
+        svg.appendChild(mk("text",{x:(hx0+hx1)/2,y:by1+18,"font-size":12.5,"text-anchor":"middle",fill:"#333"},"rango: "+mn.toFixed(2)+" – "+mx.toFixed(2))); }
+    }
+    function go(k){ for(var i=0;i<k;i++){ cur=sample(); hist.push(cur[0]); if(hist.length>20) hist.shift(); } draw(); }
+    ctrl.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){
+      if(b.dataset.n){ n=+b.dataset.n; hist=[]; cur=null; ctrl.querySelectorAll("button[data-n]").forEach(function(x){ x.classList.toggle("on", x===b); }); go(1); }
+      else go(+b.dataset.a); }); });
+    go(1);
+  })();
+</script>
+<script>
+  /* convergencia de la frecuencia relativa */
+  (function(){
+    var box=document.getElementById("sim2"); if(!box) return;
+    var svg=box.querySelector("svg"), ctrl=document.getElementById("sim2c"), lab=document.getElementById("sim2n");
+    var PI=[0.45,0.35,0.20], COL=["#005877","#E87B00","#6B6E6D"], NAMES=["f₁","f₂","f₃"];
+    var x0=70, x1=640, y0=34, y1=230, MAXN=10000;
+    function X(n){ return x0+(x1-x0)*Math.log10(n)/4; }
+    function Y(f){ return y1-(y1-y0)*f; }
+    var n=0, c=[0,0,0], P=[[],[],[]];
+    function rec(){ for(var i=0;i<3;i++) P[i].push(X(n).toFixed(1)+","+Y(c[i]/n).toFixed(1)); }
+    function step(){ var u=Math.random(); c[u<PI[0]?0:(u<PI[0]+PI[1]?1:2)]++; n++;
+      if(n<100 || (n<1000 && n%5===0) || n%50===0) rec(); }
+    function draw(){
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      [0,0.2,0.4,0.6,0.8,1].forEach(function(f){ svg.appendChild(mk("line",{x1:x0,x2:x1,y1:Y(f),y2:Y(f),stroke:"#eee"}));
+        svg.appendChild(mk("text",{x:x0-8,y:Y(f)+4,"font-size":11,"text-anchor":"end",fill:"#777"},f.toFixed(1))); });
+      [1,10,100,1000,10000].forEach(function(m){ svg.appendChild(mk("text",{x:X(m),y:y1+16,"font-size":11,"text-anchor":"middle",fill:"#777"},m.toLocaleString("es-ES"))); });
+      svg.appendChild(mk("line",{x1:x0,x2:x1,y1:y1,y2:y1,stroke:"#999"}));
+      svg.appendChild(mk("text",{x:(x0+x1)/2,y:y1+36,"font-size":12,"text-anchor":"middle",fill:"#333"},"n: individuos extraídos (escala logarítmica)"));
+      for(var i=0;i<3;i++){
+        svg.appendChild(mk("line",{x1:x0,x2:x1,y1:Y(PI[i]),y2:Y(PI[i]),stroke:COL[i],"stroke-width":1.5,"stroke-dasharray":"6,4",opacity:.7}));
+        svg.appendChild(mk("text",{x:x1+8,y:Y(PI[i])+4,"font-size":12,fill:COL[i],"font-weight":"bold"},"π"+["₁","₂","₃"][i]+" = "+PI[i].toFixed(2)));
+        if(P[i].length>0) svg.appendChild(mk("polyline",{points:P[i].join(" "),fill:"none",stroke:COL[i],"stroke-width":2.2}));
+        if(n>0){ svg.appendChild(mk("circle",{cx:X(n),cy:Y(c[i]/n),r:4.5,fill:COL[i]}));
+          svg.appendChild(mk("text",{x:x0+12+i*150,y:14,"font-size":14,fill:COL[i],"font-weight":"bold"},NAMES[i]+" = "+(c[i]/n).toFixed(3))); }
+      }
+      if(n===0) svg.appendChild(mk("text",{x:(x0+x1)/2,y:60,"font-size":15,"text-anchor":"middle",fill:"#aaa"},""));
+      lab.textContent="n = "+n.toLocaleString("es-ES");
+    }
+    ctrl.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){
+      var k=+b.dataset.k;
+      if(k===0){ n=0; c=[0,0,0]; P=[[],[],[]]; }
+      else { for(var i=0;i<k && n<MAXN;i++) step(); rec(); }
+      draw(); }); });
+    draw();
+  })();
+</script>
+<script>
+  /* probabilidad condicionada en la tabla */
+  (function(){
+    var ctrl=document.getElementById("ptabc"); if(!ctrl) return;
+    var cells=document.querySelectorAll("#ptab td, #ptab tbody th"), out=document.getElementById("ptabout");
+    var Q={ a:{uni:function(r,c){return r==="T"&&c==="T";}, hit:function(r,c){return r==="T"&&c==="A";}, keep:true,
+               t:"\\(P[A]=\\dfrac{200}{1000}=0.20\\) &nbsp;·&nbsp; universo: las 1000"},
+            ai:{uni:function(r,c){return r==="I";}, hit:function(r,c){return r==="I"&&c==="A";},
+               t:"\\(P[A/I]=\\dfrac{P[A\\cap I]}{P[I]}=\\dfrac{100}{300}=0.33\\) &nbsp;·&nbsp; universo: las 300 con insomnio"},
+            ia:{uni:function(r,c){return c==="A";}, hit:function(r,c){return r==="I"&&c==="A";},
+               t:"\\(P[I/A]=\\dfrac{P[I\\cap A]}{P[A]}=\\dfrac{100}{200}=0.50\\) &nbsp;·&nbsp; universo: las 200 con ansiedad"} };
+    var btns=ctrl.querySelectorAll("button");
+    function show(q){
+      btns.forEach(function(b){ b.classList.toggle("on", b.dataset.q===q); });
+      cells.forEach(function(td){ var r=td.dataset.r, c=td.dataset.c||"_";
+        td.classList.remove("dim","uni","hit"); if(!q) return;
+        if(Q[q].hit(r,c)) td.classList.add("hit");
+        else if(Q[q].uni(r,c)) td.classList.add("uni");
+        else if(!(Q[q].keep && (r==="T"||c==="T"))) td.classList.add("dim"); });
+      if(q) KH(out, Q[q].t); else out.innerHTML="";
+    }
+    btns.forEach(function(b){ b.addEventListener("click", function(){ show(b.dataset.q); }); });
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) show(null); }); },{threshold:0.1}).observe(ctrl);
+  })();
+</script>
+<script>
+  /* test de cribado */
+  (function(){
+    var c=document.getElementById("crib"); if(!c) return;
+    var svg=document.getElementById("cribsvg"), ip=c.querySelector("#cprev"), is=c.querySelector("#csen"), ie=c.querySelector("#cesp");
+    var COLS=40, ROWS=25, dots=[];
+    for(var i=0;i<1000;i++){ var col=i%COLS, row=Math.floor(i/COLS);
+      var d=mk("circle",{cx:12+col*15.7,cy:12+row*16.4,r:5.6}); svg.appendChild(d); dots.push(d); }
+    function fmt(v){ return (v+"").replace(".",","); }
+    function upd(){
+      var prev=+ip.value/100, sen=+is.value/100, esp=+ie.value/100;
+      var nT=Math.round(1000*prev), TP=Math.round(nT*sen), FN=nT-TP, nS=1000-nT, FP=Math.round(nS*(1-esp)), TN=nS-FP;
+      for(var i=0;i<1000;i++){ var d=dots[i], f, s, w;
+        if(i<TP){ f="#E87B00"; s="#E87B00"; } else if(i<nT){ f="white"; s="#E87B00"; }
+        else if(i<nT+FP){ f="#005877"; s="#005877"; } else { f="white"; s="#c9cdcc"; }
+        d.setAttribute("fill",f); d.setAttribute("stroke",s); d.setAttribute("stroke-width",1.8); }
+      c.querySelector("#vprev").textContent=fmt(+ip.value)+" %";
+      c.querySelector("#vsen").textContent=is.value+" %";
+      c.querySelector("#vesp").textContent=ie.value+" %";
+      var pp = TP+FP>0 ? TP/(TP+FP) : 0;
+      c.querySelector("#rpp").textContent=fmt((100*pp).toFixed(1))+" %";
+      c.querySelector("#rcount").textContent="positivos: "+TP+" con trastorno + "+FP+" sin trastorno = "+(TP+FP);
+    }
+    [ip,is,ie].forEach(function(e){ e.addEventListener("input",upd); });
+    c.querySelector(".btn-reset").addEventListener("click",function(){ ip.value=5; is.value=90; ie.value=90; upd(); });
+    upd();
+  })();
+</script>
+
+<script>
+  /* regiones de Venn: operaciones con el dado y traducción de frases */
+  function regionModule(ctrlId, boxId, outId, D, extra){
+    var ctrl=document.getElementById(ctrlId); if(!ctrl) return;
+    var svg=document.querySelector("#"+boxId+" svg"), out=document.getElementById(outId);
+    var rgs=svg.querySelectorAll(".rg"), btns=ctrl.querySelectorAll("button");
+    function show(o){
+      btns.forEach(function(b){ b.classList.toggle("on", (b.dataset.o||b.dataset.e)===o); });
+      rgs.forEach(function(g){ g.classList.toggle("on", !!o && D[o].r.indexOf(g.dataset.r)>=0); });
+      if(extra) extra(svg, o ? D[o] : null);
+      if(o) KH(out, D[o].t); else out.innerHTML="";
+    }
+    btns.forEach(function(b){ b.addEventListener("click", function(){ show(b.dataset.o||b.dataset.e); }); });
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) show(null); }); },{threshold:0.1}).observe(ctrl);
+  }
+  regionModule("opsc","ops","opsout",{
+    imp:{r:["b","ab"], f:[4], c:true, t:"\\(C\\Rightarrow B\\): siempre que sale un 4, sale par &nbsp;·&nbsp; \\(C\\subset B\\)"},
+    con:{r:["b","o"], f:[4,5,6], t:"\\(\\bar A=\\{4,5,6\\}\\): se verifica cuando <strong>no</strong> se verifica \\(A\\) &nbsp;·&nbsp; \\(\\bar{\\bar A}=A\\)"},
+    uni:{r:["a","ab","b"], f:[1,2,3,4,6], t:"\\(A\\cup B=\\{1,2,3,4,6\\}\\): se verifica \\(A\\) <strong>o</strong> \\(B\\)"},
+    int:{r:["ab"], f:[2], t:"\\(A\\cap B=\\{2\\}\\): se verifican \\(A\\) <strong>y</strong> \\(B\\)"} },
+    function(svg, d){ svg.classList.toggle("showC", !!(d && d.c));
+      svg.querySelectorAll(".face").forEach(function(f){ f.classList.toggle("hl", !!d && d.f.indexOf(+f.dataset.v)>=0); }); });
+  regionModule("exprc","expr","exprout",{
+    anb:{r:["a"], t:"\\(A\\cap\\bar B\\)"},
+    uno:{r:["a","b"], t:"\\((A\\cap\\bar B)\\cup(\\bar A\\cap B)\\)"},
+    alm:{r:["a","ab","b"], t:"\\(A\\cup B\\)"},
+    nin:{r:["o"], t:"\\(\\bar A\\cap\\bar B=\\overline{A\\cup B}\\)"},
+    nam:{r:["a","b","o"], t:"\\(\\overline{A\\cap B}=\\bar A\\cup\\bar B\\)"} });
+</script>
+<script>
+  /* álgebra de sucesos con tres bolas */
+  (function(){
+    var box=document.getElementById("alg"); if(!box) return;
+    var cards=[].slice.call(box.querySelectorAll(".acard")), ctrl=document.getElementById("algc"), out=document.getElementById("algout");
+    var A=null, B=null;
+    function name(m){ if(m==="") return "\\(\\emptyset\\)"; return "{"+m.split("").map(function(c){return '<span class="bd b'+c+'"></span>';}).join("")+"}"; }
+    function card(m){ return cards.filter(function(c){return c.dataset.m===m;})[0]; }
+    function paint(res){
+      cards.forEach(function(c){ c.classList.toggle("sa", c===A); c.classList.toggle("sb", c===B); c.classList.toggle("res", c===res);
+        c.querySelector(".tag2").textContent = c===A ? "A" : (c===B ? "B" : ""); });
+    }
+    function reset(){ A=null; B=null; paint(null); out.innerHTML=""; }
+    cards.forEach(function(c){ c.addEventListener("click", function(){
+      if(!A || (A && B)){ A=c; B=null; } else if(c!==A){ B=c; } paint(null); out.innerHTML=""; }); });
+    ctrl.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){
+      if(!A) return;
+      var a=A.dataset.m, r, txt;
+      if(b.dataset.o==="u"){ if(!B) return; var u={}; (a+B.dataset.m).split("").forEach(function(x){u[x]=1;}); r=Object.keys(u).sort().join("");
+        txt=name(a)+" \\(\\cup\\) "+name(B.dataset.m)+" = "+name(r); }
+      else { r=["0","1","2"].filter(function(x){return a.indexOf(x)<0;}).join(""); txt="contrario de "+name(a)+" = "+name(r); }
+      paint(card(r)); KH(out, txt+" &nbsp;→&nbsp; <strong style='color:#2E9E5B'>\\(\\in\\mathcal A\\): sigue en la lista</strong>"); }); });
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) reset(); }); },{threshold:0.1}).observe(box);
+  })();
+</script>
+<script>
+  /* visor de propiedades */
+  (function(){
+    var ctrl=document.getElementById("propc"); if(!ctrl) return;
+    var views=document.querySelectorAll("#prop .view"), btns=ctrl.querySelectorAll("button"),
+        f=document.getElementById("propf"), cap=document.getElementById("propcap");
+    function sv(v){ views.forEach(function(x){ x.classList.toggle("on", x.dataset.v===v); });
+      btns.forEach(function(b){ var on=b.dataset.v===v; b.classList.toggle("on", on);
+        if(on){ KH(f, b.dataset.f); cap.textContent=b.dataset.c; } }); }
+    btns.forEach(function(b){ b.addEventListener("click", function(){ sv(b.dataset.v); }); });
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) sv("1"); }); },{threshold:0.1}).observe(ctrl);
+    sv("1");
+  })();
+</script>
+<script>
+  /* dos dados */
+  (function(){
+    var ctrl=document.getElementById("d2c"); if(!ctrl) return;
+    var cells=document.querySelectorAll("#d2 td"), out=document.getElementById("d2out"), btns=ctrl.querySelectorAll("button");
+    function show(s){ var k=0;
+      cells.forEach(function(c){ var h=+c.dataset.s===s; c.classList.toggle("hit",h); if(h) k++; });
+      btns.forEach(function(b){ b.classList.toggle("on", +b.dataset.s===s); });
+      if(s) KH(out, "\\(P[\\text{suma}="+s+"]=\\dfrac{"+k+"}{36}="+(k/36).toFixed(3)+"\\)"); else out.textContent=""; }
+    btns.forEach(function(b){ b.addEventListener("click", function(){ show(+b.dataset.s); }); });
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) show(0); }); },{threshold:0.1}).observe(ctrl);
+  })();
+</script>
+<script>
+  /* independencia: dos grupos de personas */
+  (function(){
+    var box=document.getElementById("ind"); if(!box) return;
+    var svg=box.querySelector("svg"), ctrl=document.getElementById("indc"), out=document.getElementById("indout");
+    var S={ ins:{g:["Con insomnio","Sin insomnio"], n:[300,100,700,100], dep:true},
+            zur:{g:["Zurdos","No zurdos"], n:[100,20,900,180], dep:false} };
+    function rnd(seed){ return function(){ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; }; }
+    function pick(N,k,r){ var a=[]; for(var i=0;i<N;i++) a.push(i); for(var i=N-1;i>0;i--){ var j=Math.floor(r()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } var o={}; a.slice(0,k).forEach(function(x){o[x]=1;}); return o; }
+    function draw(key){
+      var d=S[key], R=20, step=11, y0=70, r=rnd(key==="ins"?7:11), x=(700-((d.n[0]+d.n[2])/R*step+40))/2+4;
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      svg.appendChild(mk("text",{x:350,y:18,"font-size":16,"text-anchor":"middle",fill:"#333","font-weight":"bold"},"Toda la población: 200 de 1000 con ansiedad = 20 %"));
+      for(var g=0; g<2; g++){
+        var N=d.n[2*g], k=d.n[2*g+1], C=N/R, on=pick(N,k,r), w=C*step;
+        svg.appendChild(mk("rect",{x:x-6,y:y0-14,width:w+2,height:R*step+8,rx:8,fill:"none",stroke:g?"#6B6E6D":"#005877","stroke-width":2}));
+        svg.appendChild(mk("text",{x:x+w/2-4,y:y0-24,"font-size":15,"text-anchor":"middle",fill:g?"#6B6E6D":"#005877","font-weight":"bold"},d.g[g]+" ("+N+")"));
+        for(var i=0;i<N;i++){ var c=Math.floor(i/R), rr=i%R;
+          svg.appendChild(mk("circle",{cx:x+c*step,cy:y0+rr*step-4,r:4,fill:on[i]?"#E87B00":"#d5d9d8"})); }
+        var pct=Math.round(100*k/N);
+        svg.appendChild(mk("text",{x:x+w/2-4,y:y0+R*step+30,"font-size":26,"text-anchor":"middle",fill:"#E87B00","font-weight":"bold"},pct+" %"));
+        x+=w+40;
+      }
+      ctrl.querySelectorAll("button").forEach(function(b){ b.classList.toggle("on", b.dataset.s===key); });
+      KH(out, d.dep ? "Proporciones <strong>distintas</strong>: saber si tiene insomnio cambia la probabilidad de ansiedad → <strong style='color:#E87B00'>dependientes</strong>"
+                    : "La <strong>misma</strong> proporción en los dos grupos, igual a la del total: saber si es zurdo no cambia nada → <strong style='color:#2E9E5B'>independientes</strong>");
+    }
+    ctrl.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ draw(b.dataset.s); }); });
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) draw("ins"); }); },{threshold:0.1}).observe(box);
+    draw("ins");
+  })();
+</script>
+<script>
+  /* mosaico de independencia */
+  (function(){
+    var c=document.getElementById("mos"); if(!c) return;
+    var svg=document.getElementById("mossvg"), pi=c.querySelector("#cmi"), pa=c.querySelector("#cma"), pb=c.querySelector("#cmb"), res=c.querySelector("#mosres");
+    var X0=40, Y0=20, W=440, Hh=300;
+    function upd(){
+      var p=+pi.value, a=+pa.value, b=+pb.value, pA=p*a+(1-p)*b;
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      var w1=W*p, w2=W-w1;
+      svg.appendChild(mk("rect",{x:X0,y:Y0,width:w1,height:Hh,fill:"#cfe3ea",stroke:"#333","stroke-width":2}));
+      svg.appendChild(mk("rect",{x:X0+w1,y:Y0,width:w2,height:Hh,fill:"#f5f7f8",stroke:"#333","stroke-width":2}));
+      svg.appendChild(mk("rect",{x:X0,y:Y0+Hh*(1-a),width:w1,height:Hh*a,fill:"#E87B00",opacity:.8}));
+      svg.appendChild(mk("rect",{x:X0+w1,y:Y0+Hh*(1-b),width:w2,height:Hh*b,fill:"#E87B00",opacity:.8}));
+      svg.appendChild(mk("line",{x1:X0,x2:X0+W,y1:Y0+Hh*(1-pA),y2:Y0+Hh*(1-pA),stroke:"#005877","stroke-width":2.5,"stroke-dasharray":"7,5"}));
+      svg.appendChild(mk("text",{x:X0+W+6,y:Y0+Hh*(1-pA)+4,"font-size":13,fill:"#005877","font-weight":"bold"},"P[A]"));
+      svg.appendChild(mk("text",{x:X0+w1/2,y:Y0+Hh+22,"font-size":15,"text-anchor":"middle",fill:"#005877","font-weight":"bold"},"I"));
+      svg.appendChild(mk("text",{x:X0+w1+w2/2,y:Y0+Hh+22,"font-size":15,"text-anchor":"middle",fill:"#6B6E6D","font-weight":"bold"},"no I"));
+      svg.appendChild(mk("text",{x:X0+W/2,y:Y0+Hh+46,"font-size":13,"text-anchor":"middle",fill:"#333"},"naranja: ansiedad (A) · área total = 1"));
+      if(w1>60) svg.appendChild(mk("text",{x:X0+w1/2,y:Y0+Hh*(1-a)+20,"font-size":14,"text-anchor":"middle",fill:"white","font-weight":"bold"},a>0.08?"A∩I":""));
+      var pAI=p*a, prod=p*pA, ind=Math.abs(a-b)<0.005;
+      KH(res, "\\(P[A\\cap I]="+pAI.toFixed(3)+"\\)<br>\\(P[A]\\,P[I]="+pA.toFixed(3)+"\\cdot"+p.toFixed(2)+"="+prod.toFixed(3)+"\\)<br>"+
+        (ind ? "<strong style='color:#2E9E5B'>Independientes</strong>: la franja naranja está a la misma altura" : "<strong style='color:#E87B00'>Dependientes</strong>: saber si hay insomnio cambia la probabilidad de ansiedad"));
+      c.querySelector("#vmi").textContent=p.toFixed(2); c.querySelector("#vma").textContent=a.toFixed(2); c.querySelector("#vmb").textContent=b.toFixed(2);
+    }
+    [pi,pa,pb].forEach(function(e){ e.addEventListener("input",upd); });
+    c.querySelector("#mosrst").addEventListener("click",function(){ pi.value=0.3; pa.value=0.33; pb.value=0.14; upd(); });
+    c.querySelector("#mosind").addEventListener("click",function(){ pa.value=0.2; pb.value=0.2; upd(); });
+    upd();
+  })();
+</script>
+
+</body>
+</html>
